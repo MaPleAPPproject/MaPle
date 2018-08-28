@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MaPle</string>
+    <string name="title_home">個人頁面</string>
+    <string name="title_explore">探索</string>
+    <string name="title_friends">好友</string>
+</resources>
