@@ -30,7 +30,6 @@ import java.util.List;
 
 public class ExploreFragment extends Fragment {
     MainActivity mainActivity;
-    private RecyclerView.ItemDecoration itemDecoration;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

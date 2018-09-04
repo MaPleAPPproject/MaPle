@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                     //點擊下方朋友選單時，跑出朋友清單
                 case R.id.navigation_friends:
-                    startfriendPage();
                     getSupportActionBar().show();
                     viewPager.setCurrentItem(2);
 //                    fragment = new FriendsFragment();
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void initContent() {
-        getSupportActionBar().show();
+        getActionBar().show();
         viewPager.setCurrentItem(0);
 //        Fragment fragment = new MypageFragment();
 //        changeFragment(fragment);
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavPagerAdapter adapter = new BottomNavPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MypageFragment());
         adapter.addFragment(new ExploreFragment());
-        adapter.addFragment(new FriendsFragment());
+        adapter.addFragment(new FriendsList());
         viewPager.setAdapter(adapter);
     }
     public class BottomNavPagerAdapter extends FragmentPagerAdapter {
@@ -147,12 +146,6 @@ public class MainActivity extends AppCompatActivity {
         public void addFragment(Fragment fragment) {
             mainFragmentList.add(fragment);
         }
-    }
-
-    private void startfriendPage(){
-        Intent intent = new Intent();
-        intent.setClass(this , FriendsList.class);
-        startActivity(intent);
     }
 
 }

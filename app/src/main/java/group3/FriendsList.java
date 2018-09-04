@@ -1,6 +1,9 @@
 package group3;
 
 import android.content.Intent;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,23 +25,27 @@ import com.example.violethsu.maple.R;
 
 import java.util.ArrayList;
 
-public class FriendsList extends AppCompatActivity {
+public class FriendsList extends Fragment {
 
     private RecyclerView recyclerView;
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends_list);
-        setTitle(R.string.textTitle_FLists);
-        handleViews();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.activity_friends_list,container, false);
+        setHasOptionsMenu(true);
+        handleViews(view);
+        return view;
+
     }
-    private void handleViews() {
-        recyclerView = findViewById(R.id.recyclerView);
+    private void handleViews(View view) {
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(1,
                         StaggeredGridLayoutManager.VERTICAL));
         List<Friend> friendList = getfriendList();
-        recyclerView.setAdapter(new friendAdapter(this, friendList));
+        recyclerView.setAdapter(new friendAdapter(getActivity(), friendList));
     }
 
     private class friendAdapter extends
@@ -53,12 +61,14 @@ public class FriendsList extends AppCompatActivity {
         class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
             TextView tvIntro, tvName;
+            Button btChat;
 
             MyViewHolder(View frienditem) {
                 super(frienditem);
                 imageView = frienditem.findViewById(R.id.imageView);
                 tvIntro = frienditem.findViewById(R.id.tvIntro);
                 tvName = frienditem.findViewById(R.id.tvName);
+                btChat=frienditem.findViewById(R.id.btChat);
             }
         }
         @Override
@@ -81,7 +91,18 @@ public class FriendsList extends AppCompatActivity {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity() , Explore_PostActivity.class);
+                    startActivity(intent);
+                }
+            });
+            //按下chat按鈕後
+            viewHolder.btChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity() , chat.class);
+                    startActivity(intent);
                 }
             });
         }
@@ -103,30 +124,24 @@ public class FriendsList extends AppCompatActivity {
         return friendList;
     }
 
-    //按下chat按鈕後
-    public void onChatClick(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this , chat.class);
-        startActivity(intent);
-    }
     //右上方的選單按鈕
+    //vio:改成fragment的onCreateOptionMenu
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.fl_option, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu,MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.fl_option, menu);
+        super.onCreateOptionsMenu(menu,menuInflater);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.optionmenu_match:
                 Intent intentmatch = new Intent();
-                intentmatch.setClass(this , Match.class);
+                intentmatch.setClass(getActivity() , Match.class);
                 startActivity(intentmatch);
                 break;
             case R.id.optionmenu_payment:
                 Intent intentpayment = new Intent();
-                intentpayment.setClass(this , Payment.class);
+                intentpayment.setClass(getActivity() , Payment.class);
                 startActivity(intentpayment);
                 break;
             default:
@@ -134,4 +149,5 @@ public class FriendsList extends AppCompatActivity {
         }
         return true;
     }
+
 }
