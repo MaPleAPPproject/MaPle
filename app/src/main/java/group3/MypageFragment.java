@@ -22,20 +22,24 @@ import java.util.List;
 public class MypageFragment extends Fragment {
     private ViewPager tabviewPager;
     private TabLayout tabLayout;
-    public MypageFragment(){};
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootview = inflater.inflate(R.layout.fragment_mypage, container, false);
+        handleviews(rootview);
+        return rootview;
+    }
+
+    private void handleviews(View rootview) {
         tabLayout = (TabLayout) rootview.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(tabviewPager);
         tabviewPager= rootview.findViewById(R.id.tabviewPager);
+//        tabLayout.addTab(tabLayout.newTab().setText("Post"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Collection"));
 //        tablayput綁定viewpager
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
         setupViewPager(tabviewPager);
-        return rootview;
     }
 
 
@@ -79,5 +83,4 @@ public class MypageFragment extends Fragment {
             return tabTitles[position];
         }
     }
-
 }

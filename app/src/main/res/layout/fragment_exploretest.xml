@@ -6,15 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:background="@color/colorBackground"
+        android:layout_margin="5dp">
         <SearchView
             android:id="@+id/searchview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:background="?android:windowBackground"
-            android:gravity="center">
+            android:gravity="center"
+            android:queryHint="Search...">
 
         </SearchView>
-
+    </android.support.v7.widget.CardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <TextView
         android:id="@+id/tvtop"
         android:layout_width="match_parent"
@@ -27,8 +39,7 @@
         android:id="@+id/rvTop"
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:padding="5dp"
-        >
+        android:padding="5dp">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -44,4 +55,5 @@
         android:id="@+id/rvRecom"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    </LinearLayout>
 </LinearLayout>

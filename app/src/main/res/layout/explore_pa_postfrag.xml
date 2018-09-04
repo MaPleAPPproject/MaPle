@@ -3,14 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/post">
 
-    <Button
-        android:id="@+id/btBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back"
-        android:layout_gravity="right" />
 
     <LinearLayout
         android:id="@+id/linerlayout"
@@ -32,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textStyle="bold"
             android:padding="10dp"
             android:text="Nina"
             android:textSize="20dp" />
@@ -43,8 +39,8 @@
         android:layout_width="320dp"
         android:layout_height="320dp"
         android:layout_gravity="center"
-        android:padding="20dp"
-        android:src="@drawable/post1"/>
+        android:background="@color/colorAccent"
+        android:padding="20dp" />
 
     <LinearLayout
         android:layout_width="320dp"
@@ -71,10 +67,10 @@
             android:textSize="15dp" />
 
         <ImageView
+            android:id="@+id/btcollect"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:onClick="collect"
             android:padding="5dp"
             app:srcCompat="@drawable/ic_explore_collect" />
     </LinearLayout>

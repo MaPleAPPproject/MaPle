@@ -70,9 +70,9 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setClass(context, PostActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent();
+//                    intent.setClass(context, Explore_PA_PostFragment.class);
+//                    startActivity(intent);
                     //        /* 取得Bundle物件 */
 //                    int programming = Integer.parseInt(etProgramming.getText().toString());
 //                    Bundle bundle = new Bundle();

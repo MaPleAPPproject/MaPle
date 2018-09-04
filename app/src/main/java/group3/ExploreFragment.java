@@ -3,14 +3,16 @@ package group3;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.violethsu.maple.R;
@@ -25,13 +28,14 @@ import com.example.violethsu.maple.R;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressLint("ValidFragment")
 public class ExploreFragment extends Fragment {
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        mainActivity=(MainActivity) getActivity();
-//    }
+    MainActivity mainActivity;
+    private RecyclerView.ItemDecoration itemDecoration;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mainActivity = (MainActivity) getActivity();
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -60,17 +64,17 @@ public class ExploreFragment extends Fragment {
     private void handleviews(View view) {
         RecyclerView rvTop = view.findViewById(R.id.rvTop);
         rvTop.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false) );
-        rvTop.setAdapter(new ExploreFragment.PostAdapter(getPosts(), getActivity()));
+        rvTop.setAdapter(new PostAdapter(getPosts(), getActivity()));
         RecyclerView rvRecom = view.findViewById(R.id.rvRecom);
         rvRecom.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
-        rvRecom.setAdapter(new ExploreFragment.PostAdapter(getPosts(), getActivity()));
+        rvRecom.setAdapter(new PostAdapter(getPosts(), getActivity()));
         SearchView searchView=view.findViewById(R.id.searchview);
     }
 
-    public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
-        List<Post> posts;
-        Context context;
-        public PostAdapter(List<Post> posts, Context context) {
+    private class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
+        private List<Post> posts;
+        private Context context;
+        PostAdapter(List<Post> posts, Context context) {
             this.posts=posts;
             this.context=context;
 
@@ -81,6 +85,9 @@ public class ExploreFragment extends Fragment {
         }
         class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
+//            TextView tvId;
+//            TextView tvLocation;
+//            TextView tvComment;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 imageView=itemView.findViewById(R.id.ivtop);
@@ -96,42 +103,32 @@ public class ExploreFragment extends Fragment {
 
 
         @Override
-        public void onBindViewHolder(@NonNull ExploreFragment.PostAdapter.MyViewHolder myViewHolder, int position) {
+        public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
             final Post post = posts.get(position);
             myViewHolder.imageView.setImageResource(post.getImageId());
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setClass(context, PostActivity.class);
+                    Intent intent =new Intent(context,Explore_PostActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("post",post);
+                    intent.putExtras(bundle);
                     startActivity(intent);
-                    //        /* 取得Bundle物件 */
-//                    int programming = Integer.parseInt(etProgramming.getText().toString());
-//                    Bundle bundle = new Bundle();
-//                    Post post1 = new Post(programming, dataStructure, algorithm);
-//                    //轉成物件傳入(key,object)
-//                    bundle.putSerializable("score", score);
-//                    ResultFragment resultFragment = new ResultFragment();
-//                    /* 將Bundle資料轉給resultFragment */
-//                    resultFragment.setArguments(bundle);
-//                    if(getFragmentManager()==null){
-//                        return;
-
                 }
             });
 
         }
     }
-    private List<Post> getPosts() {
+    protected List<Post> getPosts() {
 //        next step:add all information
         List<Post> posts = new ArrayList<>();
-        posts.add(new Post(R.drawable.itemviewtest));
-        posts.add(new Post(R.drawable.post1));
-        posts.add(new Post(R.drawable.post2));
-        posts.add(new Post(R.drawable.post3));
-        posts.add(new Post(R.drawable.post4));
-        posts.add(new Post(R.drawable.post5));
-        posts.add(new Post(R.drawable.post6));
+        posts.add(new Post(R.drawable.itemviewtest,"Jack123","Hi","usa","aaaaaaaaaaaa"));
+        posts.add(new Post(R.drawable.post1,"Apple222","Hoooo","Lodon","bbbbbbbb"));
+        posts.add(new Post(R.drawable.post2,"Orange345","Nooo","Japan","ddddd"));
+        posts.add(new Post(R.drawable.post3,"Frankly","apppleee","TW","reeeee"));
+        posts.add(new Post(R.drawable.post4,"Cocooo","yo","China","gggg"));
+        posts.add(new Post(R.drawable.post5,"JJ","ii","Korea","eeeeeee"));
+        posts.add(new Post(R.drawable.post6,"OPPP","pp","Iceland","66666"));
         return posts;
     }
 //以下為searchbar的方法
