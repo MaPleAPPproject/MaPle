@@ -1,15 +1,21 @@
 package group3;
 
+import android.content.Intent;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 import com.example.violethsu.maple.R;
@@ -48,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
 //                    fragment = new ExploreFragment();
 //                    changeFragment(fragment);
                     return true;
+                    //點擊下方朋友選單時，跑出朋友清單
                 case R.id.navigation_friends:
+                    startfriendPage();
                     getSupportActionBar().show();
                     viewPager.setCurrentItem(2);
 //                    fragment = new FriendsFragment();
@@ -139,6 +147,12 @@ public class MainActivity extends AppCompatActivity {
         public void addFragment(Fragment fragment) {
             mainFragmentList.add(fragment);
         }
+    }
+
+    private void startfriendPage(){
+        Intent intent = new Intent();
+        intent.setClass(this , FriendsList.class);
+        startActivity(intent);
     }
 
 }
