@@ -3,4 +3,12 @@
     <string name="title_home">My page</string>
     <string name="title_explore">Explore</string>
     <string name="title_friends">Friends</string>
+    <string name="btchat">CHAT</string>
+    <string name="userlink">Name</string>
+    <string name="intro">Intro</string>
+    <string name="textTitle_FLists">Friends List</string>
+    <string name="match">Match</string>
+    <string name="textTitle_Match">Match</string>
+    <string name="menumatch">Match</string>
+    <string name="payment">Payment</string>
 </resources>

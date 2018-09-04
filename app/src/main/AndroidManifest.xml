@@ -17,6 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="group3.FriendsList" />
+        <activity android:name="group3.chat" />
+        <activity android:name="group3.Match" />
+        <activity android:name="group3.Payment"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--設定點擊Clear按鈕時顯示的圖示-->
+    <item android:drawable="@drawable/match_like"
+        android:state_pressed="true" />
+    <!--設定未點擊Clear按鈕時顯示的圖示-->
+    <item android:drawable="@drawable/match_like" />
+
+</selector>

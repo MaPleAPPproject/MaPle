@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="group3.Match">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        style="?android:buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/ibLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/matchlike"
+            android:onClick="onLikeClick"
+            android:layout_marginLeft="40dp"
+            android:layout_alignLeft="@id/tv"/>
+        <ImageButton
+            android:id="@+id/ibReject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRejectClick"
+            android:background="@drawable/matchreject"
+            android:layout_marginEnd="40dp"
+            android:layout_alignRight="@id/tv" />
+    </RelativeLayout>
+
+</LinearLayout>
