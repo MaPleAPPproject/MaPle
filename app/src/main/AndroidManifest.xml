@@ -17,10 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="group3.Explore_PostActivity"/>
+        <activity android:name="group3.Explore_PostActivity" />
         <activity android:name="group3.chat" />
         <activity android:name="group3.Match" />
-        <activity android:name="group3.Payment"></activity>
+        <activity android:name="group3.Payment" />
+        <activity android:name=".group3.Receipt" />
+        <activity android:name="group3.Receipt"></activity>
     </application>
 
 </manifest>

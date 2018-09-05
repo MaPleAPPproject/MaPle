@@ -1,9 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="group3.Payment">
 
-</android.support.constraint.ConstraintLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="30dp"
+            android:alpha="0.55"
+            />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-30dp"
+            android:text="○ 現在入會99元, 即享每日十次好友配對
+        ～讓你們聊得長長 9 9~"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/btPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="100dp" />
+
+        <ImageView
+            android:id="@+id/ivGooglePayIcon"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/rgPaymentType"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/rgPaymentType"
+            android:src="@drawable/googlepay" />
+
+        <ImageView
+            android:id="@+id/ivVisaPayIcon"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignStart="@+id/ivGooglePayIcon"
+            android:layout_below="@+id/ivGooglePayIcon"
+            android:src="@drawable/visapay" />
+
+
+        <RadioGroup
+            android:id="@+id/rgPaymentType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="191dp"
+            android:layout_marginStart="31dp">
+
+            <RadioButton
+                android:id="@+id/rbGooglePay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="用 GooglePay 支付"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20dp" />
+
+            <RadioButton
+                android:id="@+id/rbCreditCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="用 CreditCard 支付"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20dp" />
+        </RadioGroup>
+
+    </RelativeLayout>
+
+</FrameLayout>
