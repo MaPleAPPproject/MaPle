@@ -1,10 +1,8 @@
-package group3;
+package group3.explore;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,41 +17,41 @@ import com.example.violethsu.maple.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MypageFragment extends Fragment {
+import group3.mypage.Mypage_tab_colec_Fragment;
+import group3.mypage.Ｍypage_tab_post_Fragment;
+
+public class OtherspageFragment extends Fragment {
     private ViewPager tabviewPager;
     private TabLayout tabLayout;
+    public OtherspageFragment(){};
+    private Fragment fragment;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootview = inflater.inflate(R.layout.fragment_mypage, container, false);
-        handleviews(rootview);
-        return rootview;
-    }
-
-    private void handleviews(View rootview) {
-        tabLayout = (TabLayout) rootview.findViewById(R.id.tablayout);
+        View rootview = inflater.inflate(R.layout.fragment_otherspage, container, false);
+        tabLayout = (TabLayout) rootview.findViewById(R.id.tablayout1);
         tabLayout.setupWithViewPager(tabviewPager);
-        tabviewPager= rootview.findViewById(R.id.tabviewPager);
-//        tabLayout.addTab(tabLayout.newTab().setText("Post"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Collection"));
+        tabviewPager= rootview.findViewById(R.id.tabviewPager1);
+        tabLayout.addTab(tabLayout.newTab().setText("Grid"));
+        tabLayout.addTab(tabLayout.newTab().setText("Card"));
 //        tablayput綁定viewpager
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
         setupViewPager(tabviewPager);
+        return rootview;
     }
-
 
     private void setupViewPager(ViewPager viewPager) {
         TabViewPagerAdapter adapter = new TabViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new Ｍypage_tab_post_Fragment(), "Post");
-        adapter.addFragment(new Mypage_tab_colec_Fragment(), "Collection");
+        adapter.addFragment(new Ｍypage_tab_post_Fragment(), "Grid");
+        adapter.addFragment(new Mypage_tab_colec_Fragment(), "Card");
         viewPager.setAdapter(adapter);
     }
 
     public class TabViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> tabfragments = new ArrayList<>();
         private final List<String> tabfragmentstext = new ArrayList<>();
-        private String tabTitles[] = new String[]{"Post", "Collection"};
+        private String tabTitles[] = new String[]{"Grid", "Card"};
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
@@ -83,4 +81,5 @@ public class MypageFragment extends Fragment {
             return tabTitles[position];
         }
     }
+
 }

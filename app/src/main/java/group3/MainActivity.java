@@ -16,9 +16,8 @@ import com.example.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import group3.Friend.FriendsList;
 import group3.explore.ExploreFragment;
+import group3.friend.FriendsList;
 import group3.mypage.MypageFragment;
 
 // need to debug mypage頁面一開始沒有tablayout

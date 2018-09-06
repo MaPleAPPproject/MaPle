@@ -1,4 +1,4 @@
-package group3;
+package group3.friend;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

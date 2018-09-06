@@ -18,10 +18,10 @@
             </intent-filter>
         </activity>
         <activity android:name="group3.explore.Explore_PostActivity"/>
-        <activity android:name="group3.Friend.chat" />
-        <activity android:name="group3.Friend.Match" />
-        <activity android:name="group3.Friend.Payment"/>
-        <activity android:name="group3.Friend.Receipt"></activity>
+        <activity android:name="group3.friend.chat" />
+        <activity android:name="group3.friend.Match" />
+        <activity android:name="group3.friend.Payment"/>
+        <activity android:name="group3.friend.Receipt"></activity>
 
     </application>
 

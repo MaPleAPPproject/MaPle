@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="group3.Match">
+    tools:context="group3.friend.Match">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
