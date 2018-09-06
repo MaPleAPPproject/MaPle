@@ -1,42 +1,49 @@
 package group3;
 
-import android.content.Intent;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 
 import com.example.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import group3.Friend.FriendsList;
+import group3.explore.ExploreFragment;
+import group3.mypage.MypageFragment;
+
 // need to debug mypage頁面一開始沒有tablayout
 public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private MainActivity mainActivity;
 
-    protected BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
-            switch (item.getItemId()) {
-                case R.id.navigation_mypage:
-                    getSupportActionBar().show();
-                    viewPager.setCurrentItem(0);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        viewPager = findViewById(R.id.viewPager);
+        setupViewPager(viewPager);
+        final BottomNavigationView navigation =findViewById(R.id.navigation);
+         BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch (item.getItemId()) {
+                    case R.id.navigation_mypage:
+                        getSupportActionBar().show();
+                        viewPager.setCurrentItem(0);
 //                    fragment換頁
 //                    fragment = new MypageFragment();
 //                    changeFragment(fragment);
@@ -46,33 +53,25 @@ public class MainActivity extends AppCompatActivity {
 //                    intent.setClass(MainActivity.this, MypageFragment.class);
 //                    startActivity(intent);
 //                    finish();
-                    return true;
+                        return true;
 
-                case R.id.navigation_explore:
-                    getSupportActionBar().hide();
-                    viewPager.setCurrentItem(1);
+                    case R.id.navigation_explore:
+                        getSupportActionBar().hide();
+                        viewPager.setCurrentItem(1);
 //                    fragment = new ExploreFragment();
 //                    changeFragment(fragment);
-                    return true;
+                        return true;
                     //點擊下方朋友選單時，跑出朋友清單
-                case R.id.navigation_friends:
-                    getSupportActionBar().show();
-                    viewPager.setCurrentItem(2);
+                    case R.id.navigation_friends:
+                        getSupportActionBar().show();
+                        viewPager.setCurrentItem(2);
 //                    fragment = new FriendsFragment();
 //                    changeFragment(fragment);
-                    return true;
+                        return true;
+                }
+                return false;
             }
-            return false;
-        }
-    };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        viewPager = findViewById(R.id.viewPager);
-        setupViewPager(viewPager);
-        final BottomNavigationView navigation =findViewById(R.id.navigation);
+        };
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
