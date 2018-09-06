@@ -29,7 +29,7 @@ public class Payment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (vipStatus != false) {
-            setContentView(R.layout.receipt);
+            setContentView(R.layout.activity_receipt);
             //           receiptFragment();
         } else {
             setContentView(R.layout.activity_payment);

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/relativeTop"
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/ivPhotoIcon"
+            android:layout_width="82dp"
+            android:layout_height="82dp"
+            android:layout_centerInParent="true"
+            android:background="#FFFFFF"
+            android:onClick="onImageClick"
+            android:src="@drawable/icon_facev" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/ivPhotoIcon"
+            android:background="@color/colorGray"
+            android:layout_margin="5dp"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeTop"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="47dp">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/name"
+            style="@style/profileItem"/>
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="291dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="93dp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeName"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="47dp"
+        >
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/email"
+            style="@style/profileItem"/>
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="291dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="93dp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeEmail"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="47dp"
+        >
+
+        <TextView
+            android:id="@+id/tvPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/password"
+            style="@style/profileItem"/>
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="291dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="93dp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeVipStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativePassword"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="47dp"
+        >
+
+        <TextView
+            android:id="@+id/tvVipStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/vipStatus"
+            style="@style/profileItem"/>
+
+        <TextView
+            android:id="@+id/tvStatusResult"
+            style="@style/profileDescribe"
+            android:layout_width="61dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="101dp"
+            android:text="@string/no" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="77dp"
+            android:text="@string/premium_plan" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeSelfIntro"
+        android:layout_width="match_parent"
+        android:layout_height="201dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeVipStatus"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="6dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="47dp">
+
+        <TextView
+            android:id="@+id/tvSelfIntro"
+            android:layout_width="369dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="15dp"
+            android:text="@string/selfIntrodution"
+            style="@style/profileItem"/>
+
+        <EditText
+            android:id="@+id/etSelfIntro"
+            android:layout_width="match_parent"
+            android:layout_height="111dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvSelfIntro"
+            android:gravity="top"
+            android:layout_margin="10dp"
+            android:shadowRadius="1.0"/>
+
+        <Button
+            android:id="@+id/btSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/etSelfIntro"
+            android:layout_marginEnd="14dp"
+            android:onClick="onSaveClick"
+            android:text="@string/save" />
+
+
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

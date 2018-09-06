@@ -45,9 +45,9 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_alignTop="@+id/rgPaymentType"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/rgPaymentType"
-            android:src="@drawable/googlepay" />
+            android:layout_centerVertical="true"/>
+            <!--android:layout_toEndOf="@+id/rgPaymentType"-->
+            <!--android:src="@drawable/googlepay" />-->
 
         <ImageView
             android:id="@+id/ivVisaPayIcon"

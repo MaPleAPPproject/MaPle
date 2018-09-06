@@ -4,4 +4,5 @@
     <string name="title_home">個人頁面</string>
     <string name="title_explore">探索</string>
     <string name="title_friends">好友</string>
+    <string name="msg_NoCameraAppsFound">No camera apps found</string>
 </resources>
