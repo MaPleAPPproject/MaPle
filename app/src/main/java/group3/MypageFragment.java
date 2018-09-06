@@ -1,9 +1,6 @@
 package group3;
 
 import android.app.ActionBar;
-import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,51 +13,21 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
 
 import com.example.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MypageFragment extends Fragment  {
+public class MypageFragment extends Fragment {
     private ViewPager tabviewPager;
     private TabLayout tabLayout;
-    private ImageButton addNewPost,map,chart,snapshot;
-
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootview = inflater.inflate(R.layout.fragment_mypage, container, false);
         handleviews(rootview);
-
-        snapshot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent profileIntent = new Intent(getActivity(),MyPage_User_ProfileActivity.class);
-                startActivity(profileIntent);
-
-
-            }
-        });
-
-        addNewPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent newPostIntent = new Intent(getActivity(),NewPostActivity.class);
-                startActivity(newPostIntent);
-
-            }
-        });
-
-
-
         return rootview;
     }
 
@@ -73,13 +40,6 @@ public class MypageFragment extends Fragment  {
 //        tablayput綁定viewpager
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
         setupViewPager(tabviewPager);
-        addNewPost = (ImageButton)rootview.findViewById(R.id.btaddNewPost);
-        map = (ImageButton)rootview.findViewById(R.id.btMap);
-        chart =(ImageButton) rootview.findViewById(R.id.btChart);
-        snapshot = (ImageButton)rootview.findViewById(R.id.snapshot);
-
-
-
     }
 
 
@@ -89,9 +49,6 @@ public class MypageFragment extends Fragment  {
         adapter.addFragment(new Mypage_tab_colec_Fragment(), "Collection");
         viewPager.setAdapter(adapter);
     }
-
-
-
 
     public class TabViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> tabfragments = new ArrayList<>();

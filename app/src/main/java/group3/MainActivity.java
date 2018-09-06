@@ -148,18 +148,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-        int id = getIntent().getIntExtra("id", 0);
-        if (id == 1) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.mypagetest,new MypageFragment())
-                    .addToBackStack(null)
-                    .commit();
-        }
-
-    }
 }

@@ -11,15 +11,4 @@
     <string name="textTitle_Match">Match</string>
     <string name="menumatch">Match</string>
     <string name="payment">Payment</string>
-    <string name="msg_NoCameraAppsFound">No camera apps found</string>
-    <string name="what_s_new">What\'s new?</string>
-    <string name="name">name</string>
-    <string name="email">email</string>
-    <string name="password">password</string>
-    <string name="vipStatus">VIP Status</string>
-    <string name="no">No</string>
-    <string name="premium_plan">Premium Plan</string>
-    <string name="selfIntrodution">Self Introduction</string>
-    <string name="save">Save</string>
-
 </resources>
