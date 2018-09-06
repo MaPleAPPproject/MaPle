@@ -1,4 +1,4 @@
-package group3;
+package group3.explore;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.example.violethsu.maple.R;
+
+import group3.MainActivity;
 
 public class Explore_PostActivity extends MainActivity {
     private Fragment fragment;

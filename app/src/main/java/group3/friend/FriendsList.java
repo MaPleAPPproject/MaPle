@@ -1,10 +1,8 @@
-package group3;
+package group3.friend;
 
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -24,6 +22,8 @@ import android.widget.TextView;
 import com.example.violethsu.maple.R;
 
 import java.util.ArrayList;
+
+import group3.explore.Explore_PostActivity;
 
 public class FriendsList extends Fragment {
 

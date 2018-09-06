@@ -1,15 +1,15 @@
-package group3;
+package group3.friend;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.violethsu.maple.R;
 
-public class Payment extends AppCompatActivity {
+public class Receipt extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.activity_receipt);
     }
 }

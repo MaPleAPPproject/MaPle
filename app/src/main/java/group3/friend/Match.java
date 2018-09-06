@@ -1,4 +1,4 @@
-package group3;
+package group3.friend;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.example.violethsu.maple.R;
 import java.util.ArrayList;
 import java.util.List;
+
+import group3.friend.Friend;
 
 import static com.example.violethsu.maple.R.layout.activity_match;
 
