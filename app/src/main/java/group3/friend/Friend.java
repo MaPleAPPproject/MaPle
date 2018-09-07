@@ -1,4 +1,4 @@
-package group3;
+package group3.friend;
 
 public class Friend {
 

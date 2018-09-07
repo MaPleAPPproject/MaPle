@@ -16,9 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.violethsu.maple.R;
+import com.cp102group3maple.violethsu.maple.R;
 
-import java.util.List;
+import group3.explore.OtherspageFragment;
 
 public class Explore_PA_PostFragment extends Fragment{
     private Button btBack;
@@ -26,6 +26,11 @@ public class Explore_PA_PostFragment extends Fragment{
     private TextView tvid,tvlocation,tvcomment;
     private Fragment fragment;
     private Bundle bundle;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -56,8 +61,8 @@ public class Explore_PA_PostFragment extends Fragment{
 //            }
 //        });
         /* 取得Bundle物件 */
-        Bundle bundle = getArguments();
-        /* 如果Bundle不為null，進一步取得Friend物件 */
+        Bundle bundle = this.getArguments();
+        /* 如果Bundle不為null，進一步取得物件 */
         Post post = bundle == null ? null : (Post) bundle.getSerializable("post");
         /* 如果Friend物件不為null，顯示各個屬性值，否則顯示錯誤訊息 */
         if (post != null) {

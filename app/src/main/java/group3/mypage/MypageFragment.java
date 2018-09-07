@@ -1,10 +1,8 @@
-package group3;
+package group3.mypage;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.violethsu.maple.R;
+import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;

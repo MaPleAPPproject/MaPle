@@ -1,8 +1,6 @@
-package group3;
+package group3.friend;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +9,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.android.billingclient.api.BillingClient;
-import com.example.violethsu.maple.R;
+import com.cp102group3maple.violethsu.maple.R;
 
 public class Payment extends AppCompatActivity {
     private ImageButton itPaymentConfirm;
@@ -21,7 +19,7 @@ public class Payment extends AppCompatActivity {
     private FragmentManager fragmentManager;
     //    private AllInOne aio = new AllInOne(path);
     private boolean vipStatus = false;
-    private BillingClient billingClient;
+    private BillingManager mBillingManager;
 
 
     @Override
@@ -53,9 +51,7 @@ public class Payment extends AppCompatActivity {
 //    }
 
     private void pay() {
-//        billingClient = new BillingClient.newBuilder()
-//                .setListenter()
-//                .build();
+        mBillingManager = new BillingManager(this);
     }
 
     private void clickEven() {

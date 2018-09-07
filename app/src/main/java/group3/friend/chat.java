@@ -1,9 +1,9 @@
-package group3;
+package group3.friend;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.violethsu.maple.R;
+import com.cp102group3maple.violethsu.maple.R;
 
 public class chat extends AppCompatActivity {
 
