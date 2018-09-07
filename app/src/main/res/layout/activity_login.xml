@@ -36,6 +36,7 @@
         android:hint="Account"
         android:singleLine="true"
         android:textColorHint="#FFFFFF"
+        android:textColor="#CCCCCC"
         android:textSize="30dp"
         android:textStyle="bold" />
 
@@ -51,6 +52,7 @@
         android:inputType="textPassword"
         android:singleLine="true"
         android:textColorHint="#FFFFFF"
+        android:textColor="#CCCCCC"
         android:textSize="30dp"
         android:textStyle="bold" />
 
