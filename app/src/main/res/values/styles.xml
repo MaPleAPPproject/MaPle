@@ -7,5 +7,23 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="TextButton">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">12sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">#20B2AA</item>
+        <item name="android:shape">rectangle</item>
+        <item name="android:layout_margin">15dp</item>
+        <item name="android:padding">10dp</item>
+
+
+    </style>
+
+    <style name="profileItem">profileItem</style>
+
+    <style name="profileDescribe">profileDescribe</style>
+
 
 </resources>

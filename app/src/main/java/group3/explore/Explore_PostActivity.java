@@ -8,9 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.cp102group3maple.violethsu.maple.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import group3.MainActivity;
 
 public class Explore_PostActivity extends MainActivity {

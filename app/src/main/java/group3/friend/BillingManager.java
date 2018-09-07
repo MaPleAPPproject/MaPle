@@ -1,4 +1,4 @@
-package group3;
+package group3.friend;
 
 import android.app.Activity;
 import android.support.annotation.Nullable;

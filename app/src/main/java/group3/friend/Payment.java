@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.android.billingclient.api.BillingClient;
 import com.cp102group3maple.violethsu.maple.R;
 
 public class Payment extends AppCompatActivity {

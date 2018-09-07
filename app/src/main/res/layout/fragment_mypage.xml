@@ -18,12 +18,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
+            <ImageButton
+                android:id="@+id/snapshot"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_margin="10dp"
                 android:padding="10dp"
-                android:src="@drawable/ic_navigation_homepage" />
+                android:src="@drawable/icon_facev" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -40,18 +41,19 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/btaddNewPost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/ic_navigation_homepage" />
+                android:background="@drawable/icon_addpost" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Post"
+                android:text="Add"
                 android:textSize="15dp" />
         </LinearLayout>
 
@@ -62,12 +64,13 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/btMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/ic_navigation_homepage" />
+                android:background="@drawable/ic_mypage_map" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -84,12 +87,13 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/btChart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/ic_navigation_homepage" />
+                android:background="@drawable/ic_mypage_charts" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -1,4 +1,4 @@
-package group3;
+package group3.explore;
 
 import android.app.WallpaperManager;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
 
+import group3.Post;
 import group3.explore.OtherspageFragment;
 
 public class Explore_PA_PostFragment extends Fragment{

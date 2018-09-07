@@ -1,4 +1,4 @@
-package group3;
+package group3.friend;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
