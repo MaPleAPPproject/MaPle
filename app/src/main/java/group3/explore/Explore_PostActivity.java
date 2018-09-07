@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.cp102group3maple.violethsu.maple.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import group3.MainActivity;
 
 public class Explore_PostActivity extends MainActivity {
@@ -19,6 +22,7 @@ public class Explore_PostActivity extends MainActivity {
         setContentView(R.layout.explore_pa_main);
         getSupportActionBar().show();
         fragment=new Explore_PA_PostFragment();
+        fragment.setArguments(this.getIntent().getExtras());
         changeFragment(fragment);
 
     }

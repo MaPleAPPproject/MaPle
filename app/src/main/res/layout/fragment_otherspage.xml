@@ -34,7 +34,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvName"
+                android:id="@+id/tvotherName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -44,7 +44,7 @@
                 android:textSize="20sp"
                 android:padding="5dp" />
             <TextView
-                android:id="@+id/selfintroduction"
+                android:id="@+id/tvotherselfintro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"

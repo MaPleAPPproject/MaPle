@@ -11,12 +11,15 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import group3.Post;
 import group3.mypage.Mypage_tab_colec_Fragment;
 import group3.mypage.Ｍypage_tab_post_Fragment;
 
@@ -25,11 +28,13 @@ public class OtherspageFragment extends Fragment {
     private TabLayout tabLayout;
     public OtherspageFragment(){};
     private Fragment fragment;
+    private TextView tvName,tvSelf;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootview = inflater.inflate(R.layout.fragment_otherspage, container, false);
+        handleviews(rootview);
         tabLayout = (TabLayout) rootview.findViewById(R.id.tablayout1);
         tabLayout.setupWithViewPager(tabviewPager);
         tabviewPager= rootview.findViewById(R.id.tabviewPager1);
@@ -39,6 +44,18 @@ public class OtherspageFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
         setupViewPager(tabviewPager);
         return rootview;
+    }
+
+    private void handleviews(View rootview) {
+        tvName=rootview.findViewById(R.id.tvotherName);
+        tvSelf=rootview.findViewById(R.id.tvotherselfintro);
+        Post post = (Post) (getArguments() != null ? getArguments().getSerializable("post") : null);
+        if(post!=null){
+            tvName.setText(post.getPersonid());
+            tvSelf.setText(post.getSelfintro());
+        }else {
+            Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
