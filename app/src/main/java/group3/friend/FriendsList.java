@@ -1,4 +1,4 @@
-package group3;
+package group3.friend;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
+
+import group3.explore.Explore_PostActivity;
 
 public class FriendsList extends Fragment {
 

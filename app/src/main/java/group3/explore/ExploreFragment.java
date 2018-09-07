@@ -1,4 +1,4 @@
-package group3;
+package group3.explore;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,9 @@ import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import group3.MainActivity;
+import group3.Post;
 
 public class ExploreFragment extends Fragment {
     MainActivity mainActivity;

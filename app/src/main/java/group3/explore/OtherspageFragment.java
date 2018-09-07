@@ -1,4 +1,4 @@
-package group3;
+package group3.explore;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +16,9 @@ import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import group3.mypage.Mypage_tab_colec_Fragment;
+import group3.mypage.Ｍypage_tab_post_Fragment;
 
 public class OtherspageFragment extends Fragment {
     private ViewPager tabviewPager;

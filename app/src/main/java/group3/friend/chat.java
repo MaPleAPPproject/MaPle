@@ -1,4 +1,4 @@
-package group3;
+package group3.friend;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

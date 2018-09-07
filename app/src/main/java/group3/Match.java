@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.cp102group3maple.violethsu.maple.R;
 import java.util.ArrayList;
 import java.util.List;
+import group3.friend.Friend;
 
 import static com.cp102group3maple.violethsu.maple.R.layout.activity_match;
 

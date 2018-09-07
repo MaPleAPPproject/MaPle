@@ -1,4 +1,4 @@
-package group3;
+package group3.mypage;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import group3.Post;
 
 public class Mypage_tab_colec_Fragment extends Fragment {
     @Nullable
