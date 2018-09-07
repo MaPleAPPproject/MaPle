@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.violethsu.maple.R;
+import com.cp102group3maple.violethsu.maple.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.violethsu.maple.R.layout.activity_match;
+import static com.cp102group3maple.violethsu.maple.R.layout.activity_match;
 
 
 public class Match extends AppCompatActivity {

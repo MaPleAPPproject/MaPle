@@ -1,7 +1,5 @@
 package group3;
 
-import android.app.WallpaperManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,9 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.violethsu.maple.R;
-
-import java.util.List;
+import com.cp102group3maple.violethsu.maple.R;
 
 public class Explore_PA_PostFragment extends Fragment{
     private Button btBack;

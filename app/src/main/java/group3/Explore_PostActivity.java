@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-import com.example.violethsu.maple.R;
+import com.cp102group3maple.violethsu.maple.R;
 
 public class Explore_PostActivity extends MainActivity {
     private Fragment fragment;
