@@ -1,8 +1,11 @@
 package group3;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -10,6 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Common {
+
+    public String URL = "http://10.0.2.2:8080/MaPle_Web";
     public static Bitmap downSize(Bitmap srcPicture, int newSize) {
 
         if (newSize < 20) {
@@ -47,4 +52,15 @@ public class Common {
                     requestCode);
         }
     }
+//    public static boolean networkConnected(Activity activity){
+//        ConnctivityManager connctivityManager =
+//                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connctivityManager != null? connctivityManager.getActiveNetworkInfo() : null;
+//        return networkInfo != null && networkInfo.isConnected();
+//    }
+
+
+
+
+
 }

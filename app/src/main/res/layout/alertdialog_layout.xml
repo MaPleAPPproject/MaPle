@@ -2,34 +2,57 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_margin="15dp"
     android:gravity="center_horizontal"
     android:background = "#FFFFFF"
-    android:orientation="horizontal">
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linerlayout01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="Pick a photo from :"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linerlayout02"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/camera"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom"
+            android:background="#00ffffff"
+            android:layout_marginStart="55dp"
+            android:layout_marginLeft="55dp"
+            android:src="@drawable/icon_photo_camera" />
 
 
-
-    <ImageButton
-        android:id="@+id/camera"
-        android:layout_height="100dp"
-        android:layout_width="100dp"
-        android:layout_margin="5dp"
-        android:layout_gravity="bottom"
-        android:background = "#00ffffff"
-        android:foregroundGravity="fill_horizontal"
-        android:src="@drawable/icon_photo_camera"/>
+        <ImageButton
+            android:id="@+id/gallery"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom"
+            android:background="#00ffffff"
 
 
-    <ImageButton
-        android:id="@+id/gallery"
-        android:layout_height="100dp"
-        android:layout_width="100dp"
-        android:layout_margin="5dp"
-        android:layout_gravity="bottom"
-        android:background = "#00ffffff"
-        android:foregroundGravity="fill_horizontal"
-        android:src="@drawable/icon_photo_library"/>
+            android:src="@drawable/icon_photo_library" />
+
+    </LinearLayout>
+
+
 
 
 
