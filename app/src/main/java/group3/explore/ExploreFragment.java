@@ -6,16 +6,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -28,6 +31,8 @@ import group3.Post;
 
 public class ExploreFragment extends Fragment {
     MainActivity mainActivity;
+    SearchView searchView;
+    Context contentview;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +48,23 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search, menu);
-        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
         searchView.setOnQueryTextListener((SearchView.OnQueryTextListener) queryListener);
+        final SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setDropDownBackgroundResource(android.R.color.background_light);
+        // Create a new ArrayAdapter and add data to search auto complete object.
+//        need to add connect from web
+        String dataArr[] = {"Japan" , "Korea" , "Taiwan", "Taipei", "New York", "China", "Thailand", "USA"};
+        ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(contentview, android.R.layout.simple_dropdown_item_1line, dataArr);
+        searchAutoComplete.setAdapter(newsAdapter);
 
+        // Listen to search view item on click event.
+        searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int itemIndex, long id) {
+                String queryString=(String)adapterView.getItemAtPosition(itemIndex);
+                searchAutoComplete.setText("" + queryString);
+            }
+        });
     }
 
     @Nullable
@@ -65,7 +84,8 @@ public class ExploreFragment extends Fragment {
         RecyclerView rvRecom = view.findViewById(R.id.rvRecom);
         rvRecom.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
         rvRecom.setAdapter(new PostAdapter(getPosts(), getActivity()));
-        SearchView searchView=view.findViewById(R.id.searchview);
+        searchView=view.findViewById(R.id.searchview);
+        contentview=view.getContext();
     }
 
     private class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
@@ -82,9 +102,6 @@ public class ExploreFragment extends Fragment {
         }
         class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
-//            TextView tvId;
-//            TextView tvLocation;
-//            TextView tvComment;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 imageView=itemView.findViewById(R.id.ivtop);
@@ -129,27 +146,18 @@ public class ExploreFragment extends Fragment {
         return posts;
     }
 //以下為searchbar的方法
-    private String grid_currentQuery = null; // holds the current query...
-    final private android.widget.SearchView.OnQueryTextListener queryListener = new android.widget.SearchView.OnQueryTextListener() {
+    final private SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
 
         @Override
         public boolean onQueryTextChange(String newText) {
-//            if (TextUtils.isEmpty(newText)) {
-//                getActivity().getActionBar().setSubtitle("List");
-//                grid_currentQuery = null;
-//            } else {
-//                getActivity().getActionBar().setSubtitle("List - Searching for: " + newText);
-//                grid_currentQuery = newText;
-//                return true;
-//
-//            }
-//            getLoaderManager().restartLoader(0, null, ExploreFragment.this);
             return false;
         }
 
         @Override
         public boolean onQueryTextSubmit(String query) {
-            Toast.makeText(getActivity(), "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
+//            收起鍵盤
+//            更換recycleview 顯示搜尋結果的post
+
             return false;
         }
     };
