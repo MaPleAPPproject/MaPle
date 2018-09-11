@@ -47,7 +47,16 @@ public class MypageFragment extends Fragment {
 
             }
         });
+
+        chart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent chartIntent = new Intent(getActivity(),Mypage_Chart_Activity.class);
+                startActivity(chartIntent);
+            }
+        });
         return rootview;
+
     }
 
     private void handleviews(View rootview) {

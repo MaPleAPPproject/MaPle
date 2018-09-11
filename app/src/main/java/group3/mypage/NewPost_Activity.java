@@ -101,6 +101,7 @@ public class NewPost_Activity extends Activity {
 
     public void onClick(View view) {
 
+//
 //        alertFragment = new AlertDialogFragment();
 //        FragmentManager fragmentManager= getSupportFragmentManager();
 //        alertFragment.show(fragmentManager, "alert");
@@ -227,3 +228,4 @@ public class NewPost_Activity extends Activity {
 
     }
 }
+

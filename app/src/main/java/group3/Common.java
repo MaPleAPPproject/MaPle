@@ -1,10 +1,7 @@
 package group3;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -12,15 +9,16 @@ import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import group3.mypage.Mypage_UserProfile_Activity;
+import static android.content.Context.*;
+import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Common {
 
-    public String URL = "http://10.0.2.2:8080/MaPle_Web";
-    public final static String PREF_FILE = "preference";
+    public static String URL = "http://10.0.2.2:8080/MaPle_Web";
     public static Bitmap downSize(Bitmap srcPicture, int newSize) {
 
         if (newSize < 20) {
@@ -58,42 +56,21 @@ public class Common {
                     requestCode);
         }
     }
-//    public static boolean networkConnected(Activity activity){
-//        ConnctivityManager connctivityManager =
-//                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo networkInfo = connctivityManager != null? connctivityManager.getActiveNetworkInfo() : null;
-//        return networkInfo != null && networkInfo.isConnected();
-//    }
 
 
-//    public void confirmExit(){
-//
-//
-//        AlertDialog.Builder  ad= new AlertDialog.Builder(Common,MainActivity.class)
-//                .setTitle("確認視窗")
-//                .setMessage("確定要離開此頁面嗎？")
-//                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//
-//
-//                    }
-//                })
-//                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//
-//                    }
-//                });
-//        ad.show();
-//
-//
-//    }
+    public static boolean networkConnected(Context context) {
+        ConnectivityManager conManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = conManager != null ? conManager.getActiveNetworkInfo() : null;
+        return networkInfo != null && networkInfo.isConnected();
+    }
 
 
+    public static byte[] bitmapToPNG(Bitmap srcPicture) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        srcPicture.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
 
 
-
+    }
 }

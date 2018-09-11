@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,38 +21,60 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
+import android.util.Base64;
+import android.util.EventLog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import group3.Common;
+import group3.MainActivity;
+import group3.friend.Payment;
 
 import static android.support.constraint.motion.utils.Oscillator.TAG;
+import static android.view.KeyEvent.KEYCODE_B;
+
 
 public class Mypage_UserProfile_Activity extends Activity {
-    private String name;
-    private String email;
-    private String password;
+
+
     private ImageButton ibPhotoIcon;
-    private Button save;
+    private Button save,cancel,premium;
     private ImageButton camera_btn;
     private ImageButton gallery_btn;
     private static final int REQUEST_TAKE_PICTURE = 1;
     private static final int REQUEST_PICK_PICTURE = 2;
     private static final int REQUEST_CROP_PICTURE = 3;
+
     private static File file;
     Intent intent;
     private Uri contentUri, croppedImageUri;
     private Bitmap picture;
+    private final static String PREFERENCES_NAME = "preferences";
+    private final static String DEFAULT_NAME = "";
+    private final static String DEFAULT_EMAIL = "";
+    private final static String DEFAULT_PASSWORD = "";
+    private final static String DEFAULT_SELFINTRO = "";
+    public static final int KEYCODE_BACK  = 4;
+    private EditText etName,etEmail,etPassword,etSelfIntro;
+    private byte[] image;
+    private CommonTask uploadTask;
+
+
 
 
     public Mypage_UserProfile_Activity() {
@@ -62,6 +87,9 @@ public class Mypage_UserProfile_Activity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
         handleView();
+        loadPreference();
+
+
 
 
 
@@ -69,16 +97,153 @@ public class Mypage_UserProfile_Activity extends Activity {
 
     private void handleView() {
         save = findViewById(R.id.btSave);
+        cancel = findViewById(R.id.btCancel);
         ibPhotoIcon = findViewById(R.id.ivPhotoIcon);
+        etName = findViewById(R.id.etName);
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+        etSelfIntro = findViewById(R.id.etSelfIntro);
+        premium = findViewById(R.id.btPremium);
 
+
+
+
+
+    }
+
+
+    private void loadPreference(){
+        SharedPreferences pf = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        String name = pf.getString("name", DEFAULT_NAME);
+        String email = pf.getString("email", DEFAULT_EMAIL);
+        String password = pf.getString("passoword", DEFAULT_PASSWORD);
+        String selfIntro = pf.getString("selfIntro", DEFAULT_SELFINTRO);
+
+        etName.setText(name);
+        etEmail.setText(email);
+        etPassword.setText(password);
+        etSelfIntro.setText(selfIntro);
+    }
+
+    //呼叫會在畫面上顯示各個偏好設定的預設值
+    private void restoreDefaults(){
+        etName.setText(DEFAULT_NAME);
+        etEmail.setText(DEFAULT_EMAIL);
+        etPassword.setText(DEFAULT_PASSWORD);
+        etSelfIntro.setText(DEFAULT_SELFINTRO);
+    }
+
+
+
+    public void onCancelClick(View view) {
+        confirmExit();
 
     }
 
 
     public void onSaveClick(View view) {
 
-        Toast.makeText(this, "saved", Toast.LENGTH_SHORT);
+        SharedPreferences pf = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        String name = etName.getText().toString();
+        String email = etEmail.getText().toString();
+        String password = etPassword.getText().toString();
+        String selfIntro = etSelfIntro.getText().toString();
+        pf.edit().putString("name",name).apply();
+        pf.edit().putString("email",email).apply();
+        pf.edit().putString("password",password).apply();
+        pf.edit().putString("selfIntro",selfIntro).apply();
+
+
+        if(image == null){
+            Toast.makeText(this, R.string.no_Image, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (Common.networkConnected(this)){
+            String url = Common.URL + "/MapleServelet";
+
+            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+            byte[] image = Common.bitmapToPNG(picture);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "imageInsert");
+            jsonObject.addProperty("name", name);
+            jsonObject.addProperty("email", email);
+            jsonObject.addProperty("password", password);
+            jsonObject.addProperty("selfIntro", selfIntro);
+            jsonObject.addProperty("imageBase64", Base64.encodeToString(image, Base64.DEFAULT));
+            uploadTask = new CommonTask(url,jsonObject.toString());
+
+            try {
+                String jsonIn = uploadTask.execute().get();
+                JsonObject jsonObject1 = new Gson().fromJson(jsonIn,JsonObject.class);
+                name = jsonObject1.get("name").getAsString();
+                email = jsonObject1.get("email").getAsString();
+                password = jsonObject1.get("password").getAsString();
+                selfIntro = jsonObject1.get("selfIntro").getAsString();
+                image = Base64.decode((jsonObject1.get("imageBase64")).getAsString(),Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+
+
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+
+        }else{
+            Toast.makeText(this, getString(R.string.msg_Nonetwork), Toast.LENGTH_SHORT).show();
+        }
+
+
+        Toast.makeText(this, "saved", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
+        startActivity(intent);
     }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            confirmExit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+
+
+    }
+
+
+    public void confirmExit(){
+
+
+        AlertDialog.Builder  ad= new AlertDialog.Builder(Mypage_UserProfile_Activity.this)
+                .setTitle("確認視窗")
+                .setMessage("確定要離開此頁面嗎？")
+                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+
+
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                });
+        ad.show();
+
+
+    }
+
+
+
+
 
     public void onImageClick(View view) {
 
@@ -121,9 +286,37 @@ public class Mypage_UserProfile_Activity extends Activity {
                 Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent1, REQUEST_PICK_PICTURE);
                 if(alertDialog!=null)
-                alertDialog.dismiss();
+                    alertDialog.dismiss();
             }
         });
+
+
+    }
+
+    public void onPremiumClick(View view) {
+
+
+        AlertDialog.Builder  ad= new AlertDialog.Builder(Mypage_UserProfile_Activity.this)
+                .setTitle("確認視窗")
+                .setMessage("確定要離開此頁面嗎？")
+                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent premiumIntent = new Intent(Mypage_UserProfile_Activity.this, Payment.class);
+                        startActivity(premiumIntent);;
+
+
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                });
+        ad.show();
+
 
 
     }
@@ -249,6 +442,21 @@ public class Mypage_UserProfile_Activity extends Activity {
             startActivityForResult(cropIntent, REQUEST_CROP_PICTURE);
         } catch (ActivityNotFoundException anfe) {
             Toast.makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public SharedPreferences getPreferences(int mode) {
+        return super.getPreferences(MODE_PRIVATE);
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(uploadTask!=null) {
+            uploadTask.cancel(true);
         }
     }
 }

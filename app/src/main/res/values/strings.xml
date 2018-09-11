@@ -27,4 +27,9 @@
     <string name="marker_snippet_Kaohsiung">台灣</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_signup">Signup</string>
+    <string name="cancel">CANCEL</string>
+    <string name="msg_Nonetwork">no network connection available</string>
+    <string name="pick_a_photo_from">Pick a photo from :</string>
+    <string name="no_Image">No image</string>
 </resources>
+
