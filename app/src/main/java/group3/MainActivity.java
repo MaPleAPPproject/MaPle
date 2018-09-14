@@ -1,6 +1,5 @@
 package group3;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -28,6 +27,8 @@ import group3.mypage.MypageFragment;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ViewPager viewPager;
+    private MainActivity mainActivity;
+
 
 
     @Override
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().hide();
                         viewPager.setCurrentItem(1);
                         return true;
+                    //點擊下方朋友選單時，跑出朋友清單
                     case R.id.navigation_friends:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(2);
