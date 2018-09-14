@@ -1,20 +1,25 @@
 package group3.mypage;
 
-import android.widget.ImageView;
+
 
 public class Mypage_NewPost {
 
-    private int postId,postPhotoId;
-    private  String location,content;
-    private ImageView imageView;
+    private int postId,photoId;
+    private  String location,content,countrycode,address,district;
+    private double longitude,latitude;
 
-    public Mypage_NewPost(int postId, int postPhotoId, String location, String content, ImageView imageView) {
+    public Mypage_NewPost(int postId, int photoId, String location, String content, String countrycode, String address, String district, double longitude, double latitude) {
         this.postId = postId;
-        this.postPhotoId = postPhotoId;
+        this.photoId = photoId;
         this.location = location;
         this.content = content;
-        this.imageView = imageView;
+        this.countrycode = countrycode;
+        this.address = address;
+        this.district = district;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
+
 
     public int getPostId() {
         return postId;
@@ -24,12 +29,12 @@ public class Mypage_NewPost {
         this.postId = postId;
     }
 
-    public int getPostPhotoId() {
-        return postPhotoId;
+    public int getPhotoId() {
+        return photoId;
     }
 
-    public void setPostPhotoId(int postPhotoId) {
-        this.postPhotoId = postPhotoId;
+    public void setPhotoId(int photoId) {
+        this.photoId = photoId;
     }
 
     public String getLocation() {
@@ -48,15 +53,45 @@ public class Mypage_NewPost {
         this.content = content;
     }
 
-    public ImageView getImageView() {
-        return imageView;
+    public String getCountrycode() {
+        return countrycode;
     }
 
-    public void setImageView(ImageView imageView) {
-        this.imageView = imageView;
+    public void setCountrycode(String countrycode) {
+        this.countrycode = countrycode;
     }
 
+    public String getAddress() {
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
 
 }

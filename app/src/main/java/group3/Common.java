@@ -2,6 +2,7 @@ package group3;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -18,8 +19,32 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Common {
 
-    public static String URL = "http://10.0.2.2:8080/MaPle_Web";
+    public static String URL = "http://10.0.2.2:8080/MaPle";
+    public final static String PREF_FILE = "preference";
+    private final static String DEFAULT_NAME = "";
+    private final static String DEFAULT_EMAIL = "";
+    private final static String DEFAULT_PASSWORD = "";
+    private final static String DEFAULT_SELFINTRO = "";
     public static Bitmap downSize(Bitmap srcPicture, int newSize) {
+
+        if (newSize < 20) {
+            newSize = 20;
+        }
+        int srcWidth = srcPicture.getWidth();
+        int srcHeight = srcPicture.getHeight();
+        int longer = Math.max(srcWidth, srcHeight);
+        if (longer > newSize) {
+            double scale = longer / (double) newSize;
+            int dstWidth = (int) (srcWidth / scale);
+            int dstHeight = (int) (srcHeight / scale);
+
+            srcPicture = Bitmap.createScaledBitmap(srcPicture, dstWidth, dstHeight, false);
+            System.gc();
+        }
+        return srcPicture;
+    }
+
+    public static Bitmap upSize(Bitmap srcPicture, int newSize) {
 
         if (newSize < 20) {
             newSize = 20;
@@ -73,4 +98,11 @@ public class Common {
 
 
     }
+
+//    @Override
+//    public SharedPreferences getSharedPreferences(String name, int mode) {
+//        return getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+//    }
+
+
 }

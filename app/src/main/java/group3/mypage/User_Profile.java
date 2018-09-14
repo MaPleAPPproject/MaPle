@@ -9,11 +9,11 @@ public class User_Profile implements Serializable {
     private String name;
     private String email;
     private String password;
-    private boolean vipStatus;
+    private int vipStatus;
     private String selfIntroduction;
 
 
-    public User_Profile(int snapshotID, String name, String email, String password, boolean vipStatus, String selfIntroduction) {
+    public User_Profile(int snapshotID, String name, String email, String password, int vipStatus, String selfIntroduction) {
         this.snapshotID = snapshotID;
         this.name = name;
         this.email = email;
@@ -53,11 +53,11 @@ public class User_Profile implements Serializable {
         this.password = password;
     }
 
-    public boolean isVipStatus() {
+    public int isVipStatus() {
         return vipStatus;
     }
 
-    public void setVipStatus(boolean vipStatus) {
+    public void setVipStatus(int vipStatus) {
         this.vipStatus = vipStatus;
     }
 

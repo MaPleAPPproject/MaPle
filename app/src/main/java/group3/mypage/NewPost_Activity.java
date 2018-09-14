@@ -2,7 +2,7 @@ package group3.mypage;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,37 +16,45 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.cp102group3maple.violethsu.maple.R;
 
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URI;
 import java.util.List;
 
 import group3.Common;
+import group3.MainActivity;
 
-public class NewPost_Activity extends Activity {
+import static android.support.constraint.motion.utils.Oscillator.TAG;
+
+public class NewPost_Activity extends Activity implements View.OnClickListener {
     private static final int REQUEST_TAKE_PICTURE = 1;
     private static final int REQUEST_PICK_PICTURE = 2;
-    private ImageButton addNewPhoto;
-    private ImageButton photoLib;
-    private ImageView imageView;
-    private ImageButton send;
+    private static final int REQUEST_CROP_PICTURE = 3;
+
+    private ImageButton camera_btn;
+    private ImageButton gallery_btn;
+    private ImageView ibPhoto;
+    private Button send,cancel;
+
     private File file;
-    private Uri contentUri;
-    AlertDialogFragment alertFragment;
-//    Intent intent;
+    private Uri contentUri, croppedImageUri;
+    private Bitmap picture;
+    private Intent intent;
+
 
 
     public static boolean isIntentAvailable(Context context, Intent intent) {
@@ -62,170 +70,197 @@ public class NewPost_Activity extends Activity {
         setContentView(R.layout.activity_newpost);
         handleView();
 
+
+
+
     }
 
 
     private void handleView() {
 
-        imageView = findViewById(R.id.ivPhoto);
-        send = findViewById(R.id.action_send);
+        ibPhoto = findViewById(R.id.ibPhoto);
+        send = findViewById(R.id.btSend);
+        cancel = findViewById(R.id.btcancel);
+        send.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+        ibPhoto.setImageResource(R.drawable.addimage);
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar, menu);
-        return true;
-    }
+
+
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btSend:
+                Intent sendIntent = new Intent(this,Mypage_SinglePost_Activity.class);
+                Toast.makeText(this, "Your post successfully created", Toast.LENGTH_SHORT).show();
 
-        int id = item.getItemId();
+                break;
 
-        if (id == R.id.action_send) {
-            Toast.makeText(this, "Your post successfully created", Toast.LENGTH_SHORT).show();
-            return true;
+
+            case R.id.btcancel:
+                confirmExit();
+
+                break;
         }
 
-        return super.onOptionsItemSelected(item);
     }
 
     protected void onStart() {
         super.onStart();
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Common.askPermissions(this, permissions, Common.REQ_EXTERNAL_STORAGE);
-
     }
 
-    public void onClick(View view) {
+    public void onPhotoClick(View view) {
 
-//
-//        alertFragment = new AlertDialogFragment();
-//        FragmentManager fragmentManager= getSupportFragmentManager();
-//        alertFragment.show(fragmentManager, "alert");
-
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        file = alertFragment.getFile();
-        if (resultCode == RESULT_OK) {
-            int newSize = 512;
-            switch (requestCode) {
-                case REQUEST_TAKE_PICTURE:
-
-                    Bitmap srcPicture = BitmapFactory.decodeFile(file.getPath());
-                    Bitmap downSizePicture = Common.downSize(srcPicture, newSize);
-                    imageView.setImageBitmap(downSizePicture);
-
-                    break;
-
-                case REQUEST_PICK_PICTURE:
-                    Uri uri = intent.getData();
-                    if (uri != null) {
-                        String[] columns = {MediaStore.Images.Media.DATA};
-                        Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
-
-                        if (cursor != null && cursor.moveToFirst()) {
-                            String imagePath = cursor.getString(0);
-                            cursor.close();
-                            Bitmap srcImage = BitmapFactory.decodeFile(imagePath);
-                            Bitmap downSizeImage = Common.downSize(srcImage, newSize);
-                            imageView.setImageBitmap(downSizeImage);
-
-                            break;
+        final android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(NewPost_Activity.this).create();
+        alertDialog.show();
+        Window win = alertDialog.getWindow();
 
 
-                        }
-                    }
+        win.setContentView(R.layout.alertdialog_layout);
+
+        ImageButton camera_btn = (ImageButton) win.findViewById(R.id.camera);
+        camera_btn.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                file = new File(file, "picture.jpg");
+                contentUri = FileProvider.getUriForFile(getApplicationContext(), getPackageName() + ".provider", file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+                if (isIntentAvailable(getApplicationContext(), intent)) {
+                    startActivityForResult(intent, REQUEST_TAKE_PICTURE);
+                    alertDialog.dismiss();
+
+
+                } else {
+
+                    Toast.makeText(getBaseContext(), R.string.msg_NoCameraAppsFound, Toast.LENGTH_SHORT).show();
+                }
             }
+        });
 
-        }
+        ImageButton gallery_btn = (ImageButton) win.findViewById(R.id.gallery);
+        gallery_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent1, REQUEST_PICK_PICTURE);
+                if (alertDialog != null)
+                    alertDialog.dismiss();
+            }
+        });
     }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+
+
         switch (requestCode) {
             case Common.REQ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    ibPhoto.setEnabled(true);
 
-//                    addNewPhoto.setEnabled(true);
-//                    photoLib.setEnabled(true);
-
-                    Toast.makeText(this, "同意使用本機相機和讀取權限", Toast.LENGTH_SHORT);
+                    Toast.makeText(this, "請同意使用本機相機和讀取權限", Toast.LENGTH_SHORT).show();
                 } else {
-//                    addNewPhoto.setEnabled(false);
-//                    photoLib.setEnabled(false);
-                    Toast.makeText(this, "請同意使用本機相機和讀取權限", Toast.LENGTH_SHORT);
-
+                 ibPhoto.setEnabled(false);
+                    return;
                 }
                 break;
         }
+    }
+
+    public void confirmExit() {
+
+
+        android.app.AlertDialog.Builder ad = new android.app.AlertDialog.Builder(NewPost_Activity.this)
+                .setTitle("確認視窗")
+                .setMessage("確定要離開此頁面嗎？")
+                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(NewPost_Activity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        ad.show();
 
 
     }
 
 
-    public static class AlertDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
-        private static final int REQUEST_TAKE_PICTURE = 1;
-        private static final int REQUEST_PICK_PICTURE = 2;
-        private File file;
-        Intent intent;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
 
-        public File getFile() {
-            return file;
-        }
+        if (resultCode == RESULT_OK) {
+
+            switch (requestCode) {
+                case REQUEST_TAKE_PICTURE:
+                    crop(contentUri);
+
+                    break;
+
+                case REQUEST_PICK_PICTURE:
+                    Uri uri = data.getData();
+                    crop(uri);
+                    break;
+                case REQUEST_CROP_PICTURE:
+                    try {
+                        picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
+
+                        Bitmap downSizePicture = Common.downSize(picture, 1100);
+                        ibPhoto.setImageBitmap(downSizePicture);
 
 
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new AlertDialog.Builder(getActivity())
-
-                    .setMessage("Pick a photo from?")
-                    .setPositiveButton("camera", this)
-                    .setNegativeButton("gallery", this)
-                    .create();
-
-        }
-
-
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    file = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                    file = new File(file, "picture.jpg");
-                    Uri contentUri = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName() + ".provider_path", file);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-                    if (NewPost_Activity.isIntentAvailable(getActivity(), intent)) {
-                        getActivity().startActivityForResult(intent, REQUEST_TAKE_PICTURE);
-
-
-                    } else {
-
-                        Toast.makeText(getActivity(), R.string.msg_NoCameraAppsFound, Toast.LENGTH_SHORT).show();
+                    } catch (FileNotFoundException e) {
+                        Log.e(TAG, e.toString());
                     }
+                    break;
 
-                    break;
-                case DialogInterface.BUTTON_NEGATIVE:
-                    Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    getActivity().startActivityForResult(intent1, REQUEST_PICK_PICTURE);
-                    break;
                 default:
-                    break;
             }
         }
-
     }
+
+    private void crop(Uri srcImageUri) {
+        File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        file = new File(file, "picture_cropped.jpg");
+        croppedImageUri = Uri.fromFile(file);
+        try {
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            cropIntent.setDataAndType(srcImageUri, "image/*");
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 180);
+            cropIntent.putExtra("outputY", 180);
+            cropIntent.putExtra("scale", true);
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, croppedImageUri);
+            cropIntent.putExtra("return-data", true);
+            startActivityForResult(cropIntent, REQUEST_CROP_PICTURE);
+        } catch (ActivityNotFoundException anfe) {
+            Toast.makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
 
