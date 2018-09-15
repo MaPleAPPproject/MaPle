@@ -5,36 +5,39 @@ import java.io.Serializable;
 
 public class User_Profile implements Serializable {
 
-    private int snapshotID;
-    private String name;
+
+
+    private int memberID;
+    private String userName;
     private String email;
     private String password;
-    private boolean vipStatus;
+    private int vipStatus;
     private String selfIntroduction;
 
 
-    public User_Profile(int snapshotID, String name, String email, String password, boolean vipStatus, String selfIntroduction) {
-        this.snapshotID = snapshotID;
-        this.name = name;
+    public User_Profile(int memberID, String userName, String email, String password, int vipStatus, String selfIntroduction) {
+        this.memberID = memberID;
+        this.userName = userName;
         this.email = email;
         this.password = password;
         this.vipStatus = vipStatus;
         this.selfIntroduction = selfIntroduction;
     }
-    public int getSnapshotID() {
-        return snapshotID;
+
+    public int getMemberID() {
+        return memberID;
     }
 
-    public void setSnapshotID(int snapshotID) {
-        this.snapshotID = snapshotID;
+    public void setMemberID(int memberID) {
+        this.memberID = memberID;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -53,11 +56,11 @@ public class User_Profile implements Serializable {
         this.password = password;
     }
 
-    public boolean isVipStatus() {
+    public int getVipStatus() {
         return vipStatus;
     }
 
-    public void setVipStatus(boolean vipStatus) {
+    public void setVipStatus(int vipStatus) {
         this.vipStatus = vipStatus;
     }
 
@@ -68,9 +71,4 @@ public class User_Profile implements Serializable {
     public void setSelfIntroduction(String selfIntroduction) {
         this.selfIntroduction = selfIntroduction;
     }
-
-
-
-
-
 }

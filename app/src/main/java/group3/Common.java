@@ -38,6 +38,25 @@ public class Common {
         return srcPicture;
     }
 
+    public static Bitmap upSize(Bitmap srcPicture, int newSize) {
+
+        if (newSize < 20) {
+            newSize = 20;
+        }
+        int srcWidth = srcPicture.getWidth();
+        int srcHeight = srcPicture.getHeight();
+        int longer = Math.max(srcWidth, srcHeight);
+        if (longer > newSize) {
+            double scale = longer / (double) newSize;
+            int dstWidth = (int) (srcWidth / scale);
+            int dstHeight = (int) (srcHeight / scale);
+
+            srcPicture = Bitmap.createScaledBitmap(srcPicture, dstWidth, dstHeight, false);
+            System.gc();
+        }
+        return srcPicture;
+    }
+
 
     public static final int REQ_EXTERNAL_STORAGE = 0;
 
@@ -73,4 +92,11 @@ public class Common {
 
 
     }
+
+//    @Override
+//    public SharedPreferences getSharedPreferences(String name, int mode) {
+//        return getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+//    }
+
+
 }

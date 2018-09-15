@@ -13,19 +13,19 @@
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/ivPhotoIcon"
-            android:layout_width="82dp"
-            android:layout_height="82dp"
+            android:id="@+id/ibPhotoIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="#00000000"
-            android:onClick="onImageClick"
-            android:src="@drawable/icon_facev" />
+            android:onClick="onImageClick"/>
+            <!--android:src="@drawable/icon_facev" />-->
 
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/ivPhotoIcon"
+            android:layout_below="@+id/ibPhotoIcon"
             android:background="@color/colorGray"
             android:layout_margin="5dp"
             android:padding="5dp"/>
@@ -156,12 +156,12 @@
             style="@style/profileDescribe"
             android:layout_width="61dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="101dp"
             android:layout_marginStart="101dp"
-            android:text="@string/no"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="101dp" />
+            android:text="@string/no" />
 
         <Button
             android:id="@+id/btPremium"
@@ -202,7 +202,7 @@
         <EditText
             android:id="@+id/etSelfIntro"
             android:layout_width="match_parent"
-            android:layout_height="111dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tvSelfIntro"
             android:gravity="top"
