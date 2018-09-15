@@ -1,63 +1,57 @@
 package group3;
 
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
-public class Post implements Serializable {
-    private int imageId;
-    private String personid;
-    private String selfintro;
-    private String location;
-    private String comment;
-    public Post(int imageId, String personid, String selfintro, String location, String comment) {
-        super();
-        this.imageId = imageId;
-        this.personid = personid;
-        this.selfintro = selfintro;
-        this.location = location;
-        this.comment = comment;
-    }
+public class Post {
+        private int memberid;
+        private int postid;
+        private int collectioncount;
+        private int clickcount;
+        private long date;
 
-    public Post(int imageId) {
-        this.imageId = imageId;
+        public Post(int memberid, int postid, int collectioncount, int clickcount, long date) {
+            super();
+            this.memberid = memberid;
+            this.postid = postid;
+            this.collectioncount = collectioncount;
+            this.clickcount = clickcount;
+            this.date = date;
+        }
+        public int getMemberid() {
+            return memberid;
+        }
+        public void setMemberid(int memberid) {
+            this.memberid = memberid;
+        }
+        public int getPostid() {
+            return postid;
+        }
+        public void setPostid(int postid) {
+            this.postid = postid;
+        }
+        public int getCollectioncount() {
+            return collectioncount;
+        }
+        public void setCollectioncount(int collectcount) {
+            this.collectioncount = collectcount;
+        }
+        public int getClickcount() {
+            return clickcount;
+        }
+        public void setClickcount(int clickcount) {
+            this.clickcount = clickcount;
+        }
+        public long getDate() {
+            return date;
+        }
+        public void setDate(long date) {
+            this.date = date;
+        }
+        public String getFormatedDate() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",
+                    Locale.US);
+            return dateFormat.format(new Date(date));
+        }
     }
-
-    public String getPersonid() {
-        return personid;
-    }
-
-    public void setPersonid(String personid) {
-        this.personid = personid;
-    }
-
-    public String getSelfintro() {
-        return selfintro;
-    }
-
-    public void setSelfintro(String selfintro) {
-        this.selfintro = selfintro;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public int getImageId() {
-        return imageId;
-    }
-
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
-    }
-}

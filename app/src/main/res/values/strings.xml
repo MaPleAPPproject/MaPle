@@ -31,5 +31,12 @@
     <string name="msg_Nonetwork">no network connection available</string>
     <string name="pick_a_photo_from">Pick a photo from :</string>
     <string name="no_Image">No image</string>
+    <string name="Send">send</string>
+    <string name="send">Send</string>
+    <string name="currentlocation">Current location</string>
+    <string name="otherlocation">Other location</string>
+    <string name="no_data_from_db">尚未有資料</string>
+    <string name="msg_NoPost">No post</string>
+    <string name="msg_NoNetwork">No net</string>
 </resources>
 

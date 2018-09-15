@@ -19,7 +19,7 @@ import com.cp102group3maple.violethsu.maple.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import group3.Post;
+import group3.Postdetail;
 import group3.mypage.Mypage_tab_colec_Fragment;
 import group3.mypage.Ｍypage_tab_post_Fragment;
 
@@ -49,10 +49,10 @@ public class OtherspageFragment extends Fragment {
     private void handleviews(View rootview) {
         tvName=rootview.findViewById(R.id.tvotherName);
         tvSelf=rootview.findViewById(R.id.tvotherselfintro);
-        Post post = (Post) (getArguments() != null ? getArguments().getSerializable("post") : null);
-        if(post!=null){
-            tvName.setText(post.getPersonid());
-            tvSelf.setText(post.getSelfintro());
+        Postdetail postdetail = (Postdetail) (getArguments() != null ? getArguments().getSerializable("postdetail") : null);
+        if(postdetail !=null){
+//            tvName.setText(postdetail.getPersonid());
+//            tvSelf.setText(postdetail.getSelfintro());
         }else {
             Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
         }

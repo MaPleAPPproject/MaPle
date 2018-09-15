@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,27 +24,61 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import group3.Common;
 import group3.MainActivity;
-import group3.Post;
-
+import group3.Picture;
+import group3.Postdetail;
+import group3.mypage.CommonTask;
+import group3.mypage.ImageTask;
+//注意fragment和activity呼叫server時間點不同
 public class ExploreFragment extends Fragment {
-    MainActivity mainActivity;
-    SearchView searchView;
-    Context contentview;
+    private static final String TAG = "ExploreFragment";
+    private FragmentActivity activity;
+    private SearchView searchView;
+    private RecyclerView rvRecom;
+    private RecyclerView rvTop;
+    private Context contentview;
+    private CommonTask pictureGetAllTask;
+    private PostTask pictureImageTask;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Picture picture;
+
+//    未完成 可以不用改寫
+//  當點擊照片時會進入另一個activity,用來存放aveInstanceState資訊
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        Log.v(TAG, "In frag's on save instance state ");
+        outState.putSerializable("picture",picture);
+    }
+    //取得activity
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mainActivity = (MainActivity) getActivity();
+        activity =getActivity();
     }
 
+    //    未完成 可以不用改寫
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+//        datafromServer=savedInstanceState.getString("picture");
+
+    }
+//  呼叫此fragment時 直接呼叫showAllPosts()向server索取資料
+    @Override
+    public void onStart() {
+        super.onStart();
+        showAllPosts();
     }
 
     @Override
@@ -72,78 +108,131 @@ public class ExploreFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_exploretest,container, false);
+        if ((savedInstanceState != null) && (savedInstanceState.getSerializable("picture") != null)) {
+            savedInstanceState.getSerializable("picture"); }
+        swipeRefreshLayout =
+                view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                showAllPosts();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         handleviews(view);
         return view;
 
     }
 
+//  向server索取資料
+    private void showAllPosts() {
+        //      此fragment有圖也有文字 所以先向server索取文字的部分
+        if (Common.networkConnected(activity)) {
+//            這邊要注意網址是否正確
+            String url = Common.URL + "/PictureServlet";
+//          要索取的資料有很多筆,用List來存
+//            注意存取放的class內容要一致（ex 從server端取得的picture資料,要放在相對應的picture容器）
+            List<Picture> pictures = null;
+            JsonObject jsonObject = new JsonObject();
+//          要求json向server發出的action是什麼請求(getAll,findByid....)
+            jsonObject.addProperty("action", "getAll");
+//          對應Servlet中的動作
+//          PictureServlet中doPost方法：
+//          if (action.equals("getAll")) {
+//          server把資料存入List<Picture> pictures
+//			List<Picture> pictures = pictureDao.getAll();
+//            寫入gson送出來
+//			writeText(response, gson.toJson(pictures));
+//          將json的請求轉文字
+            String jsonOut = jsonObject.toString();
+//          如果請求只會來回都是文字用CommonTask,若有圖另外使用imageTask
+//            注意！！！寫到Task代表開新的執行緒 執行緒很笨一定要呼叫onstop()把他關閉line254
+            pictureGetAllTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = pictureGetAllTask.execute().get();
+                Type listType = new TypeToken<List<Picture>>() {
+                }.getType();
+//              承接line145中gson的資料
+                pictures = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (pictures == null||pictures.isEmpty()) {
+                Toast.makeText(contentview,R.string.msg_NoPost,Toast.LENGTH_SHORT);
+            }
+            else {
+//                如果成功取得文字資料就將資料傳入adapter繼續後續處理
+//                若是adapter需要圖的話,則是在onBindViewHolder中發起imageTask
+                rvRecom.setAdapter(new PostAdapter(pictures, activity));
+//                rvTop.setAdapter(new PostAdapter(pictures, activity));
+            }
+        } else {
+            Toast.makeText(contentview,R.string.msg_NoNetwork,Toast.LENGTH_SHORT);
+        }
+
+    }
+
     private void handleviews(View view) {
-        RecyclerView rvTop = view.findViewById(R.id.rvTop);
+        rvTop = view.findViewById(R.id.rvTop);
         rvTop.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false) );
-        rvTop.setAdapter(new PostAdapter(getPosts(), getActivity()));
-        RecyclerView rvRecom = view.findViewById(R.id.rvRecom);
+//        rvTop.setAdapter(new PostAdapter(, getActivity()));
+        rvRecom = view.findViewById(R.id.rvRecom);
         rvRecom.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
-        rvRecom.setAdapter(new PostAdapter(getPosts(), getActivity()));
         searchView=view.findViewById(R.id.searchview);
         contentview=view.getContext();
     }
-
+//事件處理跟之前一樣
     private class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
-        private List<Post> posts;
-        private Context context;
-        PostAdapter(List<Post> posts, Context context) {
-            this.posts=posts;
-            this.context=context;
-
+        private LayoutInflater layoutInflater;
+        private int imageSize;
+        private List<Picture> pictures;
+        PostAdapter(List<Picture> pictures, Context context) {
+            this.pictures = pictures;
+            layoutInflater = LayoutInflater.from(context);
+//            要注意圖片尺寸隨著螢幕縮放 除三等於呈現為螢幕的三分之一大小
+            imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+        }
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView ivpostpicture;
+            public MyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                ivpostpicture=itemView.findViewById(R.id.ivrecom);
+            }
         }
         @Override
         public int getItemCount() {
-            return posts.size();
+            return pictures.size();
         }
-        class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView imageView;
-            public MyViewHolder(@NonNull View itemView) {
-                super(itemView);
-                imageView=itemView.findViewById(R.id.ivtop);
-            }
-        }
+
         @NonNull
         @Override
         public ExploreFragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
-            View item_view = layoutInflater.inflate(R.layout.item_view, parent, false);
-            return new ExploreFragment.PostAdapter.MyViewHolder(item_view);
+            View itemView = layoutInflater.inflate(R.layout.item_view_recom, parent, false);
+            return new ExploreFragment.PostAdapter.MyViewHolder(itemView);
         }
 
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
-            final Post post = posts.get(position);
-            myViewHolder.imageView.setImageResource(post.getImageId());
+            final Picture picture = pictures.get(position);
+            String url = Common.URL + "/PictureServlet";
+            //發起PostTask 使用picture中的id取的圖檔資料
+            int id = picture.getPostid();
+            pictureImageTask = new PostTask(url, id, imageSize, myViewHolder.ivpostpicture);
+            pictureImageTask.execute();
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(context,Explore_PostActivity.class);
+                    Intent intent =new Intent(activity,Explore_PostActivity.class);
                     Bundle bundle=new Bundle();
-                    bundle.putSerializable("post",post);
+                    bundle.putSerializable("picture", picture);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
             });
 
         }
-    }
-    protected List<Post> getPosts() {
-//        next step:add all information
-        List<Post> posts = new ArrayList<>();
-        posts.add(new Post(R.drawable.itemviewtest,"Jack123","Hi","usa","aaaaaaaaaaaa"));
-        posts.add(new Post(R.drawable.post1,"Apple222","Hoooo","Lodon","bbbbbbbb"));
-        posts.add(new Post(R.drawable.post2,"Orange345","Nooo","Japan","ddddd"));
-        posts.add(new Post(R.drawable.post3,"Frankly","apppleee","TW","reeeee"));
-        posts.add(new Post(R.drawable.post4,"Cocooo","yo","China","gggg"));
-        posts.add(new Post(R.drawable.post5,"JJ","ii","Korea","eeeeeee"));
-        posts.add(new Post(R.drawable.post6,"OPPP","pp","Iceland","66666"));
-        return posts;
     }
 //以下為searchbar的方法
     final private SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
@@ -161,4 +250,16 @@ public class ExploreFragment extends Fragment {
             return false;
         }
     };
+//
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (pictureGetAllTask != null) {
+            pictureGetAllTask.cancel(true);
+        }
+
+        if (pictureImageTask != null) {
+            pictureImageTask.cancel(true);
+        }
+    }
 }

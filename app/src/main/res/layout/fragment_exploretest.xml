@@ -27,21 +27,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <TextView
-        android:id="@+id/tvtop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="Top"
-        android:textSize="20dp" />
+                <TextView
+                android:id="@+id/tvtop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Top"
+                android:textSize="20dp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvTop"
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:padding="5dp">
-
-    </android.support.v7.widget.RecyclerView>
+                <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvTop"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:padding="5dp">
+                </android.support.v7.widget.RecyclerView>
 
     <TextView
         android:id="@+id/tvrec"
@@ -50,10 +49,14 @@
         android:padding="5dp"
         android:text="You may like..."
         android:textSize="20dp" />
-
-    <android.support.v7.widget.RecyclerView
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
         android:id="@+id/rvRecom"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 </LinearLayout>

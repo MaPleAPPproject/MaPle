@@ -2,8 +2,8 @@ package group3.friend;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import java.util.List;
@@ -39,6 +39,7 @@ public class FriendsList extends Fragment {
         return view;
 
     }
+
     private void handleViews(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(

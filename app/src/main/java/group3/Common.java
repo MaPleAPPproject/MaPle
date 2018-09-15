@@ -18,7 +18,7 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Common {
 
-    public static String URL = "http://10.0.2.2:8080/MaPle_Web";
+    public static String URL = "http://10.0.2.2:8080/MaPle";
     public static Bitmap downSize(Bitmap srcPicture, int newSize) {
 
         if (newSize < 20) {

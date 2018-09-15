@@ -9,20 +9,28 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.cp102group3maple.violethsu.maple.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MypageFragment extends Fragment {
+    private static final String TAG = "MypageFragment";
     private ViewPager tabviewPager;
     private TabLayout tabLayout;
     private ImageButton addNewPost,map,chart,snapshot;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,7 +71,7 @@ public class MypageFragment extends Fragment {
         tabLayout = (TabLayout) rootview.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(tabviewPager);
         tabviewPager= rootview.findViewById(R.id.tabviewPager);
-//        tabLayout.addTab(tabLayout.newTab().setText("Post"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Postdetail"));
 //        tabLayout.addTab(tabLayout.newTab().setText("Collection"));
 //        tablayput綁定viewpager
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
@@ -77,7 +85,7 @@ public class MypageFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         TabViewPagerAdapter adapter = new TabViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new Ｍypage_tab_post_Fragment(), "Post");
+        adapter.addFragment(new Ｍypage_tab_post_Fragment(), "Postdetail");
         adapter.addFragment(new Mypage_tab_colec_Fragment(), "Collection");
         viewPager.setAdapter(adapter);
     }
@@ -85,7 +93,7 @@ public class MypageFragment extends Fragment {
     public class TabViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> tabfragments = new ArrayList<>();
         private final List<String> tabfragmentstext = new ArrayList<>();
-        private String tabTitles[] = new String[]{"Post", "Collection"};
+        private String tabTitles[] = new String[]{"Postdetail", "Collection"};
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
