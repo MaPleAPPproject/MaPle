@@ -1,7 +1,6 @@
 package group3.mypage;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -10,50 +9,43 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
-import android.util.Base64;
-import android.util.EventLog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
-import com.google.android.gms.common.images.ImageManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.security.Permission;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import group3.Common;
 import group3.MainActivity;
 import group3.friend.Payment;
 
 import static android.support.constraint.motion.utils.Oscillator.TAG;
-import static android.view.KeyEvent.KEYCODE_B;
 
 
-public class Mypage_UserProfile_Activity extends Activity {
+public class Mypage_UserProfile_Activity extends AppCompatActivity  {
 
 
     public static final int KEYCODE_BACK  = 4;
@@ -73,12 +65,13 @@ public class Mypage_UserProfile_Activity extends Activity {
     private Uri contentUri, croppedImageUri;
     private Bitmap picture;
     private EditText etName,etEmail,etPassword,etSelfIntro;
+    private TextView tvVipStatus;
     private byte[] image;
     private CommonTask uploadTask;
-    private ImageButton ivPhotoIcon;
 
-
-
+    private int memberId;
+    private CommonTask getProfileTask;
+    private ImageTask Icontask;
 
 
     public Mypage_UserProfile_Activity() {
@@ -97,7 +90,7 @@ public class Mypage_UserProfile_Activity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
         handleView();
-        loadPreference();
+        loadProfiles();
 
 
 
@@ -111,21 +104,73 @@ public class Mypage_UserProfile_Activity extends Activity {
         etPassword = findViewById(R.id.etPassword);
         etSelfIntro = findViewById(R.id.etSelfIntro);
         premium = findViewById(R.id.btPremium);
-        ivPhotoIcon = findViewById(R.id.ivPhotoIcon);
-
+        ibPhotoIcon = findViewById(R.id.ibPhotoIcon);
+        tvVipStatus = findViewById(R.id.tvStatusResult);
     }
 
-    private void loadPreference(){
-        SharedPreferences pf = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        String name = pf.getString("name", DEFAULT_NAME);
-        String email = pf.getString("email", DEFAULT_EMAIL);
-        String password = pf.getString("passoword", DEFAULT_PASSWORD);
-        String selfIntro = pf.getString("selfIntro", DEFAULT_SELFINTRO);
 
-        etName.setText(name);
-        etEmail.setText(email);
-        etPassword.setText(password);
-        etSelfIntro.setText(selfIntro);
+    private void loadProfiles(){
+        SharedPreferences pf = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        pf.edit()
+                .putInt("memberId",memberId).apply();
+
+        memberId = pf.getInt("memberId", 1);
+        if (Common.networkConnected(this)){
+            String url = Common.URL + "/User_profileServlet";
+            User_Profile userProfiles = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findById");
+            jsonObject.addProperty("memberId", "1");
+            String jsonOut = jsonObject.toString();
+            getProfileTask = new CommonTask(url,jsonOut);
+            try {
+                String jsonIn = getProfileTask.execute().get();
+                userProfiles = new Gson().fromJson(jsonIn,User_Profile.class);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if(userProfiles==null){
+                Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                etName.setText(userProfiles.getUserName());
+                etPassword.setText(userProfiles.getPassword());
+                etEmail.setText(userProfiles.getEmail());
+                etSelfIntro.setText(userProfiles.getSelfIntroduction());
+                tvVipStatus.setText(String.valueOf(userProfiles.getVipStatus()));
+
+//                int memberId  = userProfiles.getMemberID();
+                int memberId = 1;
+                int imageSize = getResources().getDisplayMetrics().widthPixels;
+                Bitmap bitmap = null;
+
+//                jsonObject.addProperty("action", "findImageById");
+//                jsonObject.addProperty("memberId", "1");
+//                String jsonOut = jsonObject.toString();
+                try {
+                    bitmap = new ImageTask(url, memberId, imageSize, ibPhotoIcon).execute().get();
+
+                } catch (Exception e) {
+                   Log.e(TAG, e.toString());
+                }
+                if (bitmap != null) {
+                    ibPhotoIcon.setImageBitmap(bitmap);
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    image = out.toByteArray();
+
+                } else {
+                    Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
+//                    ibPhotoIcon.setImageResource(R.drawable.icon_facev);
+                }
+
+            }
+
+        } else {
+            Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     //呼叫會在畫面上顯示各個偏好設定的預設值
@@ -141,63 +186,63 @@ public class Mypage_UserProfile_Activity extends Activity {
 
     }
 
-    public void onSaveClick(View view) {
-
-        SharedPreferences pf = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        String name = etName.getText().toString();
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
-        String selfIntro = etSelfIntro.getText().toString();
-        pf.edit().putString("name",name).apply();
-        pf.edit().putString("email",email).apply();
-        pf.edit().putString("password",password).apply();
-        pf.edit().putString("selfIntro",selfIntro).apply();
-
-
-        if(image == null){
-            Toast.makeText(this, R.string.no_Image, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (Common.networkConnected(this)){
-            String url = Common.URL + "/MapleServelet";
-
-            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
-            byte[] image = Common.bitmapToPNG(picture);
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "dataInsert");
-            jsonObject.addProperty("name", name);
-            jsonObject.addProperty("email", email);
-            jsonObject.addProperty("password", password);
-            jsonObject.addProperty("selfIntro", selfIntro);
-            jsonObject.addProperty("imageBase64", Base64.encodeToString(image, Base64.DEFAULT));
-            uploadTask = new CommonTask(url,jsonObject.toString());
-
-            try {
-                String jsonIn = uploadTask.execute().get();
-                JsonObject jsonObject1 = new Gson().fromJson(jsonIn,JsonObject.class);
-                name = jsonObject1.get("name").getAsString();
-                email = jsonObject1.get("email").getAsString();
-                password = jsonObject1.get("password").getAsString();
-                selfIntro = jsonObject1.get("selfIntro").getAsString();
-                image = Base64.decode((jsonObject1.get("imageBase64")).getAsString(),Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
-        }else{
-            Toast.makeText(this, getString(R.string.msg_Nonetwork), Toast.LENGTH_SHORT).show();
-        }
-
-        Toast.makeText(this, "saved", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
-        startActivity(intent);
-    }
+//    public void onSaveClick(View view) {
+//
+//        SharedPreferences pf = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+//        String name = etName.getText().toString();
+//        String email = etEmail.getText().toString();
+//        String password = etPassword.getText().toString();
+//        String selfIntro = etSelfIntro.getText().toString();
+//        pf.edit().putString("name",name).apply();
+//        pf.edit().putString("email",email).apply();
+//        pf.edit().putString("password",password).apply();
+//        pf.edit().putString("selfIntro",selfIntro).apply();
+//
+//
+//        if(image == null){
+//            Toast.makeText(this, R.string.no_Image, Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        if (Common.networkConnected(this)){
+//            String url = Common.URL + "/UserprofileServelet";
+//
+//            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+//            byte[] image = Common.bitmapToPNG(picture);
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("action", "dataInsert");
+//            jsonObject.addProperty("name", name);
+//            jsonObject.addProperty("email", email);
+//            jsonObject.addProperty("password", password);
+//            jsonObject.addProperty("selfIntro", selfIntro);
+//            jsonObject.addProperty("imageBase64", Base64.encodeToString(image, Base64.DEFAULT));
+//            uploadTask = new CommonTask(url,jsonObject.toString());
+//
+//            try {
+//                String jsonIn = uploadTask.execute().get();
+//                JsonObject jsonObject1 = new Gson().fromJson(jsonIn,JsonObject.class);
+//                name = jsonObject1.get("name").getAsString();
+//                email = jsonObject1.get("email").getAsString();
+//                password = jsonObject1.get("password").getAsString();
+//                selfIntro = jsonObject1.get("selfIntro").getAsString();
+//                image = Base64.decode((jsonObject1.get("imageBase64")).getAsString(),Base64.DEFAULT);
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+//
+//
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }else{
+//            Toast.makeText(this, getString(R.string.msg_Nonetwork), Toast.LENGTH_SHORT).show();
+//        }
+//
+//        Toast.makeText(this, "saved", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
+//        startActivity(intent);
+//    }
 
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode==KeyEvent.KEYCODE_BACK){
@@ -263,7 +308,6 @@ public class Mypage_UserProfile_Activity extends Activity {
         });
 
         gallery_btn = (ImageButton) win.findViewById(R.id.gallery);
-        gallery_btn.setEnabled(false);
         gallery_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -320,7 +364,7 @@ public class Mypage_UserProfile_Activity extends Activity {
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
-                    ivPhotoIcon.setEnabled(false);
+                    ibPhotoIcon.setEnabled(false);
                     Toast.makeText(this, "請同意使用本機相機和讀取權限", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -362,7 +406,6 @@ public class Mypage_UserProfile_Activity extends Activity {
 
                 default:
             }
-
         }
     }
 
@@ -390,16 +433,17 @@ public class Mypage_UserProfile_Activity extends Activity {
         }
     }
 
-    @Override
-    public SharedPreferences getSharedPreferences(String name, int mode) {
-        return getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-    }
+
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(uploadTask!=null) {
-            uploadTask.cancel(true);
+        if(getProfileTask!=null) {
+            getProfileTask.cancel(true);
+        }
+
+        if(Icontask !=null) {
+            Icontask.cancel(true);
         }
     }
 }

@@ -25,20 +25,22 @@ import java.net.URL;
 
 
 public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
+
     private final static String TAG = "ImageTask";
     private  String url;
-    private int id,imageSize;
+    private int memberId,imageSize;
     private WeakReference<ImageView> imageViewWeakReference;
 
-    public ImageTask(String url, int id, int imageSize) {
+    public ImageTask(String url, int memberId, int imageSize) {
         this.url = url;
-        this.id = id;
+        this.memberId = memberId;
         this.imageSize = imageSize;
     }
 
-    public ImageTask(String url, int id, int imageSize, ImageView imageView) {
+
+    public ImageTask(String url, int memberId, int imageSize, ImageView imageView) {
         this.url = url;
-        this.id = id;
+        this.memberId = memberId;
         this.imageSize = imageSize;
         this.imageViewWeakReference = new WeakReference<>(imageView);
     }
@@ -48,7 +50,7 @@ public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
     protected Bitmap doInBackground(Object... params) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("action", "getImage");
-        jsonObject.addProperty("id",id);
+        jsonObject.addProperty("memberId",memberId);
         jsonObject.addProperty("imageSize",imageSize);
         return getRemoteImage(url, jsonObject.toString());
     }

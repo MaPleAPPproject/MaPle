@@ -60,9 +60,9 @@
         <activity android:name="group3.friend.Payment" />
         <activity android:name="group3.friend.Receipt" />
         <activity android:name="group3.mypage.NewPost_Activity" />
-        <activity android:name="group3.mypage.Mypage_UserProfile_Activity" />
         <activity android:name="group3.mypage.Mypage_SinglePost_Activity" />
         <activity android:name="group3.mypage.Mypage_Chart_Activity" />
+        <activity android:name="group3.mypage.Mypage_UserProfile_Activity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
