@@ -59,10 +59,10 @@ public class Login extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btlogin:
-                    String password = etpassword.getText().toString();
-                    String account = etaccount.getText().toString();
+                    String password = etpassword.getText().toString().trim();
+                    String account = etaccount.getText().toString().trim();
                     if ((account.equals("abc")) && (password.equals("123"))) {
-                        Toast toast = Toast.makeText(Login.this, "帳號及密碼正確", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(Login.this, "帳號及密碼正確", Toast.LENGTH_SHORT);
                         toast.show();
                         Intent intent = new Intent();
                         intent.setClass(Login.this, MainActivity.class);
