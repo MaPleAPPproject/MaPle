@@ -138,7 +138,15 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
                 etPassword.setText(userProfiles.getPassword());
                 etEmail.setText(userProfiles.getEmail());
                 etSelfIntro.setText(userProfiles.getSelfIntroduction());
-                tvVipStatus.setText(String.valueOf(userProfiles.getVipStatus()));
+                int vipStatus = userProfiles.getVipStatus();
+                        switch(vipStatus){
+                            case 0:
+                                tvVipStatus.setText("Basic");
+                            case 1:
+                                tvVipStatus.setText("Premium");
+
+                        }
+
 
 //                int memberId  = userProfiles.getMemberID();
                 int memberId = 2;
