@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewPager = findViewById(R.id.viewPager);
+//      避免view重複加載
+        viewPager.setOffscreenPageLimit(3);
         setupViewPager(viewPager);
         final BottomNavigationView navigation =findViewById(R.id.navigation);
         BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -51,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().hide();
                         viewPager.setCurrentItem(1);
                         return true;
-                    //點擊下方朋友選單時，跑出朋友清單
                     case R.id.navigation_friends:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(2);

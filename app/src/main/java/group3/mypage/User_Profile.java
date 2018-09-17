@@ -23,6 +23,12 @@ public class User_Profile implements Serializable {
         this.vipStatus = vipStatus;
         this.selfIntroduction = selfIntroduction;
     }
+    public User_Profile(String email, int vipStatus, String selfIntroduction) {
+        super();
+        this.email = email;
+        this.vipStatus = vipStatus;
+        this.selfIntroduction = selfIntroduction;
+    }
 
     public int getMemberID() {
         return memberID;

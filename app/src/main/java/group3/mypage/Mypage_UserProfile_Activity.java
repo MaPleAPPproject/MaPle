@@ -40,6 +40,7 @@ import java.util.List;
 
 import group3.Common;
 import group3.MainActivity;
+import group3.explore.PostTask;
 import group3.friend.Payment;
 
 import static android.support.constraint.motion.utils.Oscillator.TAG;
@@ -71,7 +72,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity  {
 
     private int memberId;
     private CommonTask getProfileTask;
-    private ImageTask Icontask;
+    private ImageTask icontask;
 
 
     public Mypage_UserProfile_Activity() {
@@ -141,7 +142,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity  {
                 tvVipStatus.setText(String.valueOf(userProfiles.getVipStatus()));
 
 //                int memberId  = userProfiles.getMemberID();
-                int memberId = 1;
+                int memberId = 2;
                 int imageSize = getResources().getDisplayMetrics().widthPixels;
                 Bitmap bitmap = null;
 
@@ -149,16 +150,17 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity  {
 //                jsonObject.addProperty("memberId", "1");
 //                String jsonOut = jsonObject.toString();
                 try {
-                    bitmap = new ImageTask(url, memberId, imageSize, ibPhotoIcon).execute().get();
+                    icontask = new ImageTask(url, memberId, imageSize,ibPhotoIcon);
+                    icontask.execute();
 
                 } catch (Exception e) {
                    Log.e(TAG, e.toString());
                 }
                 if (bitmap != null) {
                     ibPhotoIcon.setImageBitmap(bitmap);
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    image = out.toByteArray();
+//                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+//                    image = out.toByteArray();
 
                 } else {
                     Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
@@ -442,8 +444,8 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity  {
             getProfileTask.cancel(true);
         }
 
-        if(Icontask !=null) {
-            Icontask.cancel(true);
+        if(icontask !=null) {
+            icontask.cancel(true);
         }
     }
 }

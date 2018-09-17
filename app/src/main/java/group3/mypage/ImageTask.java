@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
 import com.google.gson.JsonObject;

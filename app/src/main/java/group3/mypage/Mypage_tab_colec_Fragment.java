@@ -5,21 +5,34 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 
+import group3.Common;
+import group3.Picture;
 import group3.Postdetail;
+import group3.explore.ExploreFragment;
 
 public class Mypage_tab_colec_Fragment extends Fragment {
+    private static final String TAG = "Mypage_tab_colec_Fragment";
+    private List<Postdetail> postdetail;
+    private CommonTask pictureGetTopTask;
+
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_collection, container, false);
@@ -28,10 +41,41 @@ public class Mypage_tab_colec_Fragment extends Fragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+//        showAllPosts();
+    }
+
+    private void showAllPosts() {
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/PictureServlet";
+            List<Picture> picturestop = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getTop");
+            String jsonOut = jsonObject.toString();
+            pictureGetTopTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = pictureGetTopTask.execute().get();
+                Type listType = new TypeToken<List<Picture>>() {
+                }.getType();
+                picturestop = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (picturestop == null||picturestop.isEmpty()) {
+                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+            }
+            else {
+            }
+        } else {
+        }
+    }
+
     private void handleviews(View view) {
         RecyclerView rvCollection = view.findViewById(R.id.rvCollection);
-        rvCollection.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-//        rvCollection.setAdapter(new Mypage_tab_colec_Fragment.PostAdapter(getPosts(), getActivity()));
+        rvCollection.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        rvCollection.setAdapter(new Mypage_tab_colec_Fragment.PostAdapter(postdetail, getActivity()));
     }
 
     public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
@@ -46,7 +90,8 @@ public class Mypage_tab_colec_Fragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return postdetails.size();
+//            return postdetails.size();
+            return 0;
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
@@ -54,7 +99,7 @@ public class Mypage_tab_colec_Fragment extends Fragment {
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
-                imageView = itemView.findViewById(R.id.ivtop);
+//                imageView = itemView.findViewById(R.id.ivtop);
             }
         }
 
@@ -62,7 +107,7 @@ public class Mypage_tab_colec_Fragment extends Fragment {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
-            View item_view = layoutInflater.inflate(R.layout.item_view, parent, false);
+            View item_view = layoutInflater.inflate(R.layout.item_view_post, parent, false);
             return new Mypage_tab_colec_Fragment.PostAdapter.MyViewHolder(item_view);
         }
 
@@ -93,18 +138,6 @@ public class Mypage_tab_colec_Fragment extends Fragment {
 //            });
 //
 //        }
-//    }
-//    private List<Postdetail> getPosts() {
-////        next step:add all information
-//        List<Postdetail> postdetails = new ArrayList<>();
-//        postdetails.add(new Postdetail(R.drawable.itemviewtest));
-//        postdetails.add(new Postdetail(R.drawable.post1));
-//        postdetails.add(new Postdetail(R.drawable.post2));
-//        postdetails.add(new Postdetail(R.drawable.post3));
-//        postdetails.add(new Postdetail(R.drawable.post4));
-//        postdetails.add(new Postdetail(R.drawable.post5));
-//        postdetails.add(new Postdetail(R.drawable.post6));
-//        return postdetails;
 //    }
         }
     }

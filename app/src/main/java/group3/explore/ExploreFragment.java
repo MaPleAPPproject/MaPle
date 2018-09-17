@@ -6,12 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -29,19 +29,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import group3.Common;
-import group3.MainActivity;
 import group3.Picture;
-import group3.Postdetail;
 import group3.mypage.CommonTask;
-import group3.mypage.ImageTask;
+
 //注意fragment和activity呼叫server時間點不同
 public class ExploreFragment extends Fragment {
     private static final String TAG = "ExploreFragment";
-    private FragmentActivity activity;
     private SearchView searchView;
     private RecyclerView rvRecom;
     private RecyclerView rvTop;
@@ -50,8 +46,9 @@ public class ExploreFragment extends Fragment {
     private PostTask pictureImageTask;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Picture picture;
+    private TextView mTextView;
+    private CommonTask pictureGetTopTask;
 
-//    未完成 可以不用改寫
 //  當點擊照片時會進入另一個activity,用來存放aveInstanceState資訊
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -59,14 +56,11 @@ public class ExploreFragment extends Fragment {
 //        Log.v(TAG, "In frag's on save instance state ");
         outState.putSerializable("picture",picture);
     }
-    //取得activity
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity =getActivity();
     }
 
-    //    未完成 可以不用改寫
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -74,11 +68,67 @@ public class ExploreFragment extends Fragment {
 //        datafromServer=savedInstanceState.getString("picture");
 
     }
-//  呼叫此fragment時 直接呼叫showAllPosts()向server索取資料
     @Override
     public void onStart() {
         super.onStart();
         showAllPosts();
+        showTopPosts();
+    }
+    private void showTopPosts() {
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/PictureServlet";
+            List<Picture> picturestop = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getTop");
+            String jsonOut = jsonObject.toString();
+            pictureGetTopTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = pictureGetTopTask.execute().get();
+                Type listType = new TypeToken<List<Picture>>() {
+                }.getType();
+                picturestop = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (picturestop == null||picturestop.isEmpty()) {
+                Toast.makeText(contentview,R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+            }
+            else {
+//                如果成功取得文字資料就將資料傳入adapter繼續後續處理
+//                若是adapter需要圖的話,則是在onBindViewHolder中發起imageTask
+                rvTop.setAdapter(new PostAdapter(picturestop, getActivity()));
+            }
+        } else {
+            Toast.makeText(contentview, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void showAllPosts() {
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/PictureServlet";
+            List<Picture> pictures = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getAll");
+            String jsonOut = jsonObject.toString();
+            pictureGetAllTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = pictureGetAllTask.execute().get();
+                Type listType = new TypeToken<List<Picture>>() {
+                }.getType();
+                pictures = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (pictures == null||pictures.isEmpty()) {
+                Toast.makeText(contentview,R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+            }
+            else {
+                rvRecom.setAdapter(new PostAdapter(pictures, getActivity()));
+            }
+        } else {
+            Toast.makeText(contentview, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -108,10 +158,10 @@ public class ExploreFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_exploretest,container, false);
-        if ((savedInstanceState != null) && (savedInstanceState.getSerializable("picture") != null)) {
-            savedInstanceState.getSerializable("picture"); }
+//        if ((savedInstanceState != null) && (savedInstanceState.getSerializable("picture") != null)) {
+//            savedInstanceState.getSerializable("picture"); }
         swipeRefreshLayout =
-                view.findViewById(R.id.swipeRefreshLayout);
+                view.findViewById(R.id.swiprefreshlayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -125,60 +175,12 @@ public class ExploreFragment extends Fragment {
 
     }
 
-//  向server索取資料
-    private void showAllPosts() {
-        //      此fragment有圖也有文字 所以先向server索取文字的部分
-        if (Common.networkConnected(activity)) {
-//            這邊要注意網址是否正確
-            String url = Common.URL + "/PictureServlet";
-//          要索取的資料有很多筆,用List來存
-//            注意存取放的class內容要一致（ex 從server端取得的picture資料,要放在相對應的picture容器）
-            List<Picture> pictures = null;
-            JsonObject jsonObject = new JsonObject();
-//          要求json向server發出的action是什麼請求(getAll,findByid....)
-            jsonObject.addProperty("action", "getAll");
-//          對應Servlet中的動作
-//          PictureServlet中doPost方法：
-//          if (action.equals("getAll")) {
-//          server把資料存入List<Picture> pictures
-//			List<Picture> pictures = pictureDao.getAll();
-//            寫入gson送出來
-//			writeText(response, gson.toJson(pictures));
-//          將json的請求轉文字
-            String jsonOut = jsonObject.toString();
-//          如果請求只會來回都是文字用CommonTask,若有圖另外使用imageTask
-//            注意！！！寫到Task代表開新的執行緒 執行緒很笨一定要呼叫onstop()把他關閉line254
-            pictureGetAllTask = new CommonTask(url, jsonOut);
-            try {
-                String jsonIn = pictureGetAllTask.execute().get();
-                Type listType = new TypeToken<List<Picture>>() {
-                }.getType();
-//              承接line145中gson的資料
-                pictures = new Gson().fromJson(jsonIn, listType);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (pictures == null||pictures.isEmpty()) {
-                Toast.makeText(contentview,R.string.msg_NoPost,Toast.LENGTH_SHORT);
-            }
-            else {
-//                如果成功取得文字資料就將資料傳入adapter繼續後續處理
-//                若是adapter需要圖的話,則是在onBindViewHolder中發起imageTask
-                rvRecom.setAdapter(new PostAdapter(pictures, activity));
-//                rvTop.setAdapter(new PostAdapter(pictures, activity));
-            }
-        } else {
-            Toast.makeText(contentview,R.string.msg_NoNetwork,Toast.LENGTH_SHORT);
-        }
-
-    }
-
     private void handleviews(View view) {
         rvTop = view.findViewById(R.id.rvTop);
         rvTop.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false) );
-//        rvTop.setAdapter(new PostAdapter(, getActivity()));
         rvRecom = view.findViewById(R.id.rvRecom);
-        rvRecom.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
+//        rvRecom.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false) );
+        rvRecom.setLayoutManager(new GridLayoutManager(getActivity(),3));
         searchView=view.findViewById(R.id.searchview);
         contentview=view.getContext();
     }
@@ -208,7 +210,7 @@ public class ExploreFragment extends Fragment {
         @NonNull
         @Override
         public ExploreFragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            View itemView = layoutInflater.inflate(R.layout.item_view_recom, parent, false);
+            View itemView = layoutInflater.inflate(R.layout.item_view_picture, parent, false);
             return new ExploreFragment.PostAdapter.MyViewHolder(itemView);
         }
 
@@ -224,7 +226,7 @@ public class ExploreFragment extends Fragment {
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(activity,Explore_PostActivity.class);
+                    Intent intent =new Intent(getActivity(),Explore_PostActivity.class);
                     Bundle bundle=new Bundle();
                     bundle.putSerializable("picture", picture);
                     intent.putExtras(bundle);
@@ -257,9 +259,30 @@ public class ExploreFragment extends Fragment {
         if (pictureGetAllTask != null) {
             pictureGetAllTask.cancel(true);
         }
+        if (pictureGetTopTask != null) {
+            pictureGetTopTask.cancel(true);
+        }
 
         if (pictureImageTask != null) {
             pictureImageTask.cancel(true);
+        }
+        updatedata();
+    }
+//  收藏
+    private void updatedata() {
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden){
+            //Fragment隐藏时调用
+            onPause();
+//            onResume();
+        }else {
+            //Fragment显示时调用
+//            onPause();
+            onResume();
         }
     }
 }

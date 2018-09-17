@@ -5,20 +5,16 @@ import java.io.Serializable;
 public class Postdetail implements Serializable {
     private int postId;
     private int memberId;
-    private long posteddate;
     private String district;
-    private String comment;
     private int clickcount;
     private int collectioncount;
     private String username;
 
-    public Postdetail(int postId, int memberId, long posteddate, String district,
-                      String comment, int clickcount, int collectioncount, String username) {
+    public Postdetail(int postId, int memberId, String district,
+                      int clickcount, int collectioncount, String username) {
         this.postId = postId;
         this.memberId = memberId;
-        this.posteddate = posteddate;
         this.district = district;
-        this.comment = comment;
         this.clickcount = clickcount;
         this.collectioncount = collectioncount;
         this.username = username;
@@ -40,13 +36,6 @@ public class Postdetail implements Serializable {
         this.memberId = memberId;
     }
 
-    public long getPosteddate() {
-        return posteddate;
-    }
-
-    public void setPosteddate(long posteddate) {
-        this.posteddate = posteddate;
-    }
 
     public String getDistrict() {
         return district;
@@ -56,13 +45,6 @@ public class Postdetail implements Serializable {
         this.district = district;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 
     public int getClickcount() {
         return clickcount;

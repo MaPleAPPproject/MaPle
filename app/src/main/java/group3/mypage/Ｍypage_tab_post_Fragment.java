@@ -14,7 +14,6 @@ import android.widget.ImageView;
 
 import com.cp102group3maple.violethsu.maple.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import group3.Postdetail;
@@ -56,7 +55,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
-                imageView = itemView.findViewById(R.id.ivtop);
+//                imageView = itemView.findViewById(R.id.ivtop);
             }
         }
 
@@ -64,7 +63,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
         @Override
         public Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
-            View item_view = layoutInflater.inflate(R.layout.item_view, parent, false);
+            View item_view = layoutInflater.inflate(R.layout.item_view_post, parent, false);
             return new Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder(item_view);
         }
 

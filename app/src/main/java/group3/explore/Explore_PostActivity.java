@@ -28,6 +28,6 @@ public class Explore_PostActivity extends MainActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.postactivitycontainer, fragment).commit();
+        fragmentTransaction.replace(R.id.postactivitycontainer, fragment).commit();
     }
 }
