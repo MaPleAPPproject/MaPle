@@ -372,7 +372,7 @@ public class Mypage_UserProfile_Activity extends Activity {
                 case REQUEST_TAKE_PICTURE:
 
 //                    Bitmap srcPicture = BitmapFactory.decodeFile(file.getPath());
-//                    Bitmap downSizePicture = Common.downSize(srcPicture, newSize);
+//                    Bitmap downSizePicture = friendCommon.downSize(srcPicture, newSize);
 //                    ibPhotoIcon.setImageBitmap(downSizePicture);
                     crop(contentUri);
                     break;

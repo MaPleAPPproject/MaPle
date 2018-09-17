@@ -5,36 +5,35 @@ import java.io.Serializable;
 
 public class User_Profile implements Serializable {
 
-    private int snapshotID;
-    private String name;
+    private int memberId;
     private String email;
     private String password;
-    private boolean vipStatus;
+    private String userName;
     private String selfIntroduction;
+    private int vipStatus;
 
-
-    public User_Profile(int snapshotID, String name, String email, String password, boolean vipStatus, String selfIntroduction) {
-        this.snapshotID = snapshotID;
-        this.name = name;
+    public User_Profile(int memberId, String email, String password, String userName, String selfIntroduction, int vipStatus) {
+        this.memberId = memberId;
         this.email = email;
         this.password = password;
+        this.userName = userName;
+        this.selfIntroduction = selfIntroduction;
         this.vipStatus = vipStatus;
+    }
+
+    public User_Profile(int memberId,String userName, String selfIntroduction) {
+        super();
+        this.memberId = memberId;
+        this.userName = userName;
         this.selfIntroduction = selfIntroduction;
     }
-    public int getSnapshotID() {
-        return snapshotID;
+
+    public int getMemberId() {
+        return memberId;
     }
 
-    public void setSnapshotID(int snapshotID) {
-        this.snapshotID = snapshotID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
     }
 
     public String getEmail() {
@@ -53,12 +52,12 @@ public class User_Profile implements Serializable {
         this.password = password;
     }
 
-    public boolean isVipStatus() {
-        return vipStatus;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setVipStatus(boolean vipStatus) {
-        this.vipStatus = vipStatus;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getSelfIntroduction() {
@@ -69,8 +68,11 @@ public class User_Profile implements Serializable {
         this.selfIntroduction = selfIntroduction;
     }
 
+    public int getVipStatus() {
+        return vipStatus;
+    }
 
-
-
-
+    public void setVipStatus(int vipStatus) {
+        this.vipStatus = vipStatus;
+    }
 }
