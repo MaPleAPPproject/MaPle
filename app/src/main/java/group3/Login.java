@@ -32,13 +32,15 @@ public class Login extends AppCompatActivity {
     private Button btlogin, btsignup;
     private EditText etaccount;
     private EditText etpassword;
+    //Toby:google
+    private GoogleSignInClient googleSignInClient;
+    private static final int RC_SIGN_IN = 10;//設定為讓系統得知是google+登入的
+    private static final String TAG ="Login";//define a constant for tag
     private AccountTask userValidTask;
     private final static String TAG="Login";
     private Gson gson;
-
-
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
@@ -59,6 +61,13 @@ public class Login extends AppCompatActivity {
         btlogin.setOnClickListener(listener);
         btgplus.setOnClickListener(listener);
         btfb.setOnClickListener(listener);
+
+        //Toby:test google+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this,gso);
+
     }
     @Override
     protected void onStart() {
@@ -75,7 +84,6 @@ public class Login extends AppCompatActivity {
             }
         }
     }
-
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -119,33 +127,32 @@ public class Login extends AppCompatActivity {
                     break;
 
                 }
-//                    case R.id.btfb: {
-//                        Intent intent = new Intent();
-//                        intent.setClass(Login.this, ExGoogleMap.class);
-//                        startActivity(intent);
-//                        break;
-//                    }
+                case R.id.btfb: {
+                    Intent intent = new Intent();
+                    intent.setClass(Login.this, ExGoogleMap.class);
+                    startActivity(intent);
+                    break;
+                }
+                case R.id.btgplus:{
+                    Intent signInIntent =googleSignInClient.getSignInIntent();
+                    startActivityForResult(signInIntent,RC_SIGN_IN);
+
+                    break;
+                }
             }
         }
     };
-    //        public List<UserAccount> getUserAccount() {
-//            List<UserAccount> useraccount = null;
-//            if (networkConnected()) {
-//                String url = URL + "/UserAccountServlet";
-//                String outStr = "";
-//                userValidTask = new AccountTask(url, outStr);
-//                String inStr = "";
-//                try {
-//                    inStr = userValidTask.execute().get();
-//                    Type listType = new TypeToken<List<UserAccount>>() {
-//                    }.getType();
-//                    useraccount = gson.fromJson(inStr, listType);
-//                } catch (Exception e) {
-//                //    Log.e(TAG, e.toString());
-//                }
-//            }
-//            return useraccount;
-//        }
+    //Toby:test google+
+    private void googleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try{
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            //Toby:google+ 取得使用者資料
+            Log.d(TAG,"handleSignInResult getName:"+account.getDisplayName());
+            Log.d(TAG,"handleSignInResult getEmail:"+account.getEmail());
+        }catch (ApiException e){
+            Log.w(TAG,"signInResult :failed code="+e.getStatusCode());
+        }
+    }
     private boolean networkConnected() {
         ConnectivityManager conManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -182,5 +189,22 @@ public class Login extends AppCompatActivity {
             userValidTask = null;
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //Toby:test google+
+        if (requestCode == RC_SIGN_IN){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            googleSignInResult(task);
+
+            Toast toast = Toast.makeText(Login.this, "您已從google帳號登入", Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+
+    }
+
+
+
 
 }

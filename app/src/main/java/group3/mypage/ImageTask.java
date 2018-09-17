@@ -66,7 +66,9 @@ public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
             imageView.setImageBitmap(bitmap);
         }else{
             imageView.setImageResource(R.drawable.icon_facev);
+
         }
+
     }
 
     private Bitmap getRemoteImage(String url, String jsonOut){
@@ -85,12 +87,14 @@ public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
 
             int requestCode = connection.getResponseCode();
             if(requestCode==200){
+
                 bitmap = BitmapFactory.decodeStream(new BufferedInputStream(connection.getInputStream()));
+                Log.d(TAG,"input:"+bitmap);
             }else{
                 Log.d(TAG,"requestCode:"+requestCode);
             }
         }catch (IOException e){
-            Log.d(TAG,e.toString());
+            Log.e(TAG,e.toString());
         }finally {
             if(connection!=null)
                 connection.disconnect();
