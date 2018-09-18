@@ -95,6 +95,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         loadProfiles();
 
 
+
     }
 
     private void handleView() {
@@ -153,6 +154,9 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
                 int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
                 Bitmap bitmap = null;
 
+//                jsonObject.addProperty("action", "findImageById");
+//                jsonObject.addProperty("memberId", "1");
+//                String jsonOut = jsonObject.toString();
                 try {
                     bitmap = new ImageTask(url, memberId, imageSize, ibPhotoIcon).execute().get();
 
@@ -328,7 +332,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
 
     public void onPremiumClick(View view) {
 
-        AlertDialog.Builder ad = new AlertDialog.Builder(Mypage_UserProfile_Activity.this)
+        AlertDialog.Builder  ad= new AlertDialog.Builder(Mypage_UserProfile_Activity.this)
                 .setTitle("確認視窗")
                 .setMessage("確定要離開此頁面嗎？")
                 .setPositiveButton("確定", new DialogInterface.OnClickListener() {
@@ -440,6 +444,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
             Toast.makeText(this, "This device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     @Override

@@ -62,7 +62,6 @@ dependencies {
     ////Toby:google
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
-    implementation 'com.jakewharton:butterknife:8.8.1'
-}
+
 
 }
