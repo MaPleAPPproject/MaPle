@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 //      避免view重複加載
         viewPager.setOffscreenPageLimit(3);
         setupViewPager(viewPager);
-        viewPager.setOffscreenPageLimit(3);
         final BottomNavigationView navigation =findViewById(R.id.navigation);
         BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
                 = new BottomNavigationView.OnNavigationItemSelectedListener() {
