@@ -36,7 +36,23 @@
     <string name="currentlocation">Current location</string>
     <string name="otherlocation">Other location</string>
     <string name="no_data_from_db">尚未有資料</string>
+    <string name="visited_countries">Visited countries</string>
+    <string name="asia">Asia</string>
+    <string name="europe">Europe</string>
+    <string name="northAmerica">North America</string>
+    <string name="southAmerica">South America</string>
+    <string name="africa">Africa</string>
+    <string name="oceania">Oceania</string>
+    <string name="default_resulta">(0/51)     0.0%</string>
+    <string name="default_resulte">(0/46)     0.0%</string>
+    <string name="default_resultna">(0/37)     0.0%</string>
+    <string name="default_resultsa">(0/14)     0.0%</string>
+    <string name="default_resultaa">(0/28)     0.0%</string>
+    <string name="default_resultaf">(0/58)     0.0%</string>
+
     <string name="msg_NoPost">No post</string>
     <string name="msg_NoNetwork">No net</string>
+    <string name="addNewPost">New Post</string>
+    <string name="charts">Charts</string>
 </resources>
 

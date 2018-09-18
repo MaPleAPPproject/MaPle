@@ -76,6 +76,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
     private String servlet = "/User_profileServlet";
 
 
+
     public Mypage_UserProfile_Activity() {
 
     }

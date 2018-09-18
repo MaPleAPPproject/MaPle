@@ -262,5 +262,13 @@ public class NewPost_Activity extends Activity implements View.OnClickListener {
         }
     }
 
+
+
+    public void upLoad(){
+        int memberId;
+
+
+    }
+
 }
 

@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class PostDetailTask extends AsyncTask<String, Integer, String> {
+class PostDetailTask extends AsyncTask<String, Integer, String> {
     private final static String TAG = "PostDetailTask";
     private String url, outStr;
 

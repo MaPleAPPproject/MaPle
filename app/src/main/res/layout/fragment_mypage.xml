@@ -16,29 +16,33 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            >
 
             <ImageButton
                 android:id="@+id/snapshot"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:layout_margin="10dp"
+                android:layout_margin="8dp"
                 android:padding="10dp"
-                android:src="@drawable/icon_facev" />
+                android:background="#00000000"/>
 
             <TextView
+                android:id="@+id/tvusername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Name"
-                android:textSize="15dp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="10dp">
 
             <ImageButton
                 android:id="@+id/btaddNewPost"
@@ -53,15 +57,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Add"
-                android:textSize="15dp" />
+                android:text="@string/addNewPost"
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="10dp">
 
             <ImageButton
                 android:id="@+id/btMap"
@@ -77,14 +82,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Visited"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="10dp">
 
             <ImageButton
                 android:id="@+id/btChart"
@@ -99,8 +105,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Charts"
-                android:textSize="15dp" />
+                android:text="@string/charts"
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 

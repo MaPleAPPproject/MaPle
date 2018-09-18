@@ -9,4 +9,8 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorRed">#f26b6b</color>
 
+    <color name="pink_d">#ff80ab</color>
+    <color name="pink_l">#fce4ec</color>
+    <color name="blue_d">#82b1ff</color>
+    <color name="blue_l">#82b1ff</color>
 </resources>

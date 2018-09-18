@@ -37,7 +37,7 @@ public class Login extends AppCompatActivity {
     private static final int RC_SIGN_IN = 10;//設定為讓系統得知是google+登入的
     private static final String TAG ="Login";//define a constant for tag
     private AccountTask userValidTask;
-    private final static String TAG="Login";
+//    private final static String TAG="Login";
     private Gson gson;
     @Override
     protected void onCreate (Bundle savedInstanceState){

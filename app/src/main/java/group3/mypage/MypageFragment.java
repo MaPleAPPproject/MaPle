@@ -1,6 +1,7 @@
 package group3.mypage;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,9 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,25 +17,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.cp102group3maple.violethsu.maple.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import group3.BaseFragment;
 import group3.Common;
-import group3.Picture;
-import group3.explore.OtherspageFragment;
 import group3.explore.TabFragment_Card;
 import group3.explore.TabFragment_Collect;
+
 
 public class MypageFragment extends Fragment {
     private static final String TAG = "MypageFragment";
@@ -45,9 +35,15 @@ public class MypageFragment extends Fragment {
     private ImageButton addNewPost, map, chart, snapshot;
     private TextView mTextView;
     private Bundle bundle;
+    private int memberId = 2;
+    private CommonTask getNameTask;
+    private TextView userName;
+    private byte[] image;
 
-    public MypageFragment(){};
+    public MypageFragment() {
+    }
 
+    ;
 
 
     @Nullable
@@ -56,11 +52,12 @@ public class MypageFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootview = inflater.inflate(R.layout.fragment_mypage, container, false);
         handleviews(rootview);
+        loadForMypage();
         tabLayout = rootview.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(tabviewPager);
         tabLayout.addTab(tabLayout.newTab().setText("Post"));
         tabLayout.addTab(tabLayout.newTab().setText("Collection"));
-        tabviewPager= rootview.findViewById(R.id.tabviewPager);
+        tabviewPager = rootview.findViewById(R.id.tabviewPager);
 //        tablayput綁定viewpager
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
         setupViewPager(tabviewPager);
@@ -120,15 +117,17 @@ public class MypageFragment extends Fragment {
         addNewPost = (ImageButton) rootview.findViewById(R.id.btaddNewPost);
         map = (ImageButton) rootview.findViewById(R.id.btMap);
         chart = (ImageButton) rootview.findViewById(R.id.btChart);
-        snapshot = (ImageButton) rootview.findViewById(R.id.snapshot);
-    }
+        userName = rootview.findViewById(R.id.tvusername);
+        snapshot = rootview.findViewById(R.id.snapshot);
+        snapshot.setImageResource(R.drawable.icon_facev);
 
+    }
 
 
     private void setupViewPager(ViewPager viewPager) {
         TabViewPagerAdapter adapter = new TabViewPagerAdapter(getChildFragmentManager());
-        TabFragment_Card tabFragment_card=new TabFragment_Card();
-        TabFragment_Collect tabFragment_collect=new TabFragment_Collect();
+        TabFragment_Card tabFragment_card = new TabFragment_Card();
+        TabFragment_Collect tabFragment_collect = new TabFragment_Collect();
         adapter.addFragment(tabFragment_card);
         adapter.addFragment(tabFragment_collect);
         viewPager.setAdapter(adapter);
@@ -181,12 +180,66 @@ public class MypageFragment extends Fragment {
         }
     }
 
-//    private void lazyLoad() {
+    public void loadForMypage() {
+
+
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/User_profileServlet";
+            User_Profile userProfiles = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findById");
+            jsonObject.addProperty("memberId", memberId);
+            String jsonOut = jsonObject.toString();
+            getNameTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = getNameTask.execute().get();
+                userProfiles = new Gson().fromJson(jsonIn, User_Profile.class);
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (userProfiles == null) {
+                Toast.makeText(getActivity(), "no_profile", Toast.LENGTH_SHORT).show();
+            } else {
+                userName.setText(userProfiles.getUserName());
+
+            }
+
+            int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
+            Bitmap bitmap = null;
+
+            try {
+                bitmap = new ImageTask(url, memberId, imageSize, snapshot).execute().get();
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (bitmap != null) {
+                snapshot.setImageBitmap(bitmap);
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                image = out.toByteArray();
+
+            } else {
+                Toast.makeText(getActivity(), "no_image", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (getNameTask != null)
+            getNameTask.cancel(true);
+
+    }
+
+    //    private void lazyLoad() {
 //        if (!isFirst) {
 //            isFirst = true;
 //        }
 //    }
-
 
 
 }
