@@ -114,7 +114,7 @@
         <!--<android.support.design.widget.TabItem-->
             <!--android:id="@+id/tab"-->
             <!--android:padding="10dp"-->
-            <!--android:text="Post"-->
+            <!--android:text="Postdetail"-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content" />-->
 

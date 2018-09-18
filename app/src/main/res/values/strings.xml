@@ -13,9 +13,9 @@
     <string name="payment">Payment</string>
     <string name="msg_NoCameraAppsFound">No camera apps found</string>
     <string name="what_s_new">What\'s new?</string>
-    <string name="name">name</string>
-    <string name="email">email</string>
-    <string name="password">password</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
     <string name="vipStatus">VIP Status</string>
     <string name="no">No</string>
     <string name="premium_plan">Premium Plan</string>
@@ -31,5 +31,12 @@
     <string name="msg_Nonetwork">no network connection available</string>
     <string name="pick_a_photo_from">Pick a photo from :</string>
     <string name="no_Image">No image</string>
+    <string name="Send">send</string>
+    <string name="send">Send</string>
+    <string name="currentlocation">Current location</string>
+    <string name="otherlocation">Other location</string>
+    <string name="no_data_from_db">尚未有資料</string>
+    <string name="msg_insertFail">Order Data Insert Fail</string>
+    <string name="msg_InsertSuccess">Order Data Insert Success</string>
 </resources>
 

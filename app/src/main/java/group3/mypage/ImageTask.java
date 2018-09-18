@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
 import com.google.gson.JsonObject;
@@ -25,20 +26,22 @@ import java.net.URL;
 
 
 public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
+
     private final static String TAG = "ImageTask";
     private  String url;
-    private int id,imageSize;
+    private int memberId,imageSize;
     private WeakReference<ImageView> imageViewWeakReference;
 
-    public ImageTask(String url, int id, int imageSize) {
+    public ImageTask(String url, int memberId, int imageSize) {
         this.url = url;
-        this.id = id;
+        this.memberId = memberId;
         this.imageSize = imageSize;
     }
 
-    public ImageTask(String url, int id, int imageSize, ImageView imageView) {
+
+    public ImageTask(String url, int memberId, int imageSize, ImageView imageView) {
         this.url = url;
-        this.id = id;
+        this.memberId = memberId;
         this.imageSize = imageSize;
         this.imageViewWeakReference = new WeakReference<>(imageView);
     }
@@ -48,7 +51,7 @@ public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
     protected Bitmap doInBackground(Object... params) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("action", "getImage");
-        jsonObject.addProperty("id",id);
+        jsonObject.addProperty("memberId",memberId);
         jsonObject.addProperty("imageSize",imageSize);
         return getRemoteImage(url, jsonObject.toString());
     }
@@ -63,7 +66,9 @@ public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
             imageView.setImageBitmap(bitmap);
         }else{
             imageView.setImageResource(R.drawable.icon_facev);
+
         }
+
     }
 
     private Bitmap getRemoteImage(String url, String jsonOut){
@@ -82,12 +87,14 @@ public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
 
             int requestCode = connection.getResponseCode();
             if(requestCode==200){
+
                 bitmap = BitmapFactory.decodeStream(new BufferedInputStream(connection.getInputStream()));
+                Log.d(TAG,"input:"+bitmap);
             }else{
                 Log.d(TAG,"requestCode:"+requestCode);
             }
         }catch (IOException e){
-            Log.d(TAG,e.toString());
+            Log.e(TAG,e.toString());
         }finally {
             if(connection!=null)
                 connection.disconnect();

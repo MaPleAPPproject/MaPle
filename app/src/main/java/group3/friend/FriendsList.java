@@ -10,6 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import java.lang.reflect.Type;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -30,6 +33,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import group3.explore.Explore_PostActivity;
 import group3.mypage.User_Profile;
@@ -53,7 +57,6 @@ public class FriendsList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_friends_list,container, false);
-
         setHasOptionsMenu(true);
         handleViews(view);
         return view;
@@ -235,5 +238,16 @@ public class FriendsList extends Fragment {
     }
 
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden){
+            //Fragment隐藏时调用
+//            onResume();
+        }else {
+            //Fragment显示时调用
+//            onPause();
+        }
+    }
 
 }

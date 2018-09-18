@@ -21,6 +21,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.EventLog;
 import android.util.Log;
@@ -30,12 +31,14 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -49,31 +52,34 @@ import static android.support.constraint.motion.utils.Oscillator.TAG;
 import static android.view.KeyEvent.KEYCODE_B;
 
 
-public class Mypage_UserProfile_Activity extends Activity {
+public class Mypage_UserProfile_Activity extends AppCompatActivity {
 
 
-    private ImageButton ibPhotoIcon;
-    private Button save,cancel,premium;
-    private ImageButton camera_btn;
-    private ImageButton gallery_btn;
+    public static final int KEYCODE_BACK = 4;
     private static final int REQUEST_TAKE_PICTURE = 1;
     private static final int REQUEST_PICK_PICTURE = 2;
     private static final int REQUEST_CROP_PICTURE = 3;
-
-    private static File file;
-    Intent intent;
-    private Uri contentUri, croppedImageUri;
-    private Bitmap picture;
-    private final static String PREFERENCES_NAME = "preferences";
     private final static String DEFAULT_NAME = "";
     private final static String DEFAULT_EMAIL = "";
     private final static String DEFAULT_PASSWORD = "";
     private final static String DEFAULT_SELFINTRO = "";
-    public static final int KEYCODE_BACK  = 4;
-    private EditText etName,etEmail,etPassword,etSelfIntro;
+    private static File file;
+    private ImageButton ibPhotoIcon;
+    private Button save, cancel, premium;
+    private ImageButton camera_btn;
+    private ImageButton gallery_btn;
+    private Intent intent;
+    private Uri contentUri, croppedImageUri;
+    private Bitmap picture;
+    private EditText etName, etEmail, etPassword, etSelfIntro;
+    private TextView tvVipStatus;
     private byte[] image;
     private CommonTask uploadTask;
-
+    private User_Profile userprofile;
+    private int memberId;
+    private CommonTask getProfileTask;
+    private ImageTask Icontask;
+    private String servlet = "/User_profileServlet";
 
 
 
@@ -81,15 +87,19 @@ public class Mypage_UserProfile_Activity extends Activity {
 
     }
 
+    public static boolean isIntentAvailable(Context context, Intent intent) {
+
+        PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
         handleView();
-        loadPreference();
-
-
+        loadProfiles();
 
 
 
@@ -98,125 +108,171 @@ public class Mypage_UserProfile_Activity extends Activity {
     private void handleView() {
         save = findViewById(R.id.btSave);
         cancel = findViewById(R.id.btCancel);
-        ibPhotoIcon = findViewById(R.id.ivPhotoIcon);
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etSelfIntro = findViewById(R.id.etSelfIntro);
         premium = findViewById(R.id.btPremium);
-
-
-
-
-
+        ibPhotoIcon = findViewById(R.id.ibPhotoIcon);
+        tvVipStatus = findViewById(R.id.tvStatusResult);
     }
 
 
-    private void loadPreference(){
-        SharedPreferences pf = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-        String name = pf.getString("name", DEFAULT_NAME);
-        String email = pf.getString("email", DEFAULT_EMAIL);
-        String password = pf.getString("passoword", DEFAULT_PASSWORD);
-        String selfIntro = pf.getString("selfIntro", DEFAULT_SELFINTRO);
 
-        etName.setText(name);
-        etEmail.setText(email);
-        etPassword.setText(password);
-        etSelfIntro.setText(selfIntro);
+    private void loadProfiles() {
+        SharedPreferences pf = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        pf.edit()
+                .putInt("memberId", memberId).apply();
+
+        memberId = pf.getInt("memberId", 1);
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/User_profileServlet";
+            User_Profile userProfiles = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findById");
+            jsonObject.addProperty("memberId", "2");
+            String jsonOut = jsonObject.toString();
+            getProfileTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = getProfileTask.execute().get();
+                userProfiles = new Gson().fromJson(jsonIn, User_Profile.class);
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (userProfiles == null) {
+                Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+            } else {
+                etName.setText(userProfiles.getUserName());
+                etPassword.setText(userProfiles.getPassword());
+                etEmail.setText(userProfiles.getEmail());
+                etSelfIntro.setText(userProfiles.getSelfIntroduction());
+                int vipStatus = userProfiles.getVipStatus();
+                switch(vipStatus){
+                    case 0:
+                        tvVipStatus.setText("Basic");
+                    case 1:
+                        tvVipStatus.setText("Premium");
+
+                }
+
+
+//                int memberId  = userProfiles.getMemberID();
+                int memberId = 2;
+                int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
+                Bitmap bitmap = null;
+
+//                jsonObject.addProperty("action", "findImageById");
+//                jsonObject.addProperty("memberId", "1");
+//                String jsonOut = jsonObject.toString();
+                try {
+                    bitmap = new ImageTask(url, memberId, imageSize, ibPhotoIcon).execute().get();
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if (bitmap != null) {
+                    ibPhotoIcon.setImageBitmap(bitmap);
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    image = out.toByteArray();
+
+                } else {
+                    Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
+//                    ibPhotoIcon.setImageResource(R.drawable.icon_facev);
+                }
+
+            }
+
+        } else {
+            Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     //呼叫會在畫面上顯示各個偏好設定的預設值
-    private void restoreDefaults(){
+    private void restoreDefaults() {
         etName.setText(DEFAULT_NAME);
         etEmail.setText(DEFAULT_EMAIL);
         etPassword.setText(DEFAULT_PASSWORD);
         etSelfIntro.setText(DEFAULT_SELFINTRO);
     }
 
-
-
     public void onCancelClick(View view) {
         confirmExit();
 
     }
 
-
     public void onSaveClick(View view) {
 
-        SharedPreferences pf = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-        String name = etName.getText().toString();
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
-        String selfIntro = etSelfIntro.getText().toString();
-        pf.edit().putString("name",name).apply();
-        pf.edit().putString("email",email).apply();
-        pf.edit().putString("password",password).apply();
-        pf.edit().putString("selfIntro",selfIntro).apply();
+//        SharedPreferences pf = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+//        String name = etName.getText().toString();
+//        String email = etEmail.getText().toString();
+//        String password = etPassword.getText().toString();
+//        String selfIntro = etSelfIntro.getText().toString();
+//        pf.edit().putString("name",name).apply();
+//        pf.edit().putString("email",email).apply();
+//        pf.edit().putString("password",password).apply();
+//        pf.edit().putString("selfIntro",selfIntro).apply();
 
 
-        if(image == null){
+        if (image == null) {
             Toast.makeText(this, R.string.no_Image, Toast.LENGTH_SHORT).show();
             return;
         }
+        memberId = 2;
+        String email = etEmail.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        String userName = etName.getText().toString().trim();
+        int vipStatus = Integer.parseInt(tvVipStatus.getText().toString().trim());
+        String selfIntroduction = etSelfIntro.getText().toString().trim();
+        if((email.length()<=0)||(password.length()<=0)||(userName.length()<=0)){
 
-        if (Common.networkConnected(this)){
-            String url = Common.URL + "/MapleServelet";
-
+            Toast.makeText(this, "請確認欄位是否有填寫", Toast.LENGTH_SHORT).show();
+        }else if (Common.networkConnected(this)) {
+            String url = Common.URL + servlet;
+            User_Profile newuserprofile = new User_Profile( memberId,email, password, userName,selfIntroduction, vipStatus);
             String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
-            byte[] image = Common.bitmapToPNG(picture);
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "imageInsert");
-            jsonObject.addProperty("name", name);
-            jsonObject.addProperty("email", email);
-            jsonObject.addProperty("password", password);
-            jsonObject.addProperty("selfIntro", selfIntro);
-            jsonObject.addProperty("imageBase64", Base64.encodeToString(image, Base64.DEFAULT));
-            uploadTask = new CommonTask(url,jsonObject.toString());
-
+            jsonObject.addProperty("action", "update");
+            jsonObject.addProperty("userprofile", new Gson().toJson(newuserprofile));
+            jsonObject.addProperty("imageBase64", imageBase64);
+            int count = 0;
             try {
-                String jsonIn = uploadTask.execute().get();
-                JsonObject jsonObject1 = new Gson().fromJson(jsonIn,JsonObject.class);
-                name = jsonObject1.get("name").getAsString();
-                email = jsonObject1.get("email").getAsString();
-                password = jsonObject1.get("password").getAsString();
-                selfIntro = jsonObject1.get("selfIntro").getAsString();
-                image = Base64.decode((jsonObject1.get("imageBase64")).getAsString(),Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-
-
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                count = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
             }
+            if (count == 0) {
+                Toast.makeText(this, "update failed", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "saved", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
+                startActivity(intent);
 
+            }
+        } else
 
-        }else{
+        {
             Toast.makeText(this, getString(R.string.msg_Nonetwork), Toast.LENGTH_SHORT).show();
         }
-
-
-        Toast.makeText(this, "saved", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
-        startActivity(intent);
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if (keyCode==KeyEvent.KEYCODE_BACK){
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             confirmExit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
 
-
     }
 
+    public void confirmExit() {
 
-    public void confirmExit(){
 
-
-        AlertDialog.Builder  ad= new AlertDialog.Builder(Mypage_UserProfile_Activity.this)
+        AlertDialog.Builder ad = new AlertDialog.Builder(Mypage_UserProfile_Activity.this)
                 .setTitle("確認視窗")
                 .setMessage("確定要離開此頁面嗎？")
                 .setPositiveButton("確定", new DialogInterface.OnClickListener() {
@@ -225,7 +281,6 @@ public class Mypage_UserProfile_Activity extends Activity {
                         Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
-
 
                     }
                 })
@@ -237,24 +292,16 @@ public class Mypage_UserProfile_Activity extends Activity {
                     }
                 });
         ad.show();
-
-
     }
-
-
-
-
 
     public void onImageClick(View view) {
 
         final AlertDialog alertDialog = new AlertDialog.Builder(Mypage_UserProfile_Activity.this).create();
         alertDialog.show();
         Window win = alertDialog.getWindow();
-
         win.setContentView(R.layout.alertdialog_layout);
 
-
-        ImageButton camera_btn = (ImageButton) win.findViewById(R.id.camera);
+        camera_btn = (ImageButton) win.findViewById(R.id.camera);
         camera_btn.setOnClickListener(new View.OnClickListener() {
 
 
@@ -269,7 +316,6 @@ public class Mypage_UserProfile_Activity extends Activity {
                     startActivityForResult(intent, REQUEST_TAKE_PICTURE);
                     alertDialog.dismiss();
 
-
                 } else {
 
                     Toast.makeText(getBaseContext(), R.string.msg_NoCameraAppsFound, Toast.LENGTH_SHORT).show();
@@ -277,15 +323,14 @@ public class Mypage_UserProfile_Activity extends Activity {
             }
         });
 
-
-        ImageButton gallery_btn = (ImageButton) win.findViewById(R.id.gallery);
+        gallery_btn = (ImageButton) win.findViewById(R.id.gallery);
         gallery_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent1, REQUEST_PICK_PICTURE);
-                if(alertDialog!=null)
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, REQUEST_PICK_PICTURE);
+                if (alertDialog != null)
                     alertDialog.dismiss();
             }
         });
@@ -295,7 +340,6 @@ public class Mypage_UserProfile_Activity extends Activity {
 
     public void onPremiumClick(View view) {
 
-
         AlertDialog.Builder  ad= new AlertDialog.Builder(Mypage_UserProfile_Activity.this)
                 .setTitle("確認視窗")
                 .setMessage("確定要離開此頁面嗎？")
@@ -303,7 +347,8 @@ public class Mypage_UserProfile_Activity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent premiumIntent = new Intent(Mypage_UserProfile_Activity.this, Payment.class);
-                        startActivity(premiumIntent);;
+                        startActivity(premiumIntent);
+                        ;
 
 
                     }
@@ -316,22 +361,11 @@ public class Mypage_UserProfile_Activity extends Activity {
                     }
                 });
         ad.show();
-
-
-
     }
-
-
-    public static boolean isIntentAvailable(Context context, Intent intent) {
-
-        PackageManager packageManager = context.getPackageManager();
-        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return list.size() > 0;
-    }
-
 
     protected void onStart() {
         super.onStart();
+
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Common.askPermissions(this, permissions, Common.REQ_EXTERNAL_STORAGE);
 
@@ -346,19 +380,13 @@ public class Mypage_UserProfile_Activity extends Activity {
             case Common.REQ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    this.camera_btn.setEnabled(true);
-                    this.gallery_btn.setEnabled(true);
-
-                    Toast.makeText(this, "請同意使用本機相機和讀取權限", Toast.LENGTH_SHORT).show();
                 } else {
-                    this.camera_btn.setEnabled(false);
-                    this.gallery_btn.setEnabled(false);
+                    ibPhotoIcon.setEnabled(false);
+                    Toast.makeText(this, "請同意使用本機相機和讀取權限", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 break;
         }
-
-
     }
 
     @Override
@@ -370,32 +398,13 @@ public class Mypage_UserProfile_Activity extends Activity {
             int newSize = 512;
             switch (requestCode) {
                 case REQUEST_TAKE_PICTURE:
-
-//                    Bitmap srcPicture = BitmapFactory.decodeFile(file.getPath());
-//                    Bitmap downSizePicture = friendCommon.downSize(srcPicture, newSize);
-//                    ibPhotoIcon.setImageBitmap(downSizePicture);
                     crop(contentUri);
                     break;
 
                 case REQUEST_PICK_PICTURE:
-                    Uri uri = intent.getData();
-                    if (uri != null) {
-                        String[] columns = {MediaStore.Images.Media.DATA};
-                        Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
-
-                        if (cursor != null && cursor.moveToFirst()) {
-                            String imagePath = cursor.getString(0);
-                            cursor.close();
-                            Bitmap srcImage = BitmapFactory.decodeFile(imagePath);
-                            Bitmap downSizeImage = Common.downSize(srcImage, newSize);
-                            ibPhotoIcon.setImageBitmap(downSizeImage);
-                            crop(contentUri);
-                            break;
-
-
-                        }
-                    }
-
+                    Uri uri = data.getData();
+                    crop(uri);
+                    break;
 
                 case REQUEST_CROP_PICTURE:
 
@@ -404,8 +413,11 @@ public class Mypage_UserProfile_Activity extends Activity {
                     try {
 
                         picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
-                        Bitmap downSizePicture = Common.downSize(picture,512);
+                        Bitmap downSizePicture = Common.downSize(picture, 512);
                         ibPhotoIcon.setImageBitmap(downSizePicture);
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        downSizePicture.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        image = out.toByteArray();
 
                     } catch (FileNotFoundException e) {
                         Log.e(TAG, e.toString());
@@ -414,7 +426,6 @@ public class Mypage_UserProfile_Activity extends Activity {
 
                 default:
             }
-
         }
     }
 
@@ -424,12 +435,9 @@ public class Mypage_UserProfile_Activity extends Activity {
         croppedImageUri = Uri.fromFile(file);
         try {
 
-
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
 
             cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-
             cropIntent.setDataAndType(srcImageUri, "image/*");
             cropIntent.putExtra("crop", "true");
             cropIntent.putExtra("aspectX", 1);
@@ -445,21 +453,21 @@ public class Mypage_UserProfile_Activity extends Activity {
         }
     }
 
-    @Override
-    public SharedPreferences getPreferences(int mode) {
-        return super.getPreferences(MODE_PRIVATE);
 
-
-    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(uploadTask!=null) {
+        if (getProfileTask != null) {
+            getProfileTask.cancel(true);
+        }
+
+        if (Icontask != null) {
+            Icontask.cancel(true);
+        }
+
+        if (uploadTask != null) {
             uploadTask.cancel(true);
         }
     }
 }
-
-
-

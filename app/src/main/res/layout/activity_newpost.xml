@@ -8,24 +8,52 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/rtLayout"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
         android:layout_gravity="top"
-        android:layout_margin="20dp"
+        android:layout_margin="35dp"
+        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/layoutpost"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
         <ImageView
-            android:id="@+id/ivPhoto"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:id="@+id/ibPhoto"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:background="@drawable/imageview"
-            android:onClick="onClick" />
+            android:onClick="onPhotoClick" />
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rtLayout"
+        android:layout_marginTop="-20dp">
+
+
+        <ImageView
+            android:id="@+id/ivMarker"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/icon_marker" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="map"/>
+
+
+
 
 
 
@@ -34,36 +62,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/rtLayout"
-        android:layout_marginTop="-20dp">
-
-
-
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="75dp"
-            android:layout_marginTop="6dp"
-            android:src="@drawable/icon_marker"
-            android:onClick="onLocationClick" />
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="234dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="44dp">
+        android:layout_below="@+id/rl01"
+        android:layout_margin="20dp">
 
         <EditText
-            android:layout_width="260dp"
-            android:layout_height="202dp"
+            android:layout_width="350dp"
+            android:layout_height="160dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/layoutpost"
@@ -73,6 +77,32 @@
             android:paddingTop="10dp" />
 
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true">
+
+        <Button
+            android:id="@+id/btSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="24dp"
+            android:text="@string/send" />
+
+        <Button
+            android:id="@+id/btcancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="128dp"
+            android:text="@string/cancel" />
     </RelativeLayout>
 
 </RelativeLayout>
