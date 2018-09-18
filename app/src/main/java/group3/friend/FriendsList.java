@@ -142,13 +142,13 @@ public class FriendsList extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull FriendsList.friendAdapter.MyViewHolder viewHolder, int position) {
             final User_Profile friends = friendsList.get(position);
+            viewHolder.tvName.setText(String.valueOf(friends.getUserName()));
+            viewHolder.tvIntro.setText(String.valueOf(friends.getSelfIntroduction()));
             //與server連線
-            String url =friendCommon.SERVER_URI+"/FriendServlet";
+            String url =friendCommon.SERVER_URI+"/User_profileServlet";
             int friendid=friends.getMemberId();
             friendImageTask = new FriendImageTask(url,friendid, imageSize, viewHolder.imageView);
             friendImageTask.execute();
-            viewHolder.tvName.setText(String.valueOf(friends.getUserName()));
-            viewHolder.tvIntro.setText(String.valueOf(friends.getSelfIntroduction()));
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

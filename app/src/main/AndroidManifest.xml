@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.cp102group3maple.violethsu.maple">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -36,7 +37,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_path" />
+                android:resource="@xml/provider_path"/>
         </provider>
         <activity
             android:name="group3.Login"
@@ -55,7 +56,7 @@
 
         </activity>
         <activity android:name="group3.explore.Explore_PostActivity" />
-        <activity android:name="group3.friend.chat" />
+        <activity android:name="group3.friend.ChatActivity" />
         <activity android:name="group3.friend.Match" />
         <activity android:name="group3.friend.Payment" />
         <activity android:name="group3.friend.Receipt" />
@@ -78,11 +79,16 @@
         <activity
             android:name="group3.mypage.ExGoogleMap"
             android:label="@string/title_activity_google_map" />
-        <activity android:name="group3.friend.Payment" />
-        <activity android:name="group3.friend.Receipt" />
-        <activity android:name="group3.mypage.NewPost_Activity" />
-        <activity android:name="group3.mypage.Mypage_UserProfile_Activity" />
-        <activity android:name="group3.mypage.Mypage_SinglePost_Activity" />
+        <activity android:name="group3.friend.Payment"
+            tools:ignore="DuplicateActivity" />
+        <activity android:name="group3.friend.Receipt"
+            tools:ignore="DuplicateActivity" />
+        <activity android:name="group3.mypage.NewPost_Activity"
+            tools:ignore="DuplicateActivity" />
+        <activity android:name="group3.mypage.Mypage_UserProfile_Activity"
+            tools:ignore="DuplicateActivity" />
+        <activity android:name="group3.mypage.Mypage_SinglePost_Activity"
+            tools:ignore="DuplicateActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -97,7 +103,8 @@
 
         <activity
             android:name="group3.mypage.ExGoogleMap"
-            android:label="@string/title_activity_google_map" />
+            android:label="@string/title_activity_google_map"
+            tools:ignore="DuplicateActivity" />
 
         <activity
             android:name="group3.Signup"
