@@ -19,11 +19,13 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/ivpersonicon"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_margin="10dp"
-                android:padding="10dp"
-                android:src="@drawable/ic_navigation_homepage" />
+                android:padding="10dp">
+
+            </ImageView>
         </LinearLayout>
 
 
@@ -32,26 +34,45 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
-
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <TextView
                 android:id="@+id/tvotherName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:textStyle="bold"
-                android:text="Nina"
+                android:layout_marginStart="20dp"
+                android:padding="5dp"
                 android:textSize="20sp"
-                android:padding="5dp" />
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvvipicon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:gravity="end" />
+                <!--android:text="VIP"-->
+                android:textColor="@color/colorRed"/>
+        </LinearLayout>
+            <TextView
+                android:id="@+id/tvemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:padding="5dp"
+                android:textSize="15sp" />
             <TextView
                 android:id="@+id/tvotherselfintro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
                 android:padding="5dp"
-                android:text="I love MaPle~~~"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
+
         </LinearLayout>
     </LinearLayout>
 

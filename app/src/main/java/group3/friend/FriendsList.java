@@ -2,10 +2,13 @@ package group3.friend;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -22,12 +25,14 @@ import android.widget.TextView;
 import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import group3.explore.Explore_PostActivity;
 
 public class FriendsList extends Fragment {
 
     private RecyclerView recyclerView;
+    private TextView mTextView;
 
     @Nullable
     @Override
@@ -39,6 +44,7 @@ public class FriendsList extends Fragment {
         return view;
 
     }
+
     private void handleViews(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(
@@ -149,5 +155,15 @@ public class FriendsList extends Fragment {
         }
         return true;
     }
-
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden){
+            //Fragment隐藏时调用
+//            onResume();
+        }else {
+            //Fragment显示时调用
+//            onPause();
+        }
+    }
 }

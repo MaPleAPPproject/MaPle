@@ -18,13 +18,13 @@ import static android.content.Context.*;
 import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Common {
-
-    public static String URL = "http://10.0.2.2:8080/MaPle";
     public final static String PREF_FILE = "preference";
     private final static String DEFAULT_NAME = "";
     private final static String DEFAULT_EMAIL = "";
     private final static String DEFAULT_PASSWORD = "";
     private final static String DEFAULT_SELFINTRO = "";
+
+    public static String URL = "http://10.0.2.2:8080/MaPle";
     public static Bitmap downSize(Bitmap srcPicture, int newSize) {
 
         if (newSize < 20) {
@@ -99,10 +99,9 @@ public class Common {
 
     }
 
-//    @Override
-//    public SharedPreferences getSharedPreferences(String name, int mode) {
-//        return getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-//    }
+    public SharedPreferences getSharedPreferences(String name, int mode) {
+        return getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+    }
 
 
 }

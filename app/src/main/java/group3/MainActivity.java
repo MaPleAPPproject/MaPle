@@ -1,15 +1,19 @@
 package group3;
 
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -22,6 +26,7 @@ import group3.mypage.MypageFragment;
 
 // need to debug mypage頁面一開始沒有tablayout
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     private ViewPager viewPager;
 
 
@@ -30,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewPager = findViewById(R.id.viewPager);
+//      避免view重複加載
+        viewPager.setOffscreenPageLimit(3);
         setupViewPager(viewPager);
         final BottomNavigationView navigation =findViewById(R.id.navigation);
         BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -47,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                         getSupportActionBar().hide();
                         viewPager.setCurrentItem(1);
                         return true;
-                    //點擊下方朋友選單時，跑出朋友清單
                     case R.id.navigation_friends:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(2);
@@ -85,20 +91,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void initContent() {
-        getActionBar().show();
-        viewPager.setCurrentItem(0);
-//        Fragment fragment = new MypageFragment();
-//        changeFragment(fragment);
-    }
 
-    private void changeFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction =
-                fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, fragment);
-        fragmentTransaction.commit();
-    }
     private void setupViewPager(ViewPager viewPager) {
         BottomNavPagerAdapter adapter = new BottomNavPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MypageFragment());

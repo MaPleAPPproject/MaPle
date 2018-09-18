@@ -36,5 +36,7 @@
     <string name="currentlocation">Current location</string>
     <string name="otherlocation">Other location</string>
     <string name="no_data_from_db">尚未有資料</string>
+    <string name="msg_NoPost">No post</string>
+    <string name="msg_NoNetwork">No net</string>
 </resources>
 
