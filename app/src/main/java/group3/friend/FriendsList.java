@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
@@ -35,7 +36,11 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import group3.MainActivity;
 import group3.explore.Explore_PostActivity;
+import group3.mypage.MypageFragment;
+import group3.mypage.Mypage_Chart_Activity;
+import group3.mypage.Mypage_UserProfile_Activity;
 import group3.mypage.User_Profile;
 
 public class FriendsList extends Fragment {
@@ -70,6 +75,7 @@ public class FriendsList extends Fragment {
     }
     private void handleViews(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(1,
                         StaggeredGridLayoutManager.VERTICAL));
@@ -78,8 +84,8 @@ public class FriendsList extends Fragment {
     }
 
     private void showAllfriends(){
-        if (friendCommon.networkConnected(activity)) {
-            String url = friendCommon.SERVER_URI + "/FriendServlet";
+        if (FriendCommon.networkConnected(activity)) {
+            String url = FriendCommon.URL + "/FriendServlet";
             List<User_Profile> friendsList = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
@@ -96,12 +102,12 @@ public class FriendsList extends Fragment {
                 Log.e(TAG, e.toString());
             }
             if (friendsList == null || friendsList.isEmpty()) {
-                friendCommon.showToast(activity, R.string.msg_NoFriendsFound);
+                FriendCommon.showToast(activity, R.string.msg_NoFriendsFound);
             } else {
                 recyclerView.setAdapter(new friendAdapter(activity, friendsList));
             }
         } else {
-            friendCommon.showToast(activity, R.string.msg_NoNetwork);
+            FriendCommon.showToast(activity, R.string.msg_NoNetwork);
         }
 
     }
@@ -145,19 +151,20 @@ public class FriendsList extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull FriendsList.friendAdapter.MyViewHolder viewHolder, int position) {
             final User_Profile friends = friendsList.get(position);
-            //與server連線
-            String url =friendCommon.SERVER_URI+"/FriendServlet";
+            viewHolder.tvName.setText(String.valueOf(friends.getUserName()));
+            viewHolder.tvIntro.setText(String.valueOf(friends.getSelfIntroduction()));
+
+            //連線至User_profileServlet端的Servlet
+            String url =FriendCommon.URL+"/User_profileServlet";
             int friendid=friends.getMemberId();
             friendImageTask = new FriendImageTask(url,friendid, imageSize, viewHolder.imageView);
             friendImageTask.execute();
-            viewHolder.tvName.setText(String.valueOf(friends.getUserName()));
-            viewHolder.tvIntro.setText(String.valueOf(friends.getSelfIntroduction()));
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(getActivity() , Explore_PostActivity.class);
+                    intent.setClass(getActivity() , Mypage_UserProfile_Activity.class);
                     startActivity(intent);
                 }
             });
@@ -166,7 +173,7 @@ public class FriendsList extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(getActivity() , ChatActivity.class);
+                    intent.setClass(getActivity() , MainActivity.class);
                     startActivity(intent);
                 }
             });

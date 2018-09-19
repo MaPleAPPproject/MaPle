@@ -73,7 +73,7 @@ public class TabFragment_Card extends Fragment {
                 Log.e(TAG, e.toString());
             }
             if (pictures == null||pictures.isEmpty()) {
-                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),R.string.msg_NoNetwork,Toast.LENGTH_SHORT).show();
             }
             else {
                 rvPost.setAdapter(new TabFragment_Card.PostAdapter(pictures, contentview));

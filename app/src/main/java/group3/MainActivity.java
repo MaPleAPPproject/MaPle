@@ -23,6 +23,8 @@ import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import group3.explore.ExploreFragment;
 
 import group3.friend.FriendsList;
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initComponent();
         SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
         userList=pref.getAll();
         if (userList.containsKey("user"+memberId)) {
