@@ -49,9 +49,6 @@
     <string name="default_resultsa">(0/14)     0.0%</string>
     <string name="default_resultaa">(0/28)     0.0%</string>
     <string name="default_resultaf">(0/58)     0.0%</string>
-
-    <string name="msg_NoPost">No post</string>
-    <string name="msg_NoNetwork">No net</string>
     <string name="addNewPost">New Post</string>
     <string name="charts">Charts</string>
     <string name="current">Current Location</string>
@@ -63,5 +60,10 @@
     <string name="btbacktonewpost">confirm and Back</string>
     <string name="btback">Back</string>
     <string name="postedDate">Posted Date:</string>
+    <string name="msg_insertFail">Order Data Insert Fail</string>
+    <string name="msg_InsertSuccess">Order Data Insert Success</string>
+    <string name="msg_NoFriendsFound">No friends</string>
+    <string name="msg_NoNetwork">Please check network</string>
+    <string name="msg_NoPost">This Posted dont exist</string>
 </resources>
 

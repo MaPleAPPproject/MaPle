@@ -20,13 +20,13 @@ public class User_Profile implements Serializable {
         this.selfIntroduction = selfIntroduction;
         this.vipStatus = vipStatus;
     }
-    public User_Profile(String email, int vipStatus, String selfIntroduction) {
+
+    public User_Profile(int memberId,String userName, String selfIntroduction) {
         super();
-        this.email = email;
-        this.vipStatus = vipStatus;
+        this.memberId = memberId;
+        this.userName = userName;
         this.selfIntroduction = selfIntroduction;
     }
-
 
     public int getMemberId() {
         return memberId;

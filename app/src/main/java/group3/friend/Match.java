@@ -37,7 +37,7 @@ public class Match extends AppCompatActivity {
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(1,
                         StaggeredGridLayoutManager.HORIZONTAL));
-        mfriendList = getmfriendList();
+//        mfriendList = getmfriendList();
         recyclerView.setAdapter(new matchAdapter(this, mfriendList));
         recyclerView.setOnFlingListener(null);
         PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
@@ -90,7 +90,7 @@ public class Match extends AppCompatActivity {
         }
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position) {
-            final Friend friends = mfriendList.get(position);
+           /* final Friend friends = mfriendList.get(position);
             viewHolder.imageView.setImageResource(friends.getImage());
             viewHolder.tvIntro.setText(String.valueOf(friends.getIntro()));
             viewHolder.tvName.setText(friends.getName());
@@ -100,9 +100,10 @@ public class Match extends AppCompatActivity {
 
                 }
             });
+            */
         }
     }
-   public List<Friend> getmfriendList() {
+ /*  public List<Friend> getmfriendList() {
         List<Friend> mfriendList = new ArrayList<>();
         mfriendList.add(new Friend(R.drawable.p01, "Hello","Hao"));
         mfriendList.add(new Friend( R.drawable.p02, "Hi","Jack"));
@@ -117,5 +118,5 @@ public class Match extends AppCompatActivity {
         mfriendList.add(new Friend(R.drawable.p11,"مرحبً " ,"Sue"));
         mfriendList.add(new Friend(R.drawable.p12, "여보세요","Cathy"));
         return mfriendList;
-    }
+    }*/
 }

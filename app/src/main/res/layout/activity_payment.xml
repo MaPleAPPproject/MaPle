@@ -7,24 +7,22 @@
     tools:context="group3.friend.Payment">
 
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivIcon"
+        <TextView
+            android:id="@+id/tvIcon"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="30dp"
-            android:alpha="0.55"
-            />
+            android:alpha="0.55" />
 
         <TextView
             android:id="@+id/tvDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ivIcon"
+            android:layout_below="@+id/tvIcon"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="-30dp"
             android:text="○ 現在入會99元, 即享每日十次好友配對
@@ -34,26 +32,26 @@
 
         <ImageButton
             android:id="@+id/btPayment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_below="@+id/rgPaymentType"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="100dp" />
+            android:background="@drawable/vipbutton" />
 
         <ImageView
             android:id="@+id/ivGooglePayIcon"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_alignTop="@+id/rgPaymentType"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/rgPaymentType"
+
+            android:layout_toRightOf="@+id/rgPaymentType"
             android:src="@drawable/googlepay" />
 
         <ImageView
             android:id="@+id/ivVisaPayIcon"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_alignStart="@+id/ivGooglePayIcon"
+            android:layout_alignLeft="@+id/ivGooglePayIcon"
             android:layout_below="@+id/ivGooglePayIcon"
             android:src="@drawable/visapay" />
 
@@ -62,10 +60,8 @@
             android:id="@+id/rgPaymentType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="191dp"
-            android:layout_marginStart="31dp">
+            android:layout_below="@+id/tvDescription"
+            android:layout_centerHorizontal="true">
 
             <RadioButton
                 android:id="@+id/rbGooglePay"

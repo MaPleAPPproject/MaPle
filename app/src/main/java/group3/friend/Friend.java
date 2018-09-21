@@ -1,42 +1,63 @@
 package group3.friend;
 
+import java.io.Serializable;
+
 public class Friend {
 
+    public static Serializable friends;
+    private int matchid;
+    private int memberid;
+    private int relationshipStatus;
+    private int friendid;
+    private int messageRoom;
 
-    private int image;
-    private String intro;
+    /*從使用者清單拿
     private String name;
+    private String intro;
+    private int image;*/
 
-    public int getImage() {
-        return image;
+    public Friend(int matchid, int memberid, int relationshipStatus, int friendid, int messageRoom) {
+        this.matchid = matchid;
+        this.memberid = memberid;
+        this.relationshipStatus = relationshipStatus;
+        this.friendid = friendid;
+        this.messageRoom = messageRoom;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public int getMatchid() {
+        return matchid;
+    }
+    public void setMatchid(int matchid) {
+        this.matchid = matchid;
     }
 
-    public String getIntro() {
-        return intro;
+    public int getMemberid() {
+        return matchid;
+    }
+    public void setMemberid(int memberid) {
+        this.memberid = memberid;
     }
 
-    public void setIntro(String intro) {
-        this.intro = intro;
+    public int getRelationshipStatus() {
+        return relationshipStatus;
+    }
+    public void setRelationshipStatus(int relationshipStatus) {
+        this.relationshipStatus = relationshipStatus;
     }
 
-    public String getName() {
-        return name;
+    public int getFriendid() {
+        return friendid;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFriendid(int friendid) {
+        this.friendid = friendid;
     }
 
+    public int getMessageRoom() {
+        return messageRoom;
+    }
 
-
-
-    public Friend(int image, String intro, String name) {
-        this.image = image;
-        this.intro = intro;
-        this.name = name;
+    public void setMessageRoom(int messageRoom) {
+        this.messageRoom = messageRoom;
     }
 }
