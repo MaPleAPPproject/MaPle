@@ -61,6 +61,7 @@ public class OtherspageFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootview = inflater.inflate(R.layout.fragment_otherspage, container, false);
         handleviews(rootview);
+        getprofile();
         tabLayout = rootview.findViewById(R.id.tablayout1);
         tabLayout.setupWithViewPager(tabviewPager);
         tabviewPager= rootview.findViewById(R.id.tabviewPager1);
@@ -78,11 +79,10 @@ public class OtherspageFragment extends Fragment {
         tvemail=rootview.findViewById(R.id.tvemail);
         tvvip=rootview.findViewById(R.id.tvvipicon);
         imageView=rootview.findViewById(R.id.ivpersonicon);
-        if(bundle !=null){
-            tvName.setText(bundle.getString(username));
-        }else {
-            Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
-        }
+//        if(bundle !=null){
+//        }else {
+//            Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -90,6 +90,7 @@ public class OtherspageFragment extends Fragment {
         TabFragment_Card tabFragment_card=new TabFragment_Card();
         TabFragment_Collect tabFragment_collect=new TabFragment_Collect();
         tabFragment_card.setArguments(bundlefortab);
+        tabFragment_collect.setArguments(bundlefortab);
         adapter.addFragment(tabFragment_card, "Post");
         adapter.addFragment(tabFragment_collect, "Collection");
         viewPager.setAdapter(adapter);
@@ -107,6 +108,7 @@ public class OtherspageFragment extends Fragment {
                     return tabfragments.get(1);
             }
             return null;
+//            return tabfragments.get(position);
         }
         public TabViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -129,11 +131,11 @@ public class OtherspageFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        getprofile();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        getprofile();
+//    }
 //  取他人資料
     private void getprofile() {
         bundle=getArguments();

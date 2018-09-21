@@ -30,4 +30,5 @@ public class Explore_PostActivity extends MainActivity {
                 fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.postactivitycontainer, fragment).commit();
     }
+
 }

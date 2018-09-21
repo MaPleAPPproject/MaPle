@@ -55,13 +55,13 @@ public class TabFragment_Card extends Fragment {
     private void showAllPosts() {
         if (Common.networkConnected(getActivity())) {
 
-//            bundle=getArguments();
-//            int memberid=bundle.getInt("memberid");
+            bundle=getArguments();
+            int memberid=bundle.getInt("memberid");
             String url = Common.URL + "/PictureServlet";
             List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getBymemberId");
-            jsonObject.addProperty("memberid", 1);
+            jsonObject.addProperty("memberid", memberid);
             String jsonOut = jsonObject.toString();
             pictureGetAllTask = new CommonTask(url, jsonOut);
             try {
@@ -87,8 +87,6 @@ public class TabFragment_Card extends Fragment {
     private void handleviews(View view) {
         if (bundle != null) {
             showAllPosts();
-        } else {
-            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();
         }
         rvPost = view.findViewById(R.id.rvPost);
         rvPost.setLayoutManager(new GridLayoutManager(contentview,3));

@@ -54,4 +54,11 @@ public class Post {
                     Locale.US);
             return dateFormat.format(new Date(date));
         }
+    public Post(int postid, int collectioncount, int clickcount) {
+        super();
+        this.postid = postid;
+        this.collectioncount = collectioncount;
+        this.clickcount = clickcount;
+    }
+
     }

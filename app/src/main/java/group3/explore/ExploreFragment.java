@@ -15,10 +15,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +33,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import group3.Common;
@@ -48,8 +53,9 @@ public class ExploreFragment extends Fragment {
     private Picture picture;
     private TextView mTextView;
     private CommonTask pictureGetTopTask;
+    private PostAdapter adpter;
 
-//  當點擊照片時會進入另一個activity,用來存放aveInstanceState資訊
+    //  當點擊照片時會進入另一個activity,用來存放aveInstanceState資訊
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -65,7 +71,6 @@ public class ExploreFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-//        datafromServer=savedInstanceState.getString("picture");
 
     }
     @Override
@@ -123,7 +128,8 @@ public class ExploreFragment extends Fragment {
                 Toast.makeText(contentview,R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
             }
             else {
-                rvRecom.setAdapter(new PostAdapter(pictures, getActivity()));
+                adpter=new PostAdapter(pictures, getActivity());
+                rvRecom.setAdapter(adpter);
             }
         } else {
             Toast.makeText(contentview, R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
@@ -140,8 +146,8 @@ public class ExploreFragment extends Fragment {
         // Create a new ArrayAdapter and add data to search auto complete object.
 //        need to add connect from web
         String dataArr[] = {"Japan" , "Korea" , "Taiwan", "Taipei", "New York", "China", "Thailand", "USA"};
-        ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(contentview, android.R.layout.simple_dropdown_item_1line, dataArr);
-        searchAutoComplete.setAdapter(newsAdapter);
+        ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(contentview, android.R.layout.simple_dropdown_item_1line, dataArr);
+        searchAutoComplete.setAdapter(districtAdapter);
 
         // Listen to search view item on click event.
         searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -179,13 +185,11 @@ public class ExploreFragment extends Fragment {
         rvTop = view.findViewById(R.id.rvTop);
         rvTop.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false) );
         rvRecom = view.findViewById(R.id.rvRecom);
-//        rvRecom.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false) );
         rvRecom.setLayoutManager(new GridLayoutManager(getActivity(),3));
         searchView=view.findViewById(R.id.searchview);
         contentview=view.getContext();
     }
-//事件處理跟之前一樣
-    private class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
+    private class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         private LayoutInflater layoutInflater;
         private int imageSize;
         private List<Picture> pictures;
@@ -195,11 +199,14 @@ public class ExploreFragment extends Fragment {
 //            要注意圖片尺寸隨著螢幕縮放 除三等於呈現為螢幕的三分之一大小
             imageSize = getResources().getDisplayMetrics().widthPixels / 3;
         }
+
         class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView tvpostid;
             ImageView ivpostpicture;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 ivpostpicture=itemView.findViewById(R.id.ivrecom);
+                tvpostid=itemView.findViewById(R.id.tvpostid);
             }
         }
         @Override
@@ -241,6 +248,7 @@ public class ExploreFragment extends Fragment {
 
         @Override
         public boolean onQueryTextChange(String newText) {
+//            adpter.getFilter().filter(newText);
             return false;
         }
 
@@ -266,10 +274,6 @@ public class ExploreFragment extends Fragment {
         if (pictureImageTask != null) {
             pictureImageTask.cancel(true);
         }
-        updatedata();
-    }
-//  收藏
-    private void updatedata() {
     }
 
     @Override

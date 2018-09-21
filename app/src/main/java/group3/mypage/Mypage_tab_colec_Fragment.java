@@ -1,6 +1,7 @@
 package group3.mypage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,71 +28,86 @@ import group3.Common;
 import group3.Picture;
 import group3.Postdetail;
 import group3.explore.ExploreFragment;
+import group3.explore.Explore_PostActivity;
+import group3.explore.PostTask;
+import group3.explore.TabFragment_Collect;
 
 public class Mypage_tab_colec_Fragment extends Fragment {
     private static final String TAG = "Mypage_tab_colec_Fragment";
-    private List<Postdetail> postdetail;
-    private CommonTask pictureGetTopTask;
+    private CommonTask pictureGetAllTask;
+    private RecyclerView rvCollection;
+    private int memberid;
+    private PostTask pictureImageTask;
+    private Context contentview;
+    private Bundle bundle;
 
     @Nullable
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab_collection, container, false);
+        View view=inflater.inflate(R.layout.tab_collection, container, false);
         handleviews(view);
         return view;
 
     }
-
     @Override
     public void onStart() {
         super.onStart();
-//        showAllPosts();
+        showAllPosts();
     }
-
+    //  取得收藏的照片
     private void showAllPosts() {
         if (Common.networkConnected(getActivity())) {
+
+//            bundle=getArguments();
+//            int memberid=bundle.getInt("memberid");
             String url = Common.URL + "/PictureServlet";
-            List<Picture> picturestop = null;
+            List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getTop");
+            jsonObject.addProperty("action", "getcollectBymemberId");
+            jsonObject.addProperty("memberid", 1);
             String jsonOut = jsonObject.toString();
-            pictureGetTopTask = new CommonTask(url, jsonOut);
+            pictureGetAllTask = new CommonTask(url, jsonOut);
             try {
-                String jsonIn = pictureGetTopTask.execute().get();
+                String jsonIn = pictureGetAllTask.execute().get();
                 Type listType = new TypeToken<List<Picture>>() {
                 }.getType();
-                picturestop = new Gson().fromJson(jsonIn, listType);
+                pictures = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
-            if (picturestop == null||picturestop.isEmpty()) {
+            if (pictures == null||pictures.isEmpty()) {
                 Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
             }
             else {
+                rvCollection.setAdapter(new Mypage_tab_colec_Fragment.PostAdapter(pictures, contentview));
             }
         } else {
+            Toast.makeText(getActivity(), R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private void handleviews(View view) {
-        RecyclerView rvCollection = view.findViewById(R.id.rvCollection);
-        rvCollection.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        rvCollection.setAdapter(new Mypage_tab_colec_Fragment.PostAdapter(postdetail, getActivity()));
+        if (bundle != null) {
+            showAllPosts();
+        } else {
+            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();
+        }
+        rvCollection = view.findViewById(R.id.rvCollection);
+        rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));
+        contentview=view.getContext();
     }
 
-    public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
-        List<Postdetail> postdetails;
-        Context context;
+    public class PostAdapter extends RecyclerView.Adapter<Mypage_tab_colec_Fragment.PostAdapter.MyViewHolder> {
+        private int imageSize;
+        private List<Picture> pictures;
+        private LayoutInflater layoutInflater;
 
-        public PostAdapter(List<Postdetail> postdetails, Context context) {
-            this.postdetails = postdetails;
-            this.context = context;
+        PostAdapter(List<Picture> pictures, Context context) {
+            this.pictures = pictures;
+            layoutInflater = LayoutInflater.from(context);
 
-        }
 
-        @Override
-        public int getItemCount() {
-//            return postdetails.size();
-            return 0;
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
@@ -99,46 +115,52 @@ public class Mypage_tab_colec_Fragment extends Fragment {
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
-//                imageView = itemView.findViewById(R.id.ivtop);
+                imageView = itemView.findViewById(R.id.ivcollect);
             }
+        }
+        @Override
+        public int getItemCount() {
+            return pictures.size();
         }
 
         @NonNull
         @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
-            View item_view = layoutInflater.inflate(R.layout.item_view_post, parent, false);
+        public Mypage_tab_colec_Fragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+            View item_view = layoutInflater.inflate(R.layout.item_view_collectionpicture, parent, false);
             return new Mypage_tab_colec_Fragment.PostAdapter.MyViewHolder(item_view);
         }
 
 
         @Override
         public void onBindViewHolder(@NonNull Mypage_tab_colec_Fragment.PostAdapter.MyViewHolder myViewHolder, int position) {
-            final Postdetail postdetail = postdetails.get(position);
-//            myViewHolder.imageView.setImageResource(postdetail.getImageId());
-//            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent();
-//                    intent.setClass(context, Explore_PA_PostFragment.class);
-//                    startActivity(intent);
-            //        /* 取得Bundle物件 */
-//                    int programming = Integer.parseInt(etProgramming.getText().toString());
-//                    Bundle bundle = new Bundle();
-//                    Postdetail post1 = new Postdetail(programming, dataStructure, algorithm);
-//                    //轉成物件傳入(key,object)
-//                    bundle.putSerializable("score", score);
-//                    ResultFragment resultFragment = new ResultFragment();
-//                    /* 將Bundle資料轉給resultFragment */
-//                    resultFragment.setArguments(bundle);
-//                    if(getFragmentManager()==null){
-//                        return;
-//
-//                }
-//            });
-//
-//        }
-//    }
+            final Picture picture = pictures.get(position);
+            String url = Common.URL + "/PictureServlet";
+            //發起PostTask 使用picture中的id取的圖檔資料
+            int id = picture.getPostid();
+            pictureImageTask = new PostTask(url, id, imageSize, myViewHolder.imageView);
+            pictureImageTask.execute();
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(getActivity(),Explore_PostActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("picture", picture);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
+
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (pictureImageTask != null) {
+            pictureImageTask.cancel(true);
+        }
+        if (pictureGetAllTask != null) {
+            pictureGetAllTask.cancel(true);
         }
     }
 }

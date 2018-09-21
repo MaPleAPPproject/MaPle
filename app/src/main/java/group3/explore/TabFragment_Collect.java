@@ -52,14 +52,13 @@ public class TabFragment_Collect extends Fragment {
 //  取得收藏的照片
     private void showAllPosts() {
         if (Common.networkConnected(getActivity())) {
-
-//            bundle=getArguments();
-//            int memberid=bundle.getInt("memberid");
+            bundle=getArguments();
+            int memberid=bundle.getInt("memberid");
             String url = Common.URL + "/PictureServlet";
             List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getcollectBymemberId");
-            jsonObject.addProperty("memberid", 1);
+            jsonObject.addProperty("memberid", memberid);
             String jsonOut = jsonObject.toString();
             pictureGetAllTask = new CommonTask(url, jsonOut);
             try {
@@ -85,8 +84,6 @@ public class TabFragment_Collect extends Fragment {
     private void handleviews(View view) {
         if (bundle != null) {
             showAllPosts();
-        } else {
-            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();
         }
         rvCollection = view.findViewById(R.id.rvCollection);
         rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));

@@ -36,6 +36,7 @@ import java.util.List;
 import butterknife.OnTouch;
 import group3.Common;
 import group3.Picture;
+import group3.Post;
 import group3.Postdetail;
 import group3.mypage.CommonTask;
 import group3.mypage.ImageTask;
@@ -43,6 +44,7 @@ import group3.mypage.ImageTask;
 import static android.support.constraint.motion.MotionScene.TAG;
 
 public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
+    private static final String TAG = "Explore_PA_PostFragment";
     private Button btBack;
     private ImageView imageView,ivicon;
     private ImageView btcollect;
@@ -55,16 +57,22 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     private Picture picture;
     private Postdetail postdetail;
     private CommonTask collectTask;
+    private CommonTask collectcheckTask;
+    private int newcollectcount;
+    private CommonTask updatepostTask;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"oncreate");
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        Log.d(TAG,"oncreateview");
         View view=inflater.inflate(R.layout.explore_pa_postfrag,container,false);
         Picture picture = (Picture) (getArguments() != null ? getArguments().getSerializable("picture") : null);
         bundle=new Bundle();
@@ -74,17 +82,17 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     }
 
     private void handleviews(View view) {
+        Log.d(TAG,"handleviews");
         btcollect=view.findViewById(R.id.btcollect);
         tvname=view.findViewById(R.id.tvName);
         tvcomment=view.findViewById(R.id.tvdescription);
         tvlocation=view.findViewById(R.id.tvlocation);
-        tvclickcount=view.findViewById(R.id.tvclickcount);
         tvcollectcount=view.findViewById(R.id.tvcollection);
         tvdate=view.findViewById(R.id.tvdate);
         /* 取得探索頁面點擊該照片的詳細資料 */
         picture = (Picture) (getArguments() != null ? getArguments().getSerializable("picture") : null);
         if (picture != null) {
-            tvdate.setText(String.valueOf(picture.getDate()));
+            tvdate.setText(picture.getFormatedDate());
             tvcomment.setText(picture.getComment());
         } else {
             Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
@@ -131,17 +139,38 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
-//      收藏鍵(need to add update when leave/if else change color)
-        btcollect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //      要取偏好設定的memberid
+        if (!iscollectable(2,postdetail.getPostId())) {
+            DrawableCompat.setTint(btcollect.getDrawable(), ContextCompat.getColor(getContext(),
+                    R.color.colorPrimaryDark));
+            btcollect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DrawableCompat.setTint(btcollect.getDrawable(), ContextCompat.getColor(getContext(),
+                            R.color.colorRed));
+                    tvcollectcount.setText(String.valueOf(postdetail.getCollectioncount()+1));
+                    addcollect();
+                }
+            });
+        }else {
                 DrawableCompat.setTint(btcollect.getDrawable(), ContextCompat.getColor(getContext(),
                         R.color.colorRed));
-                tvcollectcount.setText(String.valueOf(postdetail.getCollectioncount()+1));
-//                updatecollect();
-            }
-        });
+                Toast.makeText(getActivity(), "already collected", Toast.LENGTH_SHORT).show();
+        }
+//      收藏鍵(need to add update when leave/if else change color)
+            tvlocation.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fragment = new MapFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("postid", postdetail.getPostId());
+                    fragment.setArguments(bundle);
+                    changeFragment(fragment);
+                }
+            });
     }
+
+
 
     private void showdetail() {
         if (Common.networkConnected(getActivity())) {
@@ -165,11 +194,10 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
             else {
                 tvname.setText(postdetail.getUsername());
                 tvcollectcount.setText(String.valueOf(postdetail.getCollectioncount()));
-                tvclickcount.setText(String.valueOf(postdetail.getClickcount()));
                 tvlocation.setText(String.valueOf(postdetail.getDistrict()));
             }
         } else {
-            Toast.makeText(getActivity(),R.string.msg_Nonetwork,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),R.string.msg_NoNetwork,Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -181,6 +209,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         fragmentTransaction.replace(R.id.postactivitycontainer, fragment).commit();
     }
     public void onStop() {
+        Log.d(TAG,"onstop");
         super.onStop();
         if (postTask != null) {
             postTask.cancel(true);
@@ -194,36 +223,91 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         if (collectTask != null) {
             collectTask.cancel(true);
         }
-
-//        if(postdetail.getCollectioncount()!=Integer.parseInt(tvcollectcount.getText().toString())){
-//            updatecollect();
-//        }
-
+        if (collectcheckTask != null) {
+            collectcheckTask.cancel(true);
+        }
     }
 
-    private void updatecollect() {
-
+    private void addcollect() {
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/UserPreferenceServlet";
+            //      要取偏好設定的memberid
+            UserPreference userPreference=new UserPreference(postdetail.getPostId(),2,postdetail.getMemberId(),postdetail.getCollectioncount()+1);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "userpreInsert");
-            jsonObject.addProperty("postid", postdetail.getPostId());
-            jsonObject.addProperty("collectorid", postdetail.getMemberId());
-            //      要取偏好設定的memberid
-            jsonObject.addProperty("memberid", 2);
+            jsonObject.addProperty("userpe", new Gson().toJson(userPreference));
             String jsonOut = jsonObject.toString();
-            collectTask = new CommonTask(url, jsonOut);
+            int count = 0;
             try {
-                collectTask.execute();
+                String result = new CommonTask(url, jsonOut).execute().get();
+                count = Integer.valueOf(result);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
-        }Toast.makeText(getActivity(), R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
+            if (count == 0) {
+                Toast.makeText(getActivity(),"fail",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(),"collection ok",Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getActivity(), "no net", Toast.LENGTH_SHORT).show();
+        }
 
+    }
+    private void updatepost() {
+
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/PostServlet";
+            //      要取偏好設定的memberid
+            Post post=new Post(postdetail.getMemberId(),postdetail.getPostId(),
+                    newcollectcount,postdetail.getClickcount()+1,picture.getDate());
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "postUpdate");
+            jsonObject.addProperty("post", new Gson().toJson(post));
+            String jsonOut = jsonObject.toString();
+            int count=0;
+            try {
+                String result = new CommonTask(url, jsonOut).execute().get();
+                count = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (count == 0) {
+                Toast.makeText(getActivity(),"fail",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(),"collection to mypage ok",Toast.LENGTH_SHORT).show();
+            }
+        } else {
+        }Toast.makeText(getActivity(), "no net", Toast.LENGTH_SHORT).show();
+
+
+    }
+    private boolean iscollectable(int collectorid, int postid) {
+        boolean iscollectable=false;
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/UserPreferenceServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "userValid");
+            jsonObject.addProperty("collectorid", collectorid);//      要取偏好設定的memberid
+            jsonObject.addProperty("postid", postid);
+            String jsonOut = jsonObject.toString();
+            collectcheckTask = new CommonTask(url, jsonOut);
+            try {
+                String result = collectcheckTask.execute().get();
+                iscollectable = Boolean.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+                iscollectable = false;
+            }
+        } else {
+            Toast.makeText(getActivity(), "no net", Toast.LENGTH_SHORT).show();
+        }
+        return iscollectable;
     }
     @Override
     public void onStart() {
         super.onStart();
         showdetail();
     }
+
 }

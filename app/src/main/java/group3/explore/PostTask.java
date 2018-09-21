@@ -69,7 +69,7 @@ public class PostTask extends AsyncTask<Object, Integer, Bitmap> {
             connection.setRequestMethod("POST");
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
             bw.write(jsonOut);
-            Log.d(TAG, "output: " + jsonOut);
+//            Log.d(TAG, "output: " + jsonOut);
             bw.close();
 
             int responseCode = connection.getResponseCode();
