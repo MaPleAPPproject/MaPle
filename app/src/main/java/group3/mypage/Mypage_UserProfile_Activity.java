@@ -142,9 +142,10 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
                 int vipStatus = userProfiles.getVipStatus();
                         switch(vipStatus){
                             case 0:
-                                tvVipStatus.setText("Basic");
+                                tvVipStatus.setText(R.string.basic);
                             case 1:
-                                tvVipStatus.setText("Premium");
+                                tvVipStatus.setText(R.string.premium);
+                                premium.setVisibility(View.GONE);
 
                         }
 
@@ -203,50 +204,10 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
 //        pf.edit().putString("email",email).apply();
 //        pf.edit().putString("password",password).apply();
 //        pf.edit().putString("selfIntro",selfIntro).apply();
+        updateprofile(memberId);
 
 
-        if (image == null) {
-            Toast.makeText(this, R.string.no_Image, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        memberId = 2;
-        String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
-        String userName = etName.getText().toString().trim();
-        int vipStatus = Integer.parseInt(tvVipStatus.getText().toString().trim());
-        String selfIntroduction = etSelfIntro.getText().toString().trim();
-        if((email.length()<=0)||(password.length()<=0)||(userName.length()<=0)){
-
-            Toast.makeText(this, "請確認欄位是否有填寫", Toast.LENGTH_SHORT).show();
-        }else if (Common.networkConnected(this)) {
-            String url = Common.URL + servlet;
-            User_Profile newuserprofile = new User_Profile( memberId,email, password, userName,selfIntroduction, vipStatus);
-            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "update");
-            jsonObject.addProperty("userprofile", new Gson().toJson(newuserprofile));
-            jsonObject.addProperty("imageBase64", imageBase64);
-            int count = 0;
-            try {
-                String result = new CommonTask(url, jsonObject.toString()).execute().get();
-                count = Integer.valueOf(result);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (count == 0) {
-                Toast.makeText(this, "update failed", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "saved", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
-                startActivity(intent);
-
-            }
-        } else
-
-        {
-            Toast.makeText(this, getString(R.string.msg_Nonetwork), Toast.LENGTH_SHORT).show();
-        }
-    }
+}
 
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -290,7 +251,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         Window win = alertDialog.getWindow();
         win.setContentView(R.layout.alertdialog_layout);
 
-        camera_btn = (ImageButton) win.findViewById(R.id.camera);
+        camera_btn =  win.findViewById(R.id.camera);
         camera_btn.setOnClickListener(new View.OnClickListener() {
 
 
@@ -312,15 +273,14 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
             }
         });
 
-        gallery_btn = (ImageButton) win.findViewById(R.id.gallery);
+        gallery_btn = win.findViewById(R.id.gallery);
         gallery_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, REQUEST_PICK_PICTURE);
-                if (alertDialog != null)
-                    alertDialog.dismiss();
+                alertDialog.dismiss();
             }
         });
 
@@ -337,7 +297,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent premiumIntent = new Intent(Mypage_UserProfile_Activity.this, Payment.class);
                         startActivity(premiumIntent);
-                        ;
+
 
 
                     }
@@ -369,6 +329,8 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
             case Common.REQ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    ibPhotoIcon.setEnabled(true);
+
                 } else {
                     ibPhotoIcon.setEnabled(false);
                     Toast.makeText(this, "請同意使用本機相機和讀取權限", Toast.LENGTH_SHORT).show();
@@ -442,6 +404,54 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         }
     }
 
+
+    public void updateprofile(int memberId){
+        if (image == null) {
+            Toast.makeText(this, R.string.no_Image, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        memberId = 2;
+        String email = etEmail.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        String userName = etName.getText().toString().trim();
+        int vipStatus;
+        if(tvVipStatus.getText().toString().trim().equals("Premium"))
+            vipStatus = 1;
+        else
+            vipStatus = 0;
+        String selfIntroduction = etSelfIntro.getText().toString().trim();
+        if((email.length()<=0)||(password.length()<=0)||(userName.length()<=0)){
+
+            Toast.makeText(this, "請確認欄位是否有填寫", Toast.LENGTH_SHORT).show();
+        }else if (Common.networkConnected(this)) {
+            String url = Common.URL + servlet;
+            User_Profile newuserprofile = new User_Profile( memberId,email, password, userName,selfIntroduction, vipStatus);
+            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "update");
+            jsonObject.addProperty("userprofile", new Gson().toJson(newuserprofile));
+            jsonObject.addProperty("imageBase64", imageBase64);
+            int count = 0;
+            try {
+                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                count = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (count == 0) {
+                Toast.makeText(this, "update failed", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "saved", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Mypage_UserProfile_Activity.this, MainActivity.class);
+                startActivity(intent);
+
+            }
+        } else
+
+        {
+            Toast.makeText(this, getString(R.string.msg_Nonetwork), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onStop() {

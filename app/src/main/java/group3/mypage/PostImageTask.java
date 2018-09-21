@@ -5,56 +5,51 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
+import static com.cp102group3maple.violethsu.maple.R.drawable.addimage;
 
-public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
+public class PostImageTask extends AsyncTask<Object,Integer,Bitmap>{
 
-    private final static String TAG = "ImageTask";
+    private final static String TAG = "PostImageTask";
     private  String url;
-    private int memberId,imageSize;
+    private int postId,imageSize;
     private WeakReference<ImageView> imageViewWeakReference;
 
-    public ImageTask(String url, int memberId, int imageSize) {
+    public PostImageTask(String url, int postId, int imageSize) {
         this.url = url;
-        this.memberId = memberId;
+        this.postId = postId;
         this.imageSize = imageSize;
     }
 
 
 
 
-    public ImageTask(String url, int memberId, int imageSize, ImageView imageView) {
+    public PostImageTask(String url, int postId, int imageSize, ImageView imageView) {
         this.url = url;
-        this.memberId = memberId;
+        this.postId = postId;
         this.imageSize = imageSize;
         this.imageViewWeakReference = new WeakReference<>(imageView);
     }
 
 
 
+
     @Override
     protected Bitmap doInBackground(Object... params) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("action", "getImage");
-        jsonObject.addProperty("memberId",memberId);
+        jsonObject.addProperty("action", "getPostImage");
+        jsonObject.addProperty("postId",postId);
         jsonObject.addProperty("imageSize",imageSize);
         return getRemoteImage(url, jsonObject.toString());
     }
@@ -68,7 +63,7 @@ public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
         }else{
-            imageView.setImageResource(R.drawable.icon_facev);
+            imageView.setImageResource(addimage);
 
         }
 

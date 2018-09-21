@@ -54,5 +54,14 @@
     <string name="msg_NoNetwork">No net</string>
     <string name="addNewPost">New Post</string>
     <string name="charts">Charts</string>
+    <string name="current">Current Location</string>
+    <string name="map">Map</string>
+    <string name="basic">Basic</string>
+    <string name="premium">Premium</string>
+    <string name="hint_etLocationName">Your Location</string>
+    <string name="btConfirm">Confirm</string>
+    <string name="btbacktonewpost">confirm and Back</string>
+    <string name="btback">Back</string>
+    <string name="postedDate">Posted Date:</string>
 </resources>
 

@@ -138,13 +138,16 @@ public class Mypage_Chart_Activity extends Activity {
                     Map.Entry<String, Integer> entry = iter.next();
                     String key = entry.getKey();
                     Integer value = entry.getValue();
-//                    int countryAmount = 234;
-//                    int visitedCountry =
-//                            tvresult.setText();
                     DecimalFormat df = new DecimalFormat("######0.00");
 
 
                     switch (key) {
+                        case "Visited countries":
+                            int countryAmountTol = 234;
+                            String percentTol = "(" + value + "/" + countryAmountTol + ")   " + df.format(value*100.0f / countryAmountTol) + "%";
+                            tvresult.setText(percentTol);
+                            break;
+
                         case "Asia":
                             int countryAmountAC = 51;
                             String percentAC = "(" + value + "/" + countryAmountAC + ")   " + df.format(value*100.0f / countryAmountAC) + "%";

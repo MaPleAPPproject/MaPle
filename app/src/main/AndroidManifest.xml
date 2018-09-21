@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    <!--允許應用程式透過wifi或行動網路定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--允許應用程式透過GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -63,6 +67,7 @@
         <activity android:name="group3.mypage.Mypage_SinglePost_Activity" />
         <activity android:name="group3.mypage.Mypage_Chart_Activity" />
         <activity android:name="group3.mypage.Mypage_UserProfile_Activity" />
+        <activity android:name="group3.mypage.MapLocation" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -78,11 +83,7 @@
         <activity
             android:name="group3.mypage.ExGoogleMap"
             android:label="@string/title_activity_google_map" />
-        <activity android:name="group3.friend.Payment" />
-        <activity android:name="group3.friend.Receipt" />
-        <activity android:name="group3.mypage.NewPost_Activity" />
-        <activity android:name="group3.mypage.Mypage_UserProfile_Activity" />
-        <activity android:name="group3.mypage.Mypage_SinglePost_Activity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -95,9 +96,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name="group3.mypage.ExGoogleMap"
-            android:label="@string/title_activity_google_map" />
+
 
         <activity
             android:name="group3.Signup"
