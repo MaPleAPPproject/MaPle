@@ -9,6 +9,7 @@ public class Postdetail implements Serializable {
     private int clickcount;
     private int collectioncount;
     private String username;
+    private long lat,lon;
 
     public Postdetail(int postId, int memberId, String district,
                       int clickcount, int collectioncount, String username) {
@@ -18,6 +19,15 @@ public class Postdetail implements Serializable {
         this.clickcount = clickcount;
         this.collectioncount = collectioncount;
         this.username = username;
+    }
+    public Postdetail(int postId, int memberId, String district, int collectioncount, String username,long lat,long lon) {
+        this.postId = postId;
+        this.memberId = memberId;
+        this.district = district;
+        this.collectioncount = collectioncount;
+        this.username = username;
+        this.lat=lat;
+        this.lon=lon;
     }
 
     public int getPostId() {
@@ -68,5 +78,21 @@ public class Postdetail implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public long getLat() {
+        return lat;
+    }
+
+    public void setLat(long lat) {
+        this.lat = lat;
+    }
+
+    public long getLon() {
+        return lon;
+    }
+
+    public void setLon(long lon) {
+        this.lon = lon;
     }
 }

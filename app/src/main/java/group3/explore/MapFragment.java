@@ -30,7 +30,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FragmentActivity activity;
     private Bundle bundle;
 //    locallist class
-    private Object locallist;
 
 
     @Override
@@ -42,7 +41,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        spot = (Spot) (getArguments() != null ? getArguments().getSerializable("spot") : null);
+        bundle=getArguments();
         return inflater.inflate(R.layout.showmap, container, false);
     }
 
@@ -58,56 +57,47 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.map = map;
+        this.map = googleMap;
         if (ActivityCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
         }
         map.getUiSettings().setZoomControlsEnabled(true);
-        if (locallist == null) {
+        if (bundle == null) {
             Toast.makeText(activity,"no location",Toast.LENGTH_SHORT).show();
         } else {
-            showMap(locallist);
+            showMap();
         }
 
     }
 
-    private void showMap(Object locallist) {
+    private void showMap() {
 
-//        LatLng position = new LatLng(locallist.getLatitude(), locallist.getLongitude());
-//        show detail 可以不要
-//        String snippet = getString(R.string.col_Name) + ": " + spot.getName() + "\n" +
-//                getString(R.string.col_PhoneNo) + ": " + spot.getPhoneNo() + "\n" +
-//                getString(R.string.col_Address) + ": " + spot.getAddress();
+        LatLng position = new LatLng(getArguments().getLong("lat"), getArguments().getLong("lon"));
+//        show detail
+        String snippet = getArguments().getString("district");
 
-        // focus on the spot
-//        CameraPosition cameraPosition = new CameraPosition.Builder()
-//                .target(position)
-//                .zoom(9)
-//                .build();
-//        CameraUpdate cameraUpdate = CameraUpdateFactory
-//                .newCameraPosition(cameraPosition);
-//        map.animateCamera(cameraUpdate);
-//
-//        // ic_add spot on the map
-//        map.addMarker(new MarkerOptions()
-//                .position(position)
-//                .title(locallist.getName())
-//                .snippet(snippet));
-//
-//        map.setInfoWindowAdapter(new MyInfoWindowAdapter(activity, spot));
-//    }
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(position)
+                .zoom(2)
+                .build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory
+                .newCameraPosition(cameraPosition);
+        map.animateCamera(cameraUpdate);
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        findlocation();
-//    }
-//
-//// 用postid抓經緯度
-//    private void findlocation() {
-//
-//    }
+        // ic_add spot on the map
+        map.addMarker(new MarkerOptions()
+                .position(position)
+                .title(getArguments().getString("district"))
+                .snippet(snippet));
+
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
 }

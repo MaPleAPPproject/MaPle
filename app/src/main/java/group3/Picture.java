@@ -9,12 +9,20 @@ public class Picture implements Serializable {
     private int postid;
     private String comment;
     private long date;
+    private String district;
 
-    public Picture(int postid, String comment, long date) {
+//    public Picture(int postid, String comment, long date) {
+//        super();
+//        this.postid = postid;
+//        this.comment = comment;
+//        this.date = date;
+//    }
+    public Picture(int postid, String comment, long date,String district) {
         super();
         this.postid = postid;
         this.comment = comment;
         this.date = date;
+        this.district=district;
     }
     public int getPostid() {
         return postid;
@@ -38,6 +46,14 @@ public class Picture implements Serializable {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",
                 Locale.US);
         return dateFormat.format(new Date(date));
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
     }
 }
 

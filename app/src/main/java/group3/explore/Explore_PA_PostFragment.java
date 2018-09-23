@@ -2,6 +2,7 @@ package group3.explore;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
+import com.google.android.gms.flags.impl.SharedPreferencesFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -116,9 +118,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         Bitmap bitmap = null;
         try {
             postTask = new PostTask(url, id, imageSize);
-            // passing null and calling get() means not to run FindImageByIdTask.onPostExecute()
             bitmap = postTask.execute().get();
-//              等圖才設定文字 因為只有一張圖 且用點擊
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
@@ -133,9 +133,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         int iconimageSize = getResources().getDisplayMetrics().widthPixels/3;
         try {
             iconTask = new ImageTask(urlicon, memberid, iconimageSize,ivicon);
-            // passing null and calling get() means not to run FindImageByIdTask.onPostExecute()
             iconTask.execute().get();
-//              等圖才設定文字 因為只有一張圖 且用點擊
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
@@ -163,7 +161,9 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
                 public void onClick(View v) {
                     fragment = new MapFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("postid", postdetail.getPostId());
+                    bundle.putLong("lat", postdetail.getLat());
+                    bundle.putLong("lon",postdetail.getLon());
+                    bundle.putString("district",postdetail.getDistrict());
                     fragment.setArguments(bundle);
                     changeFragment(fragment);
                 }

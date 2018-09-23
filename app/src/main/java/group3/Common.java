@@ -26,6 +26,8 @@ public class Common {
     private final static String DEFAULT_EMAIL = "";
     private final static String DEFAULT_PASSWORD = "";
     private final static String DEFAULT_SELFINTRO = "";
+
+//    public static String URL = "http://10.0.2.2:8080/MaPle";
     public static Bitmap downSize(Bitmap srcPicture, int newSize) {
 
         if (newSize < 20) {

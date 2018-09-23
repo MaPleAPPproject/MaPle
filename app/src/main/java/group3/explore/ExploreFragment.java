@@ -40,6 +40,8 @@ import group3.Common;
 import group3.Picture;
 import group3.mypage.CommonTask;
 
+import static com.google.android.gms.common.util.ArrayUtils.contains;
+
 //注意fragment和activity呼叫server時間點不同
 public class ExploreFragment extends Fragment {
     private static final String TAG = "ExploreFragment";
@@ -50,17 +52,18 @@ public class ExploreFragment extends Fragment {
     private CommonTask pictureGetAllTask;
     private PostTask pictureImageTask;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private Picture picture;
-    private TextView mTextView;
     private CommonTask pictureGetTopTask;
     private PostAdapter adpter;
+    List<Picture> picturelist = new ArrayList<>();
+    private TextView tvrec;
+
 
     //  當點擊照片時會進入另一個activity,用來存放aveInstanceState資訊
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 //        Log.v(TAG, "In frag's on save instance state ");
-        outState.putSerializable("picture",picture);
+//        outState.putSerializable("picture",picture);
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,6 +133,7 @@ public class ExploreFragment extends Fragment {
             else {
                 adpter=new PostAdapter(pictures, getActivity());
                 rvRecom.setAdapter(adpter);
+                picturelist.addAll(pictures);
             }
         } else {
             Toast.makeText(contentview, R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
@@ -187,12 +191,13 @@ public class ExploreFragment extends Fragment {
         rvRecom = view.findViewById(R.id.rvRecom);
         rvRecom.setLayoutManager(new GridLayoutManager(getActivity(),3));
         searchView=view.findViewById(R.id.searchview);
+        tvrec=view.findViewById(R.id.tvrec);
         contentview=view.getContext();
     }
-    private class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
+    public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         private int imageSize;
-        private List<Picture> pictures;
+        List<Picture> pictures;
         PostAdapter(List<Picture> pictures, Context context) {
             this.pictures = pictures;
             layoutInflater = LayoutInflater.from(context);
@@ -200,13 +205,12 @@ public class ExploreFragment extends Fragment {
             imageSize = getResources().getDisplayMetrics().widthPixels / 3;
         }
 
+
         class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView tvpostid;
             ImageView ivpostpicture;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 ivpostpicture=itemView.findViewById(R.id.ivrecom);
-                tvpostid=itemView.findViewById(R.id.tvpostid);
             }
         }
         @Override
@@ -214,6 +218,13 @@ public class ExploreFragment extends Fragment {
             return pictures.size();
         }
 
+        public void setfilter(List<Picture> listitem)
+        {
+            Log.d(TAG, "setfilter");
+            pictures=new ArrayList<>();
+            pictures.addAll(listitem);
+            notifyDataSetChanged();
+        }
         @NonNull
         @Override
         public ExploreFragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
@@ -242,14 +253,19 @@ public class ExploreFragment extends Fragment {
             });
 
         }
+
+
     }
 //以下為searchbar的方法
-    final private SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
+    SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
 
         @Override
         public boolean onQueryTextChange(String newText) {
-//            adpter.getFilter().filter(newText);
-            return false;
+            Log.d(TAG, "onQueryTextChange");
+            tvrec.setText("搜尋結果");
+            final  List<Picture> filtermodelist=filter(picturelist,newText);
+            adpter.setfilter(filtermodelist);
+            return true;
         }
 
         @Override
@@ -259,8 +275,8 @@ public class ExploreFragment extends Fragment {
 
             return false;
         }
-    };
-//
+};
+
     @Override
     public void onStop() {
         super.onStop();
@@ -288,5 +304,20 @@ public class ExploreFragment extends Fragment {
 //            onPause();
             onResume();
         }
+    }
+    public List<Picture> filter(List<Picture> pl,String query)
+    {
+        Log.d(TAG, "filter");
+        query=query.toLowerCase();
+        final List<Picture> filteredModeList=new ArrayList<>();
+        for (Picture model:pl)
+        {
+            final String text=model.getDistrict().toLowerCase();
+            if (text.startsWith(query))
+            {
+                filteredModeList.add(model);
+            }
+        }
+        return filteredModeList;
     }
 }
