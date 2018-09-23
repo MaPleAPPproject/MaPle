@@ -77,7 +77,7 @@ public class TabFragment_Collect extends Fragment {
                 rvCollection.setAdapter(new TabFragment_Collect.PostAdapter(pictures, contentview));
             }
         } else {
-            Toast.makeText(getActivity(), R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
         }
 
     }

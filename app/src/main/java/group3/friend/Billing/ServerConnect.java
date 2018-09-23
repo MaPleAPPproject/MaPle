@@ -27,6 +27,7 @@ public class ServerConnect extends AsyncTask<String, Integer, String> {
     private String TAG = "ServerConnect";
     private String outStr, url;
     public static String URL = "http://10.0.2.2:8080/MaPle";
+//    public static String URL = "http://192.168.43.251:8080/MaPle";
 
 
 

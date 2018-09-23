@@ -28,7 +28,7 @@
             android:text="○ 現在入會99元, 即享每日十次好友配對
         ～讓你們聊得長長 9 9~"
             android:textColor="@color/colorAccent"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/btPayment"
@@ -45,7 +45,8 @@
             android:layout_alignTop="@+id/rgPaymentType"
 
             android:layout_toRightOf="@+id/rgPaymentType"
-            android:src="@drawable/googlepay" />
+            android:src="@drawable/googlepay"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/ivVisaPayIcon"
@@ -53,7 +54,8 @@
             android:layout_height="50dp"
             android:layout_alignLeft="@+id/ivGooglePayIcon"
             android:layout_below="@+id/ivGooglePayIcon"
-            android:src="@drawable/visapay" />
+            android:src="@drawable/visapay"
+            android:visibility="invisible"/>
 
 
         <RadioGroup
@@ -69,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:text="用 GooglePay 支付"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/rbCreditCard"
@@ -78,7 +80,7 @@
                 android:layout_marginTop="15dp"
                 android:text="用 CreditCard 支付"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
         </RadioGroup>
 
     </RelativeLayout>

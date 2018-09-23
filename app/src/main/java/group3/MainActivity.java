@@ -70,29 +70,19 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navigation_mypage:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(0);
-//                    fragment換頁
-//                    fragment = new MypageFragment();
-//                    changeFragment(fragment);
-//                    activity換頁
-//                    Intent intent = new Intent();
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                    intent.setClass(MainActivity.this, MypageFragment.class);
-//                    startActivity(intent);
-//                    finish();
+
                         return true;
 
                     case R.id.navigation_explore:
                         getSupportActionBar().hide();
                         viewPager.setCurrentItem(1);
-//                    fragment = new ExploreFragment();
-//                    changeFragment(fragment);
+
                         return true;
                     //點擊下方朋友選單時，跑出朋友清單
                     case R.id.navigation_friends:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(2);
-//                    fragment = new FriendsFragment();
-//                    changeFragment(fragment);
+
                         return true;
                 }
                 return false;

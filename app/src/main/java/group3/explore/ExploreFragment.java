@@ -99,7 +99,7 @@ public class ExploreFragment extends Fragment {
                 rvTop.setAdapter(new PostAdapter(picturestop, getActivity()));
             }
         } else {
-            Toast.makeText(contentview, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+            Toast.makeText(contentview, R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -126,7 +126,7 @@ public class ExploreFragment extends Fragment {
                 rvRecom.setAdapter(new PostAdapter(pictures, getActivity()));
             }
         } else {
-            Toast.makeText(contentview, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+            Toast.makeText(contentview, R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
         }
 
     }

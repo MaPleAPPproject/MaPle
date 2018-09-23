@@ -169,7 +169,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
                 tvlocation.setText(String.valueOf(postdetail.getDistrict()));
             }
         } else {
-            Toast.makeText(getActivity(),R.string.msg_NoNetwork,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),R.string.msg_Nonetwork,Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -218,7 +218,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
-        }Toast.makeText(getActivity(), R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+        }Toast.makeText(getActivity(), R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
 
     }
     @Override

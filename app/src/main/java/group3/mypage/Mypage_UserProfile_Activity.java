@@ -145,6 +145,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
                 etEmail.setText(userProfiles.getEmail());
                 etSelfIntro.setText(userProfiles.getSelfIntroduction());
                 int vipStatus = userProfiles.getVipStatus();
+
                         switch(vipStatus){
                             case 0:
                                 tvVipStatus.setText(R.string.basic);

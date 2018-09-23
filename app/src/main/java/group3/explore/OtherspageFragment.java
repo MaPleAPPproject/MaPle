@@ -168,7 +168,7 @@ public class OtherspageFragment extends Fragment {
                 tvemail.setText(user_Profile.getEmail());
             }
         } else {
-            Toast.makeText(getActivity(),R.string.msg_NoNetwork,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),R.string.msg_Nonetwork,Toast.LENGTH_SHORT).show();
         }
         String url = Common.URL + "/User_profileServlet";
         int iconimageSize = getResources().getDisplayMetrics().widthPixels/3;
