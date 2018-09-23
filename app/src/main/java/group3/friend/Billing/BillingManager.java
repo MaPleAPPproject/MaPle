@@ -15,27 +15,19 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 
 public class BillingManager implements PurchasesUpdatedListener {
+
     private Activity mActivity;
     private BillingClient mBillingClient;
-    private String userKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAleLT8EKOJxM2M0R2XC5JuksRWAtr/VwVNnyZKdetZVLSgvY4xYW2LlP2b0nJctuQT3IJmtumpeaMug5iCeiCDXfIicddBQEOy4lUmFeCiD6CuB5+qi/hQDDpl/ZZtnuPd3ihMecpOUgHAHHk1hX9IvmI4PISohzspJhjEcgCdcQLDdqtJnMhgcbnc8O86Yn6ZqpmR2+lyNo0i10uDpOENX66d/nB8t6YembAX/urBQWo+bJiCFeZQXMBMwyR1J9LRYx0tJqRccUKrOIi4ybQJJDwzQN3yRaTxf8rMKo78l6/fT2EB9LjtFadw/GrMQWDR6708xhv4aR2tDLpw/3MxQIDAQAB";
     private String product = "vip_status";
     private static final String TAG = "BillingManager";
     private boolean isServiceConnected = false;
     private int mBillingClientResponseCode;
     private BillingUpdatesListener mBillingUpdatesListener;
 
-
-    public String getUserKey() {
-        return userKey;
-    }
 
     public String getProduct() {
         return product;
@@ -47,11 +39,11 @@ public class BillingManager implements PurchasesUpdatedListener {
         this.mActivity = activity;
         this.mBillingUpdatesListener = billingUpdatesListener;
 
-        mBillingClient = BillingClient.newBuilder(activity).setListener(this).build();
+        mBillingClient = BillingClient.newBuilder(mActivity).setListener(this).build();
         startServiceConnection(new Runnable() {
             @Override
             public void run() {
-                billingUpdatesListener.onBillingClientSetupFinished();
+                mBillingUpdatesListener.onBillingClientSetupFinished();
 
             }
         });
@@ -78,7 +70,7 @@ public class BillingManager implements PurchasesUpdatedListener {
 
             @Override
             public void onBillingServiceDisconnected() {
-
+                Log.w(TAG, "BillingClient Service 連線終止");
                 isServiceConnected = false;
             }
         });
@@ -117,10 +109,11 @@ public class BillingManager implements PurchasesUpdatedListener {
                 Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
                 if (areSubscriptionsSupported()) {
                     Purchase.PurchasesResult subscriptionResult
-                            = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+                            = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
                     if (subscriptionResult.getResponseCode() == BillingClient.BillingResponse.OK) {
                         purchasesResult.getPurchasesList().addAll(subscriptionResult.getPurchasesList());
                     } else {
+                        Log.w(TAG, "queryPurchases : error");
                         // Handle any error response codes.
                     }
                 } else if (purchasesResult.getResponseCode() == BillingClient.BillingResponse.OK) {
@@ -157,13 +150,13 @@ public class BillingManager implements PurchasesUpdatedListener {
         return responseCode == BillingClient.BillingResponse.OK;
     }
 
-    public void initiatePurchaseFlow(final String skuId, final ArrayList<String> oldSkus,
+    public void initiatePurchaseFlow(final String skuId,
                                      final @BillingClient.SkuType String billingType) {
         Runnable purchaseFlowRequest = new Runnable() {
             @Override
             public void run() {
                 BillingFlowParams mParams = BillingFlowParams.newBuilder().
-                        setSku(product).setType(skuId).build();
+                        setSku(product).setType(skuId).setType(billingType).build();
                 mBillingClient.launchBillingFlow(mActivity, mParams);
             }
         };
@@ -197,7 +190,7 @@ public class BillingManager implements PurchasesUpdatedListener {
         executeServiceRequest(consumeRequest);
     }
 
-    public void querySkuDetailsAsync(final List<String> skuList, final SkuDetailsResponseListener skuListener) {
+    public void querySkuDetailsAsync(final List<String> skuList) {
         // Create a runnable from the request to use inside the connection retry policy.
         Runnable queryRequest = new Runnable() {
             @Override
@@ -209,7 +202,17 @@ public class BillingManager implements PurchasesUpdatedListener {
                 mBillingClient.querySkuDetailsAsync(params.build(), new SkuDetailsResponseListener() {
                     @Override
                     public void onSkuDetailsResponse(int responseCode, List<SkuDetails> skuDetailsList) {
-                        skuListener.onSkuDetailsResponse(responseCode, skuDetailsList);
+                        if (responseCode == BillingClient.BillingResponse.OK && skuDetailsList != null) {
+                            for (SkuDetails skuDetails : skuDetailsList) {
+                                String sku = skuDetails.getSku();
+                                String price = skuDetails.getPrice();
+                                String text = "Member ID : " + sku + "\nOrder ID : " + price;
+                                Log.d(TAG, text);
+                                Log.d(TAG, "onSkuDetailResponse : " + responseCode);
+                            }
+                        } else {
+                            Log.w(TAG, "onSkuDetailResponse Null : " + responseCode);
+                        }
                     }
 
                 });
