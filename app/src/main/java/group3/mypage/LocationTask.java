@@ -1,4 +1,4 @@
-package group3;
+package group3.mypage;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -11,16 +11,17 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class AccountTask extends AsyncTask<String, Integer, String> {
-    private final static String TAG = "AccountTask";
+public class LocationTask extends AsyncTask<String, Integer, String> {
+    private final static String TAG = "CommonTask";
     private String url, outStr;
 
-    public AccountTask(String url, String outStr) {
+    public LocationTask(String url, String outStr) {
         this.url = url;
         this.outStr = outStr;
     }
-
+    //呼叫spotGetAllTask.execute()後doinBackground開始執行
     @Override
+    //doinBackground的型別和CommonTask定的型別一樣
     protected String doInBackground(String... params) {
         return getRemoteData();
     }
@@ -33,13 +34,14 @@ public class AccountTask extends AsyncTask<String, Integer, String> {
             connection.setDoInput(true); // allow inputs
             connection.setDoOutput(true); // allow outputs
             // 不知道請求內容大小時可以呼叫此方法將請求內容分段傳輸，設定0代表使用預設大小
+            // 參考HttpURLConnection API的Posting Content部分
             connection.setChunkedStreamingMode(0);
             connection.setUseCaches(false); // do not use a cached copy
             connection.setRequestMethod("POST");
             connection.setRequestProperty("charset", "UTF-8");
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
             bw.write(outStr);
-            Log.d(TAG, "output: " + outStr);
+            Log.d(TAG, "output: " + outStr);        //Log完成時記得關閉,避免拖慢速度
             bw.close();
 
             int responseCode = connection.getResponseCode();
@@ -62,5 +64,4 @@ public class AccountTask extends AsyncTask<String, Integer, String> {
         Log.d(TAG, "input: " + inStr);
         return inStr.toString();
     }
-
 }

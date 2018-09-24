@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -24,7 +25,9 @@ public class Signup extends AppCompatActivity {
     private Button btcancel;
     private EditText etsignpw;
     private EditText etemail;
+    private TextView tvalert;
     private boolean userExist = false;
+
     private Button.OnClickListener listener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -46,6 +49,7 @@ public class Signup extends AppCompatActivity {
         etsignpw = (EditText) findViewById(R.id.etsignpw);
         etemail = (EditText) findViewById(R.id.etemail);
         btcancel = (Button) findViewById(R.id.btcancel);
+        tvalert=(TextView)findViewById(R.id.tvalert);
 
         etsignpw.setOnClickListener(listener);
         etemail.setOnClickListener(listener);
@@ -56,7 +60,7 @@ public class Signup extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     if (Common.networkConnected(Signup.this)) {
-                        String url = Common.URL + "/UserServlet";
+                        String url = Common.URL + "/UserAccountServlet";
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("action", "userExist");
                         jsonObject.addProperty("Email", etemail.getText().toString());
@@ -71,8 +75,7 @@ public class Signup extends AppCompatActivity {
                         // show an error message if the id exists;
                         // otherwise, the error message should be clear
                         if (userExist) {
-                            Toast toast = Toast.makeText(Signup.this, "Email已註冊過", Toast.LENGTH_SHORT);
-                            toast.show();
+                            tvalert.setText("提示:Email已註冊過\n");
                         }
                     }
                 }
@@ -83,36 +86,35 @@ public class Signup extends AppCompatActivity {
     public void onsubmitclick(View view) {
         String Email = etemail.getText().toString().trim();
         String PassWord = etsignpw.getText().toString().trim();
-        StringBuilder text = new StringBuilder();
+
 
         boolean isInputValid = true;
         if (userExist) {
-            Toast toast = Toast.makeText(Signup.this, "Email已註冊過", Toast.LENGTH_SHORT);
-            toast.show();
+//            Toast toast = Toast.makeText(Signup.this, "Email已註冊過", Toast.LENGTH_SHORT);
+//            toast.show();
             isInputValid = false;
-            text.append("Email已註冊過").append("\n");
+            tvalert.setText("提示:Email已註冊過");
+        } else if (Email.isEmpty()) {
+//            Toast toast = Toast.makeText(Signup.this, "Email不可空白", Toast.LENGTH_SHORT);
+//            toast.show();
+            isInputValid = false;
+            tvalert.setText("提示:Email不可空白");
 
+
+//        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(etsignpw.getText()).matches()) {
+//            Toast toasterro = Toast.makeText(Signup.this, "請填寫完整email", Toast.LENGTH_SHORT);
+//            toasterro.show();
+//            isInputValid = false;
+//            tvalert.append("Email已註冊過"+"\n");
+//        }
+
+        }else if (PassWord.isEmpty()) {
+//            Toast toast = Toast.makeText(Signup.this, "密碼不可空白", Toast.LENGTH_SHORT);
+//            toast.show();
+            isInputValid = false;
+            tvalert.setText("提示:密碼不可空白");
         }
 
-        if (Email.isEmpty()) {
-            Toast toast = Toast.makeText(Signup.this, "Email不可空白", Toast.LENGTH_SHORT);
-            toast.show();
-            isInputValid = false;
-
-
-        }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(etsignpw.getText()).matches()) {
-            Toast toasterro = Toast.makeText(Signup.this, "請填寫完整email", Toast.LENGTH_SHORT);
-            toasterro.show();
-            isInputValid = false;
-
-        }
-        if (PassWord.isEmpty()) {
-            Toast toast = Toast.makeText(Signup.this, "密碼不可空白", Toast.LENGTH_SHORT);
-            toast.show();
-            isInputValid = false;
-
-        }
 
         UserAccount useraccount=new UserAccount(Email,PassWord);
         if (isInputValid) {

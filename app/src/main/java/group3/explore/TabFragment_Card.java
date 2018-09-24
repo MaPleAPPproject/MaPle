@@ -2,6 +2,7 @@ package group3.explore;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
+import com.google.android.gms.flags.impl.SharedPreferencesFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +30,10 @@ import group3.Common;
 import group3.Picture;
 import group3.Postdetail;
 import group3.mypage.CommonTask;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.google.android.gms.flags.impl.SharedPreferencesFactory.getSharedPreferences;
+import static group3.Common.PREF_FILE;
 
 public class TabFragment_Card extends Fragment {
     private static final String TAG = "TabFragment_Card";
@@ -55,8 +61,10 @@ public class TabFragment_Card extends Fragment {
     private void showAllPosts() {
         if (Common.networkConnected(getActivity())) {
 
-            bundle=getArguments();
-            int memberid=bundle.getInt("memberid");
+//            bundle=getArguments();
+//            int memberid=bundle.getInt("memberid");
+            SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+            memberid = Integer.parseInt(pref.getString("MemberId", ""));
             String url = Common.URL + "/PictureServlet";
             List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();

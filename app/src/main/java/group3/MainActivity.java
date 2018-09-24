@@ -1,6 +1,8 @@
 package group3;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private MainActivity mainActivity;
 
-    private static int memberId = 0;
+    private int memberId = 0;
     private int vipStatus;
     private String email, passWord, userName;
     private SharedPreferences userPref;
@@ -47,13 +49,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
-        userList=pref.getAll();
-        if (userList.containsKey("user"+memberId)) {
-            // TODO: 2018/9/14 呼叫自動登陸List 頁面
-        } else {
-            // TODO: 2018/9/14 呼叫loginActivity
-        }
+        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        memberId = Integer.parseInt(pref.getString("MemberId", ""));
+        Log.d(TAG,"test"+memberId);
+
+//        if (userList.containsKey("user"+memberId)) {
+//            // TODO: 2018/9/14 呼叫自動登陸List 頁面
+//        } else {
+//            // TODO: 2018/9/14 呼叫loginActivity
+//        }
 
         viewPager = findViewById(R.id.viewPager);
 //      避免view重複加載
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         };
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

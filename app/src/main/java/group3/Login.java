@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,6 +36,7 @@ import group3.mypage.ExGoogleMap;
 public class Login extends AppCompatActivity {
     private final static String URL = "http://10.0.2.2:8080/MaPle";
     private final static String TAG = "Login";
+    String memberId;
     private Button btfb, btgplus;
     private Button btlogin, btsignup;
     private EditText etloemail;
@@ -42,7 +44,25 @@ public class Login extends AppCompatActivity {
     private AccountTask userValidTask;
     private Gson gson;
     private long time = 0;
-    String memberid=null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+//        btfb = (Button) findViewById(R.id.btfb);
+//        btgplus = (Button) findViewById(R.id.btgplus);
+        btlogin = (Button) findViewById(R.id.btlogin);
+        btsignup = (Button) findViewById(R.id.btsignup);
+        etloemail = (EditText) findViewById(R.id.etloemail);
+        etpassword = (EditText) findViewById(R.id.etpassword);
+
+        btsignup.setOnClickListener(listener);
+        btlogin.setOnClickListener(listener);
+//        btgplus.setOnClickListener(listener);
+//        btfb.setOnClickListener(listener);
+    }
 
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
@@ -52,37 +72,27 @@ public class Login extends AppCompatActivity {
                     String password = etpassword.getText().toString().trim();
                     String email = etloemail.getText().toString().trim();
 
-                        if (email.length() <= 0 || password.length() <= 0) {
-                            Toast toast = Toast.makeText(Login.this, "請輸入帳號及密碼", Toast.LENGTH_SHORT);
-                            toast.show();
-                            break;
-                        }
+                    if (email.length() <= 0 || password.length() <= 0) {
+                        Toast toast = Toast.makeText(Login.this, "請輸入帳號或密碼", Toast.LENGTH_LONG);
+                        toast.show();
+                    } else if (isLogin(email, password)) {
+                        SharedPreferences preferences = getSharedPreferences(
+                                Common.PREF_FILE, MODE_PRIVATE);
+                        preferences.edit()
+                                .putBoolean("login", true)
+                                .putString("MemberId", memberId)
+                                .apply();
+                        setResult(RESULT_OK);
 
-                        if (isLogin(email,password)) {
-                            SharedPreferences preferences = getSharedPreferences(
-                                    Common.PREF_FILE, MODE_PRIVATE);
-                            preferences.edit().putBoolean("login", true)
-                                    .putString("MemberId",memberid)
-                                    .putString("Email", email)
-                                    .putString("PassWord", password)
-                                    .apply();
-                            setResult(RESULT_OK);
-
-                            Intent intent = new Intent();
-                            intent.setClass(Login.this, MainActivity.class);
-                            startActivity(intent);
-                            Toast toast = Toast.makeText(Login.this, "歡迎使用MaPle", Toast.LENGTH_SHORT);
-                            toast.show();
-                            finish();
-                            break;
-                        } else {
-                            Toast toast = Toast.makeText(Login.this, "帳號或密碼錯誤", Toast.LENGTH_SHORT);
-                            toast.show();
-                            break;
-                        }
-
+                        Intent intent = new Intent();
+                        intent.setClass(Login.this, MainActivity.class);
+                        startActivity(intent);
+                        Toast.makeText(Login.this, "歡迎使用MaPle", Toast.LENGTH_LONG);
+                        finish();
+                        break;
                     }
-
+                    break;
+                }
                 case R.id.btsignup: {
                     Intent intent = new Intent();
                     intent.setClass(Login.this, Signup.class);
@@ -96,52 +106,24 @@ public class Login extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
-
-
-        btfb = (Button) findViewById(R.id.btfb);
-        btgplus = (Button) findViewById(R.id.btgplus);
-        btlogin = (Button) findViewById(R.id.btlogin);
-        btsignup = (Button) findViewById(R.id.btsignup);
-        etloemail = (EditText) findViewById(R.id.etloemail);
-        etpassword = (EditText) findViewById(R.id.etpassword);
-
-        btsignup.setOnClickListener(listener);
-        btlogin.setOnClickListener(listener);
-        btgplus.setOnClickListener(listener);
-        btfb.setOnClickListener(listener);
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
-        String Email = preferences.getString("Email", "");
-        String PassWord = preferences.getString("PassWord", "");
-            boolean login = preferences.getBoolean("login", false);
-            if (login) {
-                memberid = preferences.getString("MemberId", "");
+        boolean login = preferences.getBoolean("login", false);
+        if (login) {
+            String Email = preferences.getString("Email", "");
+            String PassWord = preferences.getString("PassWord", "");
+            memberId = preferences.getString("MemberId", "");
+
+            if (Email.length() > 0 || PassWord.length() > 0){
                 if (isLogin(Email, PassWord)) {
                     setResult(RESULT_OK);
+
                 }
             }
+        }
     }
-
-
-
-//    private boolean networkConnected() {
-//        ConnectivityManager conManager =
-//                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo networkInfo = conManager != null ? conManager.getActiveNetworkInfo() : null;
-//        return networkInfo != null && networkInfo.isConnected();
-//    }
-
-
 
     private boolean isLogin(final String Email, final String PassWord) {
         boolean islogin = false;
@@ -156,17 +138,17 @@ public class Login extends AppCompatActivity {
             try {
                 String result = userValidTask.execute().get();
                 if (result.equals("0")) {
-                    Toast toast = Toast.makeText(Login.this, "查無此帳號", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(Login.this, "查無此帳號", Toast.LENGTH_LONG);
                     toast.show();
                 } else {
                     islogin = true;
-                    memberid = result;
+                    memberId = result;
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
         } else {
-            Toast toast = Toast.makeText(Login.this, "連線異常請檢查", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(Login.this, "連線異常請檢查", Toast.LENGTH_LONG);
             toast.show();
         }
         return islogin;

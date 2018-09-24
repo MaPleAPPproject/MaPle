@@ -39,6 +39,7 @@ android {
     repositories {
         mavenCentral()
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
@@ -50,7 +51,6 @@ dependencies {
     implementation 'com.android.support:support-vector-drawable:28.0.0-rc01'
     implementation 'com.android.support:recyclerview-v7:28.0.0-rc01'
     implementation 'com.android.support:cardview-v7:28.0.0-rc01'
-
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -64,5 +64,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'com.jakewharton:butterknife:8.8.1'
-
 }

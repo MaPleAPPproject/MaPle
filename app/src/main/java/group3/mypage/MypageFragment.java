@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class MypageFragment extends Fragment {
     private CommonTask getNameTask;
     private TextView userName;
     private byte[] image;
+
 
     public MypageFragment() {
     }
@@ -84,6 +86,13 @@ public class MypageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent chartIntent = new Intent(getActivity(), Mypage_Chart_Activity.class);
+                startActivity(chartIntent);
+            }
+        });
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent chartIntent = new Intent(getActivity(), ExGoogleMap.class);
                 startActivity(chartIntent);
             }
         });

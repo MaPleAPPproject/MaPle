@@ -2,6 +2,7 @@ package group3.explore;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +27,8 @@ import java.util.List;
 import group3.Common;
 import group3.Picture;
 import group3.mypage.CommonTask;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class TabFragment_Collect extends Fragment {
     private static final String TAG = "TabFragment_Collect";
@@ -52,8 +55,10 @@ public class TabFragment_Collect extends Fragment {
 //  取得收藏的照片
     private void showAllPosts() {
         if (Common.networkConnected(getActivity())) {
-            bundle=getArguments();
-            int memberid=bundle.getInt("memberid");
+//            bundle=getArguments();
+//            int memberid=bundle.getInt("memberid");
+            SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+            memberid = Integer.parseInt(pref.getString("MemberId", ""));
             String url = Common.URL + "/PictureServlet";
             List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();
