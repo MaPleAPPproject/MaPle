@@ -62,6 +62,7 @@ public class Security {
             signatureAlgorithm.initVerify(publicKey);
             signatureAlgorithm.update(signedData.getBytes());
             if (!signatureAlgorithm.verify(signatureBytes)) {
+
                 BillingHelper.logWarn(TAG, "Signature verification failed.");
                 return false;
             }
