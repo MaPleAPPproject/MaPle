@@ -1,6 +1,8 @@
 package group3.friend;
 
 
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingFlowParams;
@@ -25,16 +28,23 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.android.billingclient.api.PurchaseHistoryResponseListener;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import group3.Common;
 import group3.friend.Billing.BillingManager;
 import group3.friend.Billing.BillingUpdatesListener;
 import group3.friend.Billing.OrderListDataType;
 import group3.friend.Billing.ServerConnect;
+import group3.mypage.CommonTask;
+import group3.mypage.ImageTask;
+import group3.mypage.User_Profile;
 
-public class Payment extends AppCompatActivity implements PurchaseHistoryResponseListener{
+import static android.support.constraint.motion.utils.Oscillator.TAG;
+
+public class Payment extends AppCompatActivity implements PurchaseHistoryResponseListener {
     private ImageButton itPaymentConfirm;
     private RadioGroup rgPaymentType;
     private RadioButton rbGooglePay, rbCreditCard;
@@ -47,7 +57,7 @@ public class Payment extends AppCompatActivity implements PurchaseHistoryRespons
     private BillingClient mBillingClient;
     private static final String TAG = "Payment";
     private ServerConnect serverConnect;
-    private int memberId = 1;
+    private int memberId = 2;
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     private String urlToOrderList = ServerConnect.URL + "/ReceiptServlet";
     private String urlToUserAccount = ServerConnect.URL + "/User_profileServlet";
@@ -63,38 +73,64 @@ public class Payment extends AppCompatActivity implements PurchaseHistoryRespons
             //           receiptFragment();
         } else {
             setContentView(R.layout.activity_payment);
-
             handleView();
-            if(vipStatus == 0){
-
-            }
+            defaultVipStatus();
             clickEven();
             initProgress();
-            }
+        }
     }
+
+    private void defaultVipStatus() {
+
+        memberId = Integer.parseInt(getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE)
+                .getString("MemberId", ""));
+
+        if (Common.networkConnected(this)) {
+            String userUrl = Common.URL + "/User_profileServlet";
+            User_Profile userProfiles = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findById");
+            jsonObject.addProperty("memberId", this.memberId);
+            String jsonOut = jsonObject.toString();
+            CommonTask getProfileTask = new CommonTask(userUrl, jsonOut);
+            Log.d(TAG, jsonOut);
+            try {
+                String jsonIn = getProfileTask.execute().get();
+                Log.d(TAG, jsonIn);
+                userProfiles = new Gson().fromJson(jsonIn, User_Profile.class);
+                } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (userProfiles == null) {
+                Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+            } else {
+                this.vipStatus = userProfiles.getVipStatus();
+                switch (vipStatus) {
+                    case 0:
+                        break;
+                    case 1:
+                        itPaymentConfirm.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        }
+    }
+
     private void handleView() {
         itPaymentConfirm = findViewById(R.id.btPayment);
         rgPaymentType = findViewById(R.id.rgPaymentType);
         rbCreditCard = findViewById(R.id.rbCreditCard);
         rbGooglePay = findViewById(R.id.rbGooglePay);
-        tvReceipt = findViewById(R.id.tvIcon);
         rgPaymentType.setVisibility(View.INVISIBLE);
 
-
     }
+
     private void initProgress() {
         List<String> skuList = new ArrayList<>();
         skuList.add(mBillingManager.getProduct());
 
         mBillingManager.querySkuDetailsAsync(skuList);
-        OrderListDataType data = null;
-        data = findByID(memberId, urlToUserAccount);
 
-        if (data != null) {
-
-        } else {
-//            ServerConnect.showToast(Payment.this, R.string.no_data_from_db);
-        }
     }
 
     private void clickEven() {

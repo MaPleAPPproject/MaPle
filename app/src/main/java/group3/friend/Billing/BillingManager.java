@@ -200,6 +200,7 @@ public class BillingManager implements PurchasesUpdatedListener {
 
     public void querySkuDetailsAsync(final List<String> skuList) {
         // Create a runnable from the request to use inside the connection retry policy.
+
         Runnable queryRequest = new Runnable() {
             @Override
             public void run() {
@@ -210,6 +211,7 @@ public class BillingManager implements PurchasesUpdatedListener {
                 mBillingClient.querySkuDetailsAsync(params.build(), new SkuDetailsResponseListener() {
                     @Override
                     public void onSkuDetailsResponse(int responseCode, List<SkuDetails> skuDetailsList) {
+                        final List<SkuDetails> skus = skuDetailsList;
                         if (responseCode == BillingClient.BillingResponse.OK && skuDetailsList != null) {
                             for (SkuDetails skuDetails : skuDetailsList) {
                                 String sku = skuDetails.getSku();
@@ -228,6 +230,7 @@ public class BillingManager implements PurchasesUpdatedListener {
         };
 
         executeServiceRequest(queryRequest);
+
     }
     private boolean verifyValidSignature(String signedData, String signature) {
         // Some sanity checks to see if the developer (that's you!) really followed the
