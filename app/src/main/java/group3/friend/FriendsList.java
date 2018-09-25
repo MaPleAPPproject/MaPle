@@ -1,12 +1,14 @@
 package group3.friend;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
@@ -36,12 +38,15 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import group3.Common;
 import group3.MainActivity;
 import group3.explore.Explore_PostActivity;
 import group3.mypage.MypageFragment;
 import group3.mypage.Mypage_Chart_Activity;
 import group3.mypage.Mypage_UserProfile_Activity;
 import group3.mypage.User_Profile;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FriendsList extends Fragment {
 
@@ -50,11 +55,17 @@ public class FriendsList extends Fragment {
     private FragmentActivity activity;
     private FriendTask friendGetAllTask;
     private FriendImageTask friendImageTask;
+    private SharedPreferences pref;
+    private int memberId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity=getActivity();
+        pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        String smemberId = pref.getString("MemberId", "");
+        memberId=Integer.parseInt(smemberId);
     }
 
     @Nullable
@@ -74,13 +85,8 @@ public class FriendsList extends Fragment {
         showAllfriends();
     }
     private void handleViews(View view) {
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        recyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(1,
-                        StaggeredGridLayoutManager.VERTICAL));
-     //   List<User_Profile> friendsList = getfriendsList();
-     //   recyclerView.setAdapter(new friendAdapter(getActivity(), friendsList));
+       recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
     }
 
     private void showAllfriends(){
@@ -89,7 +95,7 @@ public class FriendsList extends Fragment {
             List<User_Profile> friendsList = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
-            jsonObject.addProperty("memberid", 1);
+            jsonObject.addProperty("memberid", memberId);
             String jsonOut = jsonObject.toString();
             friendGetAllTask = new FriendTask(url, jsonOut);
 

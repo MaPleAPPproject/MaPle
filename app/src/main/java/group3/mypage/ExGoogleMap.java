@@ -52,7 +52,7 @@ import group3.Post;
 import group3.explore.PostTask;
 
 public class ExGoogleMap extends FragmentActivity implements OnMapReadyCallback  {
-    private final static String URL = "http://10.0.2.2:8080/MaPle";
+//    private final static String URL = "http://10.0.2.2:8080/MaPle";
     private final static String TAG = "ExGoogleMap";
     String memberId;
     String bestProv;
@@ -99,8 +99,8 @@ public class ExGoogleMap extends FragmentActivity implements OnMapReadyCallback 
     }
 
     private void showAllLocations() {
-        if (LocationCommon.networkConnected(this)) {
-            String url = LocationCommon.URL + "/spotServlet";
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/spotServlet";
             //準備容器接資料
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findById");//約定傳輸資料格式
@@ -150,7 +150,7 @@ public class ExGoogleMap extends FragmentActivity implements OnMapReadyCallback 
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(position)
-                .zoom(5)
+                .zoom(3)
                 .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory
                 .newCameraPosition(cameraPosition);
@@ -181,7 +181,7 @@ public class ExGoogleMap extends FragmentActivity implements OnMapReadyCallback 
         @Override
         public View getInfoWindow(Marker marker) {
             ImageView imageView = infoWindow.findViewById(R.id.ivLogo);
-            String url = LocationCommon.URL + "/spotServlet";
+            String url = Common.URL + "/spotServlet";
 
             postid= (int) marker.getTag();
             Bitmap bitmap = null;

@@ -43,6 +43,7 @@ import group3.Postdetail;
 import group3.mypage.CommonTask;
 import group3.mypage.ImageTask;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.support.constraint.motion.MotionScene.TAG;
 
 public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
@@ -62,11 +63,17 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     private CommonTask collectcheckTask;
     private int newcollectcount;
     private CommonTask updatepostTask;
+    private int collectorid;
+    private SharedPreferences pref;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"oncreate");
+        pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        String smemberId = pref.getString("MemberId", "");
+        collectorid=Integer.parseInt(smemberId);
 
     }
 
@@ -137,8 +144,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
-        //      要取偏好設定的memberid
-        if (!iscollectable(2,postdetail.getPostId())) {
+        if (!iscollectable(collectorid,postdetail.getPostId())) {
             DrawableCompat.setTint(btcollect.getDrawable(), ContextCompat.getColor(getContext(),
                     R.color.colorPrimaryDark));
             btcollect.setOnClickListener(new View.OnClickListener() {
@@ -232,7 +238,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/UserPreferenceServlet";
             //      要取偏好設定的memberid
-            UserPreference userPreference=new UserPreference(postdetail.getPostId(),2,postdetail.getMemberId(),postdetail.getCollectioncount()+1);
+            UserPreference userPreference=new UserPreference(postdetail.getPostId(),collectorid,postdetail.getMemberId(),postdetail.getCollectioncount()+1);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "userpreInsert");
             jsonObject.addProperty("userpe", new Gson().toJson(userPreference));

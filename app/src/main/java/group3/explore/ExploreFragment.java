@@ -262,9 +262,8 @@ public class ExploreFragment extends Fragment {
         @Override
         public boolean onQueryTextChange(String newText) {
             Log.d(TAG, "onQueryTextChange");
-            tvrec.setText("搜尋結果");
             final  List<Picture> filtermodelist=filter(picturelist,newText);
-            adpter.setfilter(filtermodelist);
+                adpter.setfilter(filtermodelist);
             return true;
         }
 

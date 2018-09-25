@@ -2,6 +2,7 @@ package group3.mypage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,6 +33,8 @@ import group3.explore.Explore_PostActivity;
 import group3.explore.PostTask;
 import group3.explore.TabFragment_Collect;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class Mypage_tab_colec_Fragment extends Fragment {
     private static final String TAG = "Mypage_tab_colec_Fragment";
     private CommonTask pictureGetAllTask;
@@ -40,6 +43,16 @@ public class Mypage_tab_colec_Fragment extends Fragment {
     private PostTask pictureImageTask;
     private Context contentview;
     private Bundle bundle;
+    private SharedPreferences pref;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        String smemberId = pref.getString("MemberId", "");
+        memberid=Integer.parseInt(smemberId);
+    }
 
     @Nullable
     @Override
@@ -64,7 +77,7 @@ public class Mypage_tab_colec_Fragment extends Fragment {
             List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getcollectBymemberId");
-            jsonObject.addProperty("memberid", 1);
+            jsonObject.addProperty("memberid", memberid);
             String jsonOut = jsonObject.toString();
             pictureGetAllTask = new CommonTask(url, jsonOut);
             try {

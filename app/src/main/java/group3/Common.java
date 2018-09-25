@@ -19,8 +19,8 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Common {
 
-    public static String URL = "http://10.0.2.2:8080/MaPle";
-//    public static String URL = "http://192.168.43.251:8080/MaPle";
+//    public static String URL = "http://10.0.2.2:8080/MaPle";
+    public static String URL = "http://192.168.197.12:8080/MaPle";
     public final static String PREF_FILE = "preference";
     private final static String DEFAULT_NAME = "";
     private final static String DEFAULT_EMAIL = "";

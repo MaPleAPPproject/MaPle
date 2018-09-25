@@ -1,6 +1,7 @@
 package group3.mypage;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +29,8 @@ import group3.Common;
 import group3.explore.TabFragment_Card;
 import group3.explore.TabFragment_Collect;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class MypageFragment extends Fragment {
     private static final String TAG = "MypageFragment";
@@ -36,17 +39,23 @@ public class MypageFragment extends Fragment {
     private ImageButton addNewPost, map, chart, snapshot;
     private TextView mTextView;
     private Bundle bundle;
-    private int memberId = 2;
+    private int memberId;
     private CommonTask getNameTask;
     private TextView userName;
     private byte[] image;
-
+    private SharedPreferences pref;
 
     public MypageFragment() {
     }
 
-    ;
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        String smemberId = pref.getString("MemberId", "");
+        memberId=Integer.parseInt(smemberId);
+    }
 
     @Nullable
     @Override
@@ -135,10 +144,10 @@ public class MypageFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         TabViewPagerAdapter adapter = new TabViewPagerAdapter(getChildFragmentManager());
-        TabFragment_Card tabFragment_card = new TabFragment_Card();
-        TabFragment_Collect tabFragment_collect = new TabFragment_Collect();
-        adapter.addFragment(tabFragment_card);
-        adapter.addFragment(tabFragment_collect);
+        Mypage_tab_colec_Fragment mypage_tab_colec_fragment_ = new Mypage_tab_colec_Fragment();
+        Mypage_tab_post_Fragment mypage_tab_post_fragment = new  Mypage_tab_post_Fragment();
+        adapter.addFragment(mypage_tab_post_fragment);
+        adapter.addFragment(mypage_tab_colec_fragment_);
         viewPager.setAdapter(adapter);
     }
 
@@ -190,7 +199,6 @@ public class MypageFragment extends Fragment {
     }
 
     public void loadForMypage() {
-
 
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/User_profileServlet";

@@ -39,26 +39,36 @@ public class TabFragment_Collect extends Fragment {
     private Context contentview;
     private Bundle bundle;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.tab_collection, container, false);
-        handleviews(view);
+        bundle=getArguments();
+        memberid=bundle.getInt("memberid");
+        rvCollection = view.findViewById(R.id.rvCollection);
+        rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));
+        contentview=view.getContext();
+//        handleviews(view);
+        showAllPosts();
         return view;
 
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        showAllPosts();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        showAllPosts();
+//    }
 //  取得收藏的照片
     private void showAllPosts() {
+        bundle=getArguments();
+        memberid=bundle.getInt("memberid");
         if (Common.networkConnected(getActivity())) {
-//            bundle=getArguments();
-//            int memberid=bundle.getInt("memberid");
-            SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-            memberid = Integer.parseInt(pref.getString("MemberId", ""));
             String url = Common.URL + "/PictureServlet";
             List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();
@@ -103,6 +113,7 @@ public class TabFragment_Collect extends Fragment {
         PostAdapter(List<Picture> pictures, Context context) {
             this.pictures = pictures;
             layoutInflater = LayoutInflater.from(context);
+
 
 
         }

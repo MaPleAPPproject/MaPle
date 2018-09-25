@@ -48,23 +48,25 @@ public class TabFragment_Card extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.tab_post, container, false);
-        handleviews(view);
+        bundle=getArguments();
+        memberid=bundle.getInt("memberid");
+        rvPost = view.findViewById(R.id.rvPost);
+        rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
+        contentview=view.getContext();
+        showAllPosts();
+//        handleviews(view);
         return view;
 
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        showAllPosts();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        showAllPosts();
+//    }
 //  取得照片
     private void showAllPosts() {
-        if (Common.networkConnected(getActivity())) {
 
-//            bundle=getArguments();
-//            int memberid=bundle.getInt("memberid");
-            SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-            memberid = Integer.parseInt(pref.getString("MemberId", ""));
+        if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/PictureServlet";
             List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();
@@ -84,7 +86,7 @@ public class TabFragment_Card extends Fragment {
                 Toast.makeText(getActivity(),R.string.msg_NoNetwork,Toast.LENGTH_SHORT).show();
             }
             else {
-                rvPost.setAdapter(new TabFragment_Card.PostAdapter(pictures, contentview));
+                rvPost.setAdapter(new TabFragment_Card.PostAdapter(pictures,contentview));
             }
         } else {
             Toast.makeText(getActivity(), R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
@@ -92,14 +94,14 @@ public class TabFragment_Card extends Fragment {
 
     }
 
-    private void handleviews(View view) {
-        if (bundle != null) {
-            showAllPosts();
-        }
-        rvPost = view.findViewById(R.id.rvPost);
-        rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
-        contentview=view.getContext();
-    }
+//    private void handleviews(View view) {
+//        if (bundle != null) {
+//            showAllPosts();
+//        }
+//        rvPost = view.findViewById(R.id.rvPost);
+//        rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
+//        contentview=view.getContext();
+//    }
 
     public class PostAdapter extends RecyclerView.Adapter<TabFragment_Card.PostAdapter.MyViewHolder> {
         private int imageSize;
@@ -109,8 +111,6 @@ public class TabFragment_Card extends Fragment {
         PostAdapter(List<Picture> pictures, Context context) {
             this.pictures = pictures;
             layoutInflater = LayoutInflater.from(context);
-
-
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {

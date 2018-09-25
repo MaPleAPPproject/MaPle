@@ -2,6 +2,7 @@ package group3.mypage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +32,9 @@ import group3.explore.Explore_PostActivity;
 import group3.explore.PostTask;
 import group3.explore.TabFragment_Card;
 
-public class Ｍypage_tab_post_Fragment extends Fragment {
+import static android.content.Context.MODE_PRIVATE;
+
+public class Mypage_tab_post_Fragment extends Fragment {
     private static final String TAG = "Ｍypage_tab_post_Fragment";
     private CommonTask pictureGetAllTask;
     private RecyclerView rvPost;
@@ -39,6 +42,16 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
     private PostTask pictureImageTask;
     private Context contentview;
     private Bundle bundle;
+    private SharedPreferences pref;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        String smemberId = pref.getString("MemberId", "");
+        memberid=Integer.parseInt(smemberId);
+    }
 
     @Nullable
     @Override
@@ -61,7 +74,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
             List<Picture> pictures = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getBymemberId");
-            jsonObject.addProperty("memberid", 1);
+            jsonObject.addProperty("memberid", memberid);
             String jsonOut = jsonObject.toString();
             pictureGetAllTask = new CommonTask(url, jsonOut);
             try {
@@ -76,7 +89,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
                 Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
             }
             else {
-                rvPost.setAdapter(new Ｍypage_tab_post_Fragment.PostAdapter(pictures, contentview));
+                rvPost.setAdapter(new Mypage_tab_post_Fragment.PostAdapter(pictures, contentview));
             }
         } else {
             Toast.makeText(getActivity(), R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
@@ -95,7 +108,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
         contentview=view.getContext();
     }
 
-    public class PostAdapter extends RecyclerView.Adapter<Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder> {
+    public class PostAdapter extends RecyclerView.Adapter<Mypage_tab_post_Fragment.PostAdapter.MyViewHolder> {
         private int imageSize;
         private List<Picture> pictures;
         private LayoutInflater layoutInflater;
@@ -122,14 +135,14 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
 
         @NonNull
         @Override
-        public Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        public Mypage_tab_post_Fragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             View item_view = layoutInflater.inflate(R.layout.item_view_picture, parent, false);
-            return new Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder(item_view);
+            return new Mypage_tab_post_Fragment.PostAdapter.MyViewHolder(item_view);
         }
 
 
         @Override
-        public void onBindViewHolder(@NonNull Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder myViewHolder, int position) {
+        public void onBindViewHolder(@NonNull Mypage_tab_post_Fragment.PostAdapter.MyViewHolder myViewHolder, int position) {
             final Picture picture = pictures.get(position);
             String url = Common.URL + "/PictureServlet";
             //發起PostTask 使用picture中的id取的圖檔資料

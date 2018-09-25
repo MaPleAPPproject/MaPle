@@ -33,7 +33,7 @@ import group3.mypage.CommonTask;
 import group3.mypage.ImageTask;
 import group3.mypage.Mypage_tab_colec_Fragment;
 import group3.mypage.User_Profile;
-import group3.mypage.Ｍypage_tab_post_Fragment;
+import group3.mypage.Mypage_tab_post_Fragment;
 
 import static android.support.constraint.motion.MotionScene.TAG;
 import static com.cp102group3maple.violethsu.maple.R.color.colorRed;
@@ -60,6 +60,11 @@ public class OtherspageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootview = inflater.inflate(R.layout.fragment_otherspage, container, false);
+        bundle=getArguments();
+        username=bundle.getString("tvname");
+        memberid=bundle.getInt("memberid");
+        bundlefortab=new Bundle();
+        bundlefortab.putInt("memberid",memberid);
         handleviews(rootview);
         getprofile();
         tabLayout = rootview.findViewById(R.id.tablayout1);
@@ -138,11 +143,6 @@ public class OtherspageFragment extends Fragment {
 //    }
 //  取他人資料
     private void getprofile() {
-        bundle=getArguments();
-        username=bundle.getString("tvname");
-        int memberid=bundle.getInt("memberid");
-        bundlefortab=new Bundle();
-        bundlefortab.putInt("memberid",memberid);
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/User_profileServlet";
             user_Profile=null;
