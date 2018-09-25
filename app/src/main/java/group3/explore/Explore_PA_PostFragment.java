@@ -112,7 +112,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 fragment = new OtherspageFragment();
                 Bundle memberbundle=new Bundle();
-                memberbundle.putString("tvname", postdetail.getUsername());
+                memberbundle.putString("username", postdetail.getUsername());
                 memberbundle.putInt("memberid", postdetail.getMemberId());
                 fragment.setArguments(memberbundle);
                 changeFragment(fragment);

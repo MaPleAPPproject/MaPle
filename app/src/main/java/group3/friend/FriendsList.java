@@ -162,7 +162,7 @@ public class FriendsList extends Fragment {
 
             //連線至User_profileServlet端的Servlet
             String url =FriendCommon.URL+"/User_profileServlet";
-            int friendid=friends.getMemberId();
+            final int friendid=friends.getMemberId();
             friendImageTask = new FriendImageTask(url,friendid, imageSize, viewHolder.imageView);
             friendImageTask.execute();
 
@@ -170,7 +170,11 @@ public class FriendsList extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(getActivity() , Mypage_UserProfile_Activity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putString("username",friends.getUserName());
+                    bundle.putInt("memberid", friends.getMemberId());
+                    intent.putExtras(bundle);
+                    intent.setClass(getActivity() , Friend_PostActivity.class);
                     startActivity(intent);
                 }
             });

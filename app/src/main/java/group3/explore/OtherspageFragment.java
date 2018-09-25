@@ -61,7 +61,7 @@ public class OtherspageFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootview = inflater.inflate(R.layout.fragment_otherspage, container, false);
         bundle=getArguments();
-        username=bundle.getString("tvname");
+        username=bundle.getString("username");
         memberid=bundle.getInt("memberid");
         bundlefortab=new Bundle();
         bundlefortab.putInt("memberid",memberid);
@@ -161,8 +161,9 @@ public class OtherspageFragment extends Fragment {
                 Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
             }
             else {
+                tvName.setText(username);
                 tvSelf.setText(user_Profile.getSelfIntroduction());
-                tvName.setText(user_Profile.getUserName());
+//                tvName.setText(user_Profile.getUserName());
                 if(user_Profile.getVipStatus()==1) {
                     tvvip.setText("VIP");
                     tvvip.setTextColor(getResources().getColor(R.color.colorRed));
