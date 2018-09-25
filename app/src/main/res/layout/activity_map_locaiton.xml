@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:onClick="onConfirmClick"
-        android:text="@string/btConfirm"
+        android:text="@string/btSubmit"
         android:layout_toStartOf="@+id/btBacktoNewPost"
         android:layout_toLeftOf="@+id/btBacktoNewPost" />
 
@@ -47,7 +47,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:onClick="onBackToNewPostClick"
-            android:text="@string/btback"
+            android:text="@string/btok"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
 

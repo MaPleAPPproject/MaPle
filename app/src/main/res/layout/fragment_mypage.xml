@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="10dp"
+            android:layout_weight="1"
             >
 
             <ImageButton
@@ -42,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            >
 
             <ImageButton
                 android:id="@+id/btaddNewPost"
@@ -58,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/addNewPost"
+                android:gravity="center"
                 android:textSize="15sp" />
         </LinearLayout>
 
@@ -66,7 +69,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:layout_weight="1">
 
             <ImageButton
                 android:id="@+id/btMap"
@@ -99,7 +103,8 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/ic_mypage_charts" />
+                android:background="@drawable/ic_mypage_charts"
+                android:layout_weight="1"/>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -8,11 +8,21 @@ public class NewPost {
 
 
     private int postId, pictureId;
-    private  String location, comment, countryCode,address,district;
+    private  String location;
+    private String comment;
+    private String countryCode;
+    private String address;
+    private String district;
+    private String postedDate;
+    private String userName;
     private double longitude,latitude;
 
 
 
+    public NewPost(String postedDate, String userName) {
+        this.postedDate = postedDate;
+        this.userName = userName;
+    }
 
 
 
@@ -22,9 +32,24 @@ public class NewPost {
         this.comment = comment;
     }
 
+    public NewPost(String comment, String district, String postedDate, String userName) {
+        this.comment = comment;
+        this.district = district;
+        this.postedDate = postedDate;
+        this.userName = userName;
+    }
 
     public NewPost(String countryCode, String address, String district, double longitude, double latitude) {
 
+        this.countryCode = countryCode;
+        this.address = address;
+        this.district = district;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+    public NewPost(String comment, String countryCode, String address, String district, double longitude, double latitude) {
+        this.comment = comment;
         this.countryCode = countryCode;
         this.address = address;
         this.district = district;
@@ -115,6 +140,22 @@ public class NewPost {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public String getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(String postedDate) {
+        this.postedDate = postedDate;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 

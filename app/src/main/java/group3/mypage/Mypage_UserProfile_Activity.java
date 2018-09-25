@@ -76,7 +76,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
     private byte[] image;
     private CommonTask uploadTask;
     private User_Profile userprofile;
-    private int memberId;
+    private int memberId=2;
     private CommonTask getProfileTask;
     private ImageTask Icontask;
     private String servlet = "/User_profileServlet";
@@ -113,21 +113,23 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         premium = findViewById(R.id.btPremium);
         ibPhotoIcon = findViewById(R.id.ibPhotoIcon);
         tvVipStatus = findViewById(R.id.tvStatusResult);
+//        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+//                MODE_PRIVATE);
+//        memberId = Integer.valueOf(pref.getString("MemberId","0"));
+
+
     }
 
 
     private void loadProfiles() {
-        SharedPreferences pf = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        pf.edit()
-                .putInt("memberId", memberId).apply();
 
-        memberId = pf.getInt("memberId", 1);
+
         if (Common.networkConnected(this)) {
             String url = Common.URL + "/User_profileServlet";
             User_Profile userProfiles = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findById");
-            jsonObject.addProperty("memberId", "2");
+            jsonObject.addProperty("memberId", memberId);
             String jsonOut = jsonObject.toString();
             getProfileTask = new CommonTask(url, jsonOut);
             try {
@@ -156,8 +158,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
                         }
 
 
-//                int memberId  = userProfiles.getMemberID();
-                int memberId = 2;
+
                 int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
                 Bitmap bitmap = null;
 
@@ -210,7 +211,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
 //        pf.edit().putString("email",email).apply();
 //        pf.edit().putString("password",password).apply();
 //        pf.edit().putString("selfIntro",selfIntro).apply();
-        updateprofile(memberId);
+        updateprofile();
 
 
 }
@@ -360,13 +361,14 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
 
                 case REQUEST_PICK_PICTURE:
                     Uri uri = data.getData();
+                    Log.e(TAG, "選好照片了: " + uri.toString());
                     crop(uri);
                     break;
 
                 case REQUEST_CROP_PICTURE:
 
 
-                    Log.d(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
+                    Log.e(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
                     try {
 
                         picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
@@ -391,9 +393,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         file = new File(file, "picture_cropped.jpg");
         croppedImageUri = Uri.fromFile(file);
         try {
-
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
-
             cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             cropIntent.setDataAndType(srcImageUri, "image/*");
             cropIntent.putExtra("crop", "true");
@@ -411,12 +411,16 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
     }
 
 
-    public void updateprofile(int memberId){
+    public void updateprofile(){
+
+//        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+//                MODE_PRIVATE);
+//        int memberId = Integer.valueOf(pref.getString("MemberId","0"));
         if (image == null) {
             Toast.makeText(this, R.string.no_Image, Toast.LENGTH_SHORT).show();
             return;
         }
-        memberId = 2;
+
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String userName = etName.getText().toString().trim();
@@ -431,6 +435,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
             Toast.makeText(this, "請確認欄位是否有填寫", Toast.LENGTH_SHORT).show();
         }else if (Common.networkConnected(this)) {
             String url = Common.URL + servlet;
+            int memberId = 2;
             User_Profile newuserprofile = new User_Profile( memberId,email, password, userName,selfIntroduction, vipStatus);
             String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
             JsonObject jsonObject = new JsonObject();

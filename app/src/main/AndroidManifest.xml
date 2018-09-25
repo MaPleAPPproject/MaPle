@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
     <!-- 使用Context.getExternalFilesDir(String)儲存拍照照片不需要寫入權限，但API 19以前需要讀的權限 -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -47,11 +48,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
         </provider>
-
         <activity
             android:name="group3.Login"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,6 +65,7 @@
 
         </activity>
         <activity android:name="group3.explore.Explore_PostActivity" />
+        <activity android:name="group3.friend.ChatActivity" />
         <activity android:name="group3.friend.Match" />
         <activity android:name="group3.friend.Payment" />
         <activity android:name="group3.friend.Receipt" />
@@ -73,6 +74,7 @@
         <activity android:name="group3.mypage.Mypage_Chart_Activity" />
         <activity android:name="group3.mypage.Mypage_UserProfile_Activity" />
         <activity android:name="group3.mypage.MapLocation" />
+        <activity android:name="group3.mypage.Mypage_PostUpdate_Activity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -100,6 +102,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
 
 
         <activity
