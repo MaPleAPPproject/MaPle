@@ -8,9 +8,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -21,13 +18,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import group3.Common;
 public class ServerConnect extends AsyncTask<String, Integer, String> {
 
     private String TAG = "ServerConnect";
     private String outStr, url;
-    public static String URL = "http://10.0.2.2:8080/MaPle";
-//    public static String URL = "http://192.168.43.251:8080/MaPle";
+//    public static String URL = "http://10.0.2.2:8080/MaPle";
+    public static String URL = Common.URL;
 
 
 

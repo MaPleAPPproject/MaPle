@@ -10,12 +10,16 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.Purchase.PurchasesResult;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 
+
+import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 
 public class BillingManager implements PurchasesUpdatedListener {
@@ -27,6 +31,9 @@ public class BillingManager implements PurchasesUpdatedListener {
     private boolean isServiceConnected = false;
     private int mBillingClientResponseCode;
     private BillingUpdatesListener mBillingUpdatesListener;
+    private Set<String> mTokensToBeConsumed;
+    private static final String BASE_64_ENCODED_PUBLIC_KEY = "IIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAleLT8EKOJxM2M0R2XC5JuksRWAtr/VwVNnyZKdetZVLSgvY4xYW2LlP2b0nJctuQT3IJmtumpeaMug5iCeiCDXfIicddBQEOy4lUmFeCiD6CuB5+qi/hQDDpl/ZZtnuPd3ihMecpOUgHAHHk1hX9IvmI4PISohzspJhjEcgCdcQLDdqtJnMhgcbnc8O86Yn6ZqpmR2+lyNo0i10uDpOENX66d/nB8t6YembAX/urBQWo+bJiCFeZQXMBMwyR1J9LRYx0tJqRccUKrOIi4ybQJJDwzQN3yRaTxf8rMKo78l6/fT2EB9LjtFadw/GrMQWDR6708xhv4aR2tDLpw/3MxQIDAQAB";
+
 
 
     public String getProduct() {
@@ -47,6 +54,7 @@ public class BillingManager implements PurchasesUpdatedListener {
 
             }
         });
+
 
     }
 
@@ -207,6 +215,7 @@ public class BillingManager implements PurchasesUpdatedListener {
                                 String sku = skuDetails.getSku();
                                 String price = skuDetails.getPrice();
                                 String text = "Member ID : " + sku + "\nOrder ID : " + price;
+
                                 Log.d(TAG, text);
                                 Log.d(TAG, "onSkuDetailResponse : " + responseCode);
                             }
@@ -214,12 +223,27 @@ public class BillingManager implements PurchasesUpdatedListener {
                             Log.w(TAG, "onSkuDetailResponse Null : " + responseCode);
                         }
                     }
-
                 });
             }
         };
 
         executeServiceRequest(queryRequest);
     }
+    private boolean verifyValidSignature(String signedData, String signature) {
+        // Some sanity checks to see if the developer (that's you!) really followed the
+        // instructions to run this sample (don't put these checks on your app!)
+        if (BASE_64_ENCODED_PUBLIC_KEY.contains("CONSTRUCT_YOUR")) {
+            throw new RuntimeException("Please update your app's public key at: "
+                    + "BASE_64_ENCODED_PUBLIC_KEY");
+        }
+
+        try {
+            return Security.verifyPurchase(BASE_64_ENCODED_PUBLIC_KEY, signedData, signature);
+        } catch (IOException e) {
+            Log.e(TAG, "Got an exception trying to validate a purchase: " + e);
+            return false;
+        }
+    }
+
 }
 

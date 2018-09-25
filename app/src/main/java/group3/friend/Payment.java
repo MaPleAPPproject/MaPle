@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.android.billingclient.api.PurchaseHistoryResponseListener;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import group3.friend.Billing.BillingUpdatesListener;
 import group3.friend.Billing.OrderListDataType;
 import group3.friend.Billing.ServerConnect;
 
-public class Payment extends AppCompatActivity {
+public class Payment extends AppCompatActivity implements PurchaseHistoryResponseListener{
     private ImageButton itPaymentConfirm;
     private RadioGroup rgPaymentType;
     private RadioButton rbGooglePay, rbCreditCard;
@@ -64,13 +65,12 @@ public class Payment extends AppCompatActivity {
             setContentView(R.layout.activity_payment);
 
             handleView();
-            initProgress();
-//            if(vipStatus == 0){
-//                mBillingManager.querySkuDetailsAsync();
-//            }
-            clickEven();
+            if(vipStatus == 0){
 
-        }
+            }
+            clickEven();
+            initProgress();
+            }
     }
     private void handleView() {
         itPaymentConfirm = findViewById(R.id.btPayment);
@@ -80,11 +80,9 @@ public class Payment extends AppCompatActivity {
         tvReceipt = findViewById(R.id.tvIcon);
         rgPaymentType.setVisibility(View.INVISIBLE);
 
+
     }
     private void initProgress() {
-
-
-        mBillingManager = new BillingManager(this, new MyBillingUpdateListener());
         List<String> skuList = new ArrayList<>();
         skuList.add(mBillingManager.getProduct());
 
@@ -100,11 +98,10 @@ public class Payment extends AppCompatActivity {
     }
 
     private void clickEven() {
+        mBillingManager = new BillingManager(this, new MyBillingUpdateListener());
         itPaymentConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (vipStatus == 1) {
 
                     OrderListDataType data = null;
@@ -117,6 +114,9 @@ public class Payment extends AppCompatActivity {
                         ServerConnect.showToast(Payment.this, R.string.no_data_from_db);
                     }
                 } else {
+                    List<String> skuList = new ArrayList<>();
+                    skuList.add(mBillingManager.getProduct());
+                    mBillingManager.querySkuDetailsAsync(skuList);
                     pay();
 
                 }
@@ -152,6 +152,11 @@ public class Payment extends AppCompatActivity {
             ServerConnect.showToast(Payment.this, R.string.msg_Nonetwork);
         }
         return null;
+    }
+
+    @Override
+    public void onPurchaseHistoryResponse(int responseCode, List<Purchase> purchasesList) {
+
     }
 
 
