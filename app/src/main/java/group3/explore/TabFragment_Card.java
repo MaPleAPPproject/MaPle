@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -49,7 +50,8 @@ public class TabFragment_Card extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.tab_post, container, false);
         bundle=getArguments();
-        memberid=bundle.getInt("memberid");
+        memberid = bundle.getInt("memberid");
+
         rvPost = view.findViewById(R.id.rvPost);
         rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
         contentview=view.getContext();

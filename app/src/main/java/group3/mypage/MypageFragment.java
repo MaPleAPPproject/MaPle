@@ -144,10 +144,10 @@ public class MypageFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         TabViewPagerAdapter adapter = new TabViewPagerAdapter(getChildFragmentManager());
-        TabFragment_Card tabFragment_card = new TabFragment_Card();
-        TabFragment_Collect tabFragment_collect = new TabFragment_Collect();
-        adapter.addFragment(tabFragment_card);
-        adapter.addFragment(tabFragment_collect);
+        Mypage_tab_colec_Fragment mypage_tab_colec_fragment_ = new Mypage_tab_colec_Fragment();
+        Mypage_tab_post_Fragment mypage_tab_post_fragment = new  Mypage_tab_post_Fragment();
+        adapter.addFragment(mypage_tab_post_fragment);
+        adapter.addFragment(mypage_tab_colec_fragment_);
         viewPager.setAdapter(adapter);
     }
 
@@ -200,11 +200,9 @@ public class MypageFragment extends Fragment {
 
     public void loadForMypage() {
 
-
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/User_profileServlet";
             User_Profile userProfiles = null;
-            int memberId =2 ;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findById");
             jsonObject.addProperty("memberId", memberId);

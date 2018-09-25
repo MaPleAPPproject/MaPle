@@ -54,7 +54,7 @@ public class TabFragment_Collect extends Fragment {
         rvCollection = view.findViewById(R.id.rvCollection);
         rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));
         contentview=view.getContext();
-//        handleviews(view);
+        handleviews(view);
         showAllPosts();
         return view;
 
@@ -67,7 +67,7 @@ public class TabFragment_Collect extends Fragment {
 //  取得收藏的照片
     private void showAllPosts() {
         bundle=getArguments();
-        memberid=bundle.getInt("memberid");
+//        memberid=bundle.getInt("memberid");
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/PictureServlet";
             List<Picture> pictures = null;

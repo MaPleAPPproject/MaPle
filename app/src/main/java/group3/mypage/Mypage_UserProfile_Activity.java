@@ -41,6 +41,7 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Member;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -76,13 +77,15 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
     private byte[] image;
     private CommonTask uploadTask;
     private User_Profile userprofile;
-    private int memberId=2;
+    private int memberId;
     private CommonTask getProfileTask;
     private ImageTask Icontask;
     private String servlet = "/User_profileServlet";
+    private SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+            MODE_PRIVATE);
 
 
-    public Mypage_UserProfile_Activity() {
+    public Mypage_UserProfile_Activity () {
 
     }
 
@@ -98,7 +101,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
         handleView();
-        loadProfiles();
+        loadProfiles(memberId);
 
 
     }
@@ -113,15 +116,13 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         premium = findViewById(R.id.btPremium);
         ibPhotoIcon = findViewById(R.id.ibPhotoIcon);
         tvVipStatus = findViewById(R.id.tvStatusResult);
-//        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
-//                MODE_PRIVATE);
-//        memberId = Integer.valueOf(pref.getString("MemberId","0"));
+        memberId = Integer.valueOf(pref.getString("MemberId",""));
 
 
     }
 
 
-    private void loadProfiles() {
+    private void loadProfiles(int memberId) {
 
 
         if (Common.networkConnected(this)) {
@@ -202,16 +203,18 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
 
     public void onSaveClick(View view) {
 
-//        SharedPreferences pf = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-//        String name = etName.getText().toString();
-//        String email = etEmail.getText().toString();
-//        String password = etPassword.getText().toString();
-//        String selfIntro = etSelfIntro.getText().toString();
-//        pf.edit().putString("name",name).apply();
-//        pf.edit().putString("email",email).apply();
-//        pf.edit().putString("password",password).apply();
-//        pf.edit().putString("selfIntro",selfIntro).apply();
-        updateprofile();
+        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        memberId = Integer.parseInt(pref.getString("MemberId", ""));
+        updateprofile(memberId);
+        String name = etName.getText().toString();
+        String email = etEmail.getText().toString();
+        String password = etPassword.getText().toString();
+        String selfIntro = etSelfIntro.getText().toString();
+        pref.edit().putString("name",name).apply();
+        pref.edit().putString("email",email).apply();
+        pref.edit().putString("password",password).apply();
+        pref.edit().putString("selfIntro",selfIntro).apply();
+
 
 
 }
@@ -411,7 +414,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
     }
 
 
-    public void updateprofile(){
+    public void updateprofile(int memberId){
 
 //        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
 //                MODE_PRIVATE);
@@ -435,11 +438,12 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
             Toast.makeText(this, "請確認欄位是否有填寫", Toast.LENGTH_SHORT).show();
         }else if (Common.networkConnected(this)) {
             String url = Common.URL + servlet;
-            int memberId = 2;
+
             User_Profile newuserprofile = new User_Profile( memberId,email, password, userName,selfIntroduction, vipStatus);
             String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "update");
+            jsonObject.addProperty("memberId", memberId);
             jsonObject.addProperty("userprofile", new Gson().toJson(newuserprofile));
             jsonObject.addProperty("imageBase64", imageBase64);
             int count = 0;

@@ -14,7 +14,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
     lintOptions {
@@ -27,7 +29,7 @@ android {
             keyAlias 'key'
             keyPassword 'qwer1234'
             storePassword 'qwer1234'
-            storeFile file('../../keystore')
+            storeFile file('/Users/juiyingchiu/Desktop/MaPle2/MaPle/keystore')
         }
         release {
             keyAlias 'key'

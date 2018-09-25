@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -83,7 +84,9 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     private CommonTask insertTask;
     private HashMap<String,Integer> resultMap = new HashMap<>();
     private int postId;
-    private int memberId = 2;
+    private int memberId;
+    SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+            MODE_PRIVATE);
 
 //    private GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
 //        @Override
@@ -113,6 +116,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpost);
+        memberId = Integer.valueOf(pref.getString("MemberId",""));
         handleView();
 
 
@@ -134,6 +138,8 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         btcancel.setOnClickListener(this);
 //        btcurrent.setOnClickListener(this);
         btmap.setOnClickListener(this);
+
+
 
     }
 
@@ -520,5 +526,13 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (insertTask != null) {
+            insertTask.cancel(true);
+        }
+    }
 }
 

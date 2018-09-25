@@ -40,24 +40,22 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
     private byte[] profileIcon;
     private CommonTask getPostTask;
     private PostImageTask getPostImageTask;
-    private int memberId = 2;
+    private int memberId;
     private CommonTask deletePostTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.my_page_post);
         super.onCreate(savedInstanceState);
-//        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
-//                MODE_PRIVATE);
-//        memberId = Integer.valueOf(pref.getString("MemberId",""));
-//        Log.i("singlePost sharepref", pref.getString("MemberId",""));
+        SharedPreferences sharedPreferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        memberId = Integer.parseInt(sharedPreferences.getString("MemberId", ""));
         handleView();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             postId = bundle.getInt("postId");
             loadData(postId);
-            loadProfileIcon(2);
+            loadProfileIcon(memberId);
         }
 
 
@@ -77,7 +75,9 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
 
 
     public void onReturnClick(View view) {
-        int memberId = 2;
+        SharedPreferences sharedPreferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        memberId = Integer.valueOf(sharedPreferences.getString("MemberId", ""));
+
         Intent intent = new Intent(Mypage_SinglePost_Activity.this, MainActivity.class);
         intent.putExtra("memberId", memberId);
         startActivity(intent);
@@ -172,7 +172,7 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
 
                 }
                 //getPhotoIcon
-                int memberId = 2;
+
                 int imageIconSize = getResources().getDisplayMetrics().widthPixels / 4;
                 Bitmap iconBitmap = null;
                 try {
@@ -258,6 +258,19 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
         }
 
 
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (deletePostTask != null) {
+            deletePostTask.cancel(true);
+        }
+
+        if (getPostTask != null) {
+            getPostTask.cancel(true);
+        }
 
     }
 }

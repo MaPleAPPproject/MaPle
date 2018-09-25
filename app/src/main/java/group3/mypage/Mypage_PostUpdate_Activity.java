@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -61,6 +62,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
     private String address, adminArea, countryCode, countryName, district;
     private Bitmap picture;
     private byte[] image;
+    private  int memberId;
 
 
     @Override
@@ -88,6 +90,9 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
 //        btCurrent.setOnClickListener(this);
         btmap.setOnClickListener(this);
 //        imageView.setOnClickListener(this);
+        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        memberId = Integer.valueOf(pref.getString("MemberId",""));
 
 
     }
@@ -222,7 +227,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
                     if(adminArea==null){
                         district = address;
                     }else{
-                        district = countryName + "," + adminArea;
+                        district = countryName  + adminArea;
 
                     }
                         tvLocation.setText(district);
@@ -432,6 +437,21 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
             }
         });
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (updateTask != null) {
+            updateTask.cancel(true);
+        }
+
+        if (getPostTask != null) {
+            getPostTask.cancel(true);
+        }
+    }
+
+
 }
 
 

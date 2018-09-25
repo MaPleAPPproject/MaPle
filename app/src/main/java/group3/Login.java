@@ -105,8 +105,7 @@ public class Login extends AppCompatActivity {
 
 
 
-        btfb = (Button) findViewById(R.id.btfb);
-        btgplus = (Button) findViewById(R.id.btgplus);
+
         btlogin = (Button) findViewById(R.id.btlogin);
         btsignup = (Button) findViewById(R.id.btsignup);
         etloemail = (EditText) findViewById(R.id.etloemail);
@@ -114,8 +113,7 @@ public class Login extends AppCompatActivity {
 
         btsignup.setOnClickListener(listener);
         btlogin.setOnClickListener(listener);
-        btgplus.setOnClickListener(listener);
-        btfb.setOnClickListener(listener);
+
     }
 
     @Override
@@ -156,8 +154,8 @@ public class Login extends AppCompatActivity {
             String jsonOut = jsonObject.toString();
             userValidTask = new AccountTask(url, jsonOut);
             try {
-                 String result = "2";
-//                String result = userValidTask.execute().get();
+//                 String result = "2";
+                String result = userValidTask.execute().get();
                 if (result.equals("0")) {
                     Toast toast = Toast.makeText(Login.this, "查無此帳號", Toast.LENGTH_SHORT);
                     toast.show();

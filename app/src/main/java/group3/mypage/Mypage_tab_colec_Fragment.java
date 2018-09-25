@@ -1,6 +1,7 @@
 package group3.mypage;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,6 +33,8 @@ public class Mypage_tab_colec_Fragment extends Fragment {
     private static final String TAG = "MypagetabcolecFragment";
     private List<Postdetail> postdetail;
     private CommonTask pictureGetTopTask;
+
+
 
 
     @Nullable

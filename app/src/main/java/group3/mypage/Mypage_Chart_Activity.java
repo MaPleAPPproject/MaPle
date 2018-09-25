@@ -31,9 +31,11 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
     private CommonTask visitedTask;
     private HashSet<String> countryCodeSet = new HashSet<>();
     private GeoMapView geoMapView;
-    private int memberId = 2;
+    private int memberId;
     private HashMap<String, Integer> visitedCount;
     private TextView tvresult, tvresultasia, tvresulteurope, tvresultnorthamerica, tvresultsouthamerica, tvresultafrica, tvresultoceania;
+    private SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+            MODE_PRIVATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +66,8 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
         tvresultsouthamerica = findViewById(R.id.tvresultsouthamerica);
         tvresultafrica = findViewById(R.id.tvresultafrica);
         tvresultoceania = findViewById(R.id.tvresultoceania);
-//        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
-//                MODE_PRIVATE);
-//        memberId = Integer.valueOf(pref.getString("MemberId",""));
+
+        memberId = Integer.valueOf(pref.getString("MemberId",""));
 
 
 
