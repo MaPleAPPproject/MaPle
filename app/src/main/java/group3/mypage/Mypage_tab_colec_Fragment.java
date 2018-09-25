@@ -29,14 +29,16 @@ import group3.Postdetail;
 import group3.explore.ExploreFragment;
 
 public class Mypage_tab_colec_Fragment extends Fragment {
-    private static final String TAG = "Mypage_tab_colec_Fragment";
+    private static final String TAG = "MypagetabcolecFragment";
     private List<Postdetail> postdetail;
     private CommonTask pictureGetTopTask;
+
 
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_collection, container, false);
         handleviews(view);
+        showAllPosts();
         return view;
 
     }
@@ -52,7 +54,7 @@ public class Mypage_tab_colec_Fragment extends Fragment {
             String url = Common.URL + "/PictureServlet";
             List<Picture> picturestop = null;
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getTop");
+            jsonObject.addProperty("action", "getAllPost");
             String jsonOut = jsonObject.toString();
             pictureGetTopTask = new CommonTask(url, jsonOut);
             try {

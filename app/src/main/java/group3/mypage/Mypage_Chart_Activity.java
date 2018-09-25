@@ -1,8 +1,10 @@
 package group3.mypage;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.motion.utils.Oscillator;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -24,7 +26,7 @@ import java.util.Set;
 
 import group3.Common;
 
-public class Mypage_Chart_Activity extends Activity {
+public class Mypage_Chart_Activity extends AppCompatActivity {
 
     private CommonTask visitedTask;
     private HashSet<String> countryCodeSet = new HashSet<>();
@@ -38,6 +40,7 @@ public class Mypage_Chart_Activity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chartlayout);
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
         handleView();
         getVisitedStatic(memberId);
         geoMapView = (GeoMapView) findViewById(R.id.geoMap);
@@ -61,6 +64,9 @@ public class Mypage_Chart_Activity extends Activity {
         tvresultsouthamerica = findViewById(R.id.tvresultsouthamerica);
         tvresultafrica = findViewById(R.id.tvresultafrica);
         tvresultoceania = findViewById(R.id.tvresultoceania);
+//        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+//                MODE_PRIVATE);
+//        memberId = Integer.valueOf(pref.getString("MemberId",""));
 
 
 

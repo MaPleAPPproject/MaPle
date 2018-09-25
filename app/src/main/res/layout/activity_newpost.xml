@@ -7,10 +7,10 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/rtLayout"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_width="300dp"
+        android:layout_height="280dp"
         android:layout_gravity="top"
-        android:layout_margin="35dp"
+        android:layout_margin="15dp"
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/layoutpost"
@@ -19,89 +19,105 @@
 
         <ImageView
             android:id="@+id/ibPhoto"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:padding="10dp"
+            android:padding="6dp"
             android:onClick="onPhotoClick" />
 
 
 
     </RelativeLayout>
-
     <LinearLayout
-        android:id="@+id/rl01"
-        android:layout_width="match_parent"
+        android:id="@+id/linerlayout_location"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rtLayout"
-        android:layout_marginTop="-20dp">
-
-
-
-        <Button
-            android:id="@+id/btcurrent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:src="@drawable/button_shape"
-            android:text="@string/current" />
-
-        <Button
-            android:id="@+id/btmap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/button_shape"
-            android:text="@string/map"/>
-
-
-
-
-
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_below="@+id/rl01"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true">
 
         <ImageView
             android:id="@+id/ivMarker"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="40dp"
+            android:layout_marginTop="7dp"
+
             android:src="@drawable/icon_marker" />
+
         <TextView
             android:id="@+id/tvLocation"
-            android:layout_width="250dp"
-            android:layout_height="36dp" />
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+
+            />
+
+        <Button
+            android:id="@+id/btmap"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:src="@drawable/button_shape"
+            android:text="@string/map" />
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/rl01"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/linerlayout_location"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="5dp">-->
+
+
+        <!--<Button-->
+            <!--android:id="@+id/btcurrent"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginRight="5dp"-->
+            <!--android:src="@drawable/button_shape"-->
+            <!--android:text="@string/current" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btmap1"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:src="@drawable/button_shape"-->
+            <!--android:text="@string/map" />-->
+
+
+
+
+
+
+    <!--</LinearLayout>-->
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl01"
-        android:layout_margin="20dp">
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+
+        android:layout_below="@id/linerlayout_location"
+        >
 
         <EditText
             android:id="@+id/etComment"
-            android:layout_width="350dp"
-            android:layout_height="160dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_width="354dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
             android:background="@drawable/layoutpost"
+
             android:gravity="top"
             android:hint="@string/what_s_new"
             android:paddingLeft="10dp"
             android:paddingTop="10dp" />
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

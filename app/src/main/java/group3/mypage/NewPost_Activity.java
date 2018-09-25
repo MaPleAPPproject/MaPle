@@ -68,7 +68,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     private Bitmap picture;
     private Intent intent;
     private byte[] image;
-    private int memberId;
+
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
     private GoogleMap map;
@@ -83,7 +83,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     private CommonTask insertTask;
     private HashMap<String,Integer> resultMap = new HashMap<>();
     private int postId;
-    private String display;
+    private int memberId = 2;
 
 //    private GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
 //        @Override
@@ -125,13 +125,14 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         btsend = findViewById(R.id.btSend);
         btcancel = findViewById(R.id.btcancel);
         ibPhoto.setImageResource(R.drawable.addimage);
-        btcurrent = findViewById(R.id.btcurrent);
+
         btmap = findViewById(R.id.btmap);
         etComment = findViewById(R.id.etComment);
         tvLocation = findViewById(R.id.tvLocation);
+        tvLocation.setVisibility(View.GONE);
         btsend.setOnClickListener(this);
         btcancel.setOnClickListener(this);
-        btcurrent.setOnClickListener(this);
+//        btcurrent.setOnClickListener(this);
         btmap.setOnClickListener(this);
 
     }
@@ -141,6 +142,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btSend:
+
                 insert(memberId);
                 Bundle bundle = new Bundle();
                 bundle.putInt("postId", postId);
@@ -158,7 +160,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
 
                 break;
 
-            case R.id.btcurrent:
+//            case R.id.btcurrent:
 //                LocationManager locationManager = (LocationManager) getSystemService(Activity.LOCATION_SERVICE);
 //                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 //                    Toast.makeText(this, "請允許使用GPS服務", Toast.LENGTH_LONG).show();
@@ -172,7 +174,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
 //
 
 
-                break;
+//                break;
 
             case R.id.btmap:
                 Intent mapIntent = new Intent(this, MapLocation.class);
@@ -247,9 +249,10 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     ibPhoto.setEnabled(true);
 
-                    Toast.makeText(this, "請同意使用本機相機和讀取權限", Toast.LENGTH_SHORT).show();
+
                 } else {
                     ibPhoto.setEnabled(false);
+                    Toast.makeText(this, "請同意使用本機相機和讀取權限", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 break;
@@ -285,57 +288,110 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
+        switch (requestCode) {
+            case REQUEST_TAKE_PICTURE:
+                Log.e("take picture", "contenturi = " + contentUri);
+                crop(contentUri);
 
-            switch (requestCode) {
-                case REQUEST_TAKE_PICTURE:
-                    crop(contentUri);
+                break;
+            case REQUEST_PICK_PICTURE:
+                Uri uri = data.getData();
+                Log.e("pick picture", "uri = " + uri);
+                crop(uri);
+                break;
 
-                    break;
+            case REQUEST_CROP_PICTURE:
+                Log.e(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
+                try {
+                    picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
+                    Bitmap downSizePicture = Common.downSize(picture, 512);
+                    ibPhoto.setImageBitmap(downSizePicture);
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    downSizePicture.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    image = out.toByteArray();
 
-                case REQUEST_PICK_PICTURE:
-                    Uri uri = data.getData();
-                    crop(uri);
-                    break;
-                case REQUEST_CROP_PICTURE:
-                    try {
-                        picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
-                        Bitmap downSizePicture = Common.downSize(picture, 512);
-                        ibPhoto.setImageBitmap(downSizePicture);
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        downSizePicture.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        image = out.toByteArray();
+                } catch (FileNotFoundException e) {
+                    Log.e(TAG, e.toString());
+                }
+                break;
 
-                    } catch (FileNotFoundException e) {
-                        Log.e(TAG, e.toString());
+            case REQUEST_GET_LOCATION:
+
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    latitude = bundle.getDouble("latitude");
+                    longitude = bundle.getDouble("longitude");
+                    address = bundle.getString("address");
+                    adminArea = bundle.getString("adminArea");
+                    countryCode = bundle.getString("countryCode");
+                    countryName = bundle.getString("countryName");
+//                    district = bundle.getString("district");
+                    if(adminArea==null){
+                        district = address;
+                    }else{
+                        district = countryName + "," + adminArea;
                     }
-                    break;
-
-                case REQUEST_GET_LOCATION:
-
-                    Bundle bundle = data.getExtras();
-                    if (bundle != null) {
-                        latitude = bundle.getDouble("latitude");
-                        longitude = bundle.getDouble("longitude");
-                        address = bundle.getString("address");
-                        adminArea = bundle.getString("adminArea");
-                        countryCode = bundle.getString("countryCode");
-                        countryName = bundle.getString("countryName");
-                        district = bundle.getString("district");
-                        display = countryName + adminArea;
-                        tvLocation.setText(display);
+                    tvLocation.setText(district);
+                    tvLocation.setVisibility(View.VISIBLE);
 
 
-                    } else
-                        Toast.makeText(this, "bundle failed", Toast.LENGTH_SHORT);
+                } else
+
+                    Toast.makeText(this, "bundle failed", Toast.LENGTH_SHORT);
 
 
-                default:
-            }
+            default:
         }
+
+//        if (resultCode == RESULT_OK) {
+//
+//            switch (requestCode) {
+//                case REQUEST_TAKE_PICTURE:
+//                    Log.e("take picture", "contenturi = " + contentUri);
+//                    crop(contentUri);
+//
+//                    break;
+//
+//                case REQUEST_CROP_PICTURE:
+//                    Log.e(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
+//                    try {
+//                        picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
+//                        Bitmap downSizePicture = Common.downSize(picture, 512);
+//                        ibPhoto.setImageBitmap(downSizePicture);
+//                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                        downSizePicture.compress(Bitmap.CompressFormat.JPEG, 100, out);
+//                        image = out.toByteArray();
+//
+//                    } catch (FileNotFoundException e) {
+//                        Log.e(TAG, e.toString());
+//                    }
+//                    break;
+//
+//                case REQUEST_GET_LOCATION:
+//
+//                    Bundle bundle = data.getExtras();
+//                    if (bundle != null) {
+//                        latitude = bundle.getDouble("latitude");
+//                        longitude = bundle.getDouble("longitude");
+//                        address = bundle.getString("address");
+//                        adminArea = bundle.getString("adminArea");
+//                        countryCode = bundle.getString("countryCode");
+//                        countryName = bundle.getString("countryName");
+//                        district = bundle.getString("district");
+//                        display = countryName + adminArea;
+//                        tvLocation.setText(display);
+//
+//
+//                    } else
+//                        Toast.makeText(this, "bundle failed", Toast.LENGTH_SHORT);
+//
+//
+//                default:
+//            }
+//        }
     }
 
-    private void crop(Uri srcImageUri) {
+    public void crop(Uri srcImageUri) {
         File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         file = new File(file, "picture_cropped.jpg");
         croppedImageUri = Uri.fromFile(file);
@@ -411,10 +467,10 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
             NewPost locationTable = new NewPost(countryCode, address, district, longitude, latitude);
             String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "update");
+            jsonObject.addProperty("action", "insert");
             jsonObject.addProperty("memberId", memberId);
             jsonObject.addProperty("locationTable",new Gson().toJson(locationTable));
-            jsonObject.addProperty("commentForPicture", comment);
+            jsonObject.addProperty("comment", comment);
             jsonObject.addProperty("imageBase64", imageBase64);
             String jsonOut = jsonObject.toString();
             insertTask = new CommonTask(url, jsonOut);
@@ -434,6 +490,8 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
                     switch (result){
                         case "postId":
                             postId =resultMap.get(result);
+                            Log.e("resultMap.postId = ", "resultMap.postId = " + postId);
+
                             break;
                         case "pictureCount":
                             int pictureCount =resultMap.get(result);

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
@@ -61,6 +62,7 @@ public class Login extends AppCompatActivity {
                         if (isLogin(email,password)) {
                             SharedPreferences preferences = getSharedPreferences(
                                     Common.PREF_FILE, MODE_PRIVATE);
+                            Log.e(TAG, "MemberId = " +memberid );
                             preferences.edit().putBoolean("login", true)
                                     .putString("MemberId",memberid)
                                     .putString("Email", email)
@@ -154,7 +156,8 @@ public class Login extends AppCompatActivity {
             String jsonOut = jsonObject.toString();
             userValidTask = new AccountTask(url, jsonOut);
             try {
-                String result = userValidTask.execute().get();
+                 String result = "2";
+//                String result = userValidTask.execute().get();
                 if (result.equals("0")) {
                     Toast toast = Toast.makeText(Login.this, "查無此帳號", Toast.LENGTH_SHORT);
                     toast.show();

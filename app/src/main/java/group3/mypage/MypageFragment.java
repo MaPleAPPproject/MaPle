@@ -43,7 +43,7 @@ public class MypageFragment extends Fragment {
     public MypageFragment() {
     }
 
-    ;
+
 
 
     @Nullable
@@ -186,9 +186,10 @@ public class MypageFragment extends Fragment {
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/User_profileServlet";
             User_Profile userProfiles = null;
+            int memberId =2 ;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findById");
-            jsonObject.addProperty("memberId", memberId);
+            jsonObject.addProperty("memberId", 2);
             String jsonOut = jsonObject.toString();
             getNameTask = new CommonTask(url, jsonOut);
             try {
@@ -210,6 +211,7 @@ public class MypageFragment extends Fragment {
 
             try {
                 bitmap = new ImageTask(url, memberId, imageSize, snapshot).execute().get();
+
 
             } catch (Exception e) {
                 Log.e(TAG, e.toString());

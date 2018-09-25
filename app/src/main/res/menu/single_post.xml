@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/newPost_modify"
+        android:icon="@drawable/icon_modify"
+        android:title="@string/title_modify"/>
+        <!--android:onClick="onUpdateClick"/>-->
+
+    <item
+        android:id="@+id/newPost_delete"
+        android:icon="@drawable/delete"
+        android:title="@string/title_delete"/>
+        <!--android:onClick="onDeleteClick"/>-->
+
+
+</menu>
