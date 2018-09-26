@@ -55,7 +55,7 @@
     <string name="map">Map</string>
     <string name="basic">Basic</string>
     <string name="premium">Premium</string>
-    <string name="hint_etLocationName">Your location</string>
+    <string name="hint_etLocationName">Your Location</string>
     <string name="btConfirm">Confirm</string>
     <string name="btbacktonewpost">confirm and Back</string>
     <string name="btback">Back</string>
@@ -65,12 +65,15 @@
     <string name="msg_NoFriendsFound">No friends</string>
     <string name="msg_NoNetwork">Please check network</string>
     <string name="msg_NoPost">This Posted dont exist</string>
-    <string name="title_update">Update</string>
     <string name="title_delete">Delete</string>
     <string name="title_modify">Modify</string>
-    <string name="btSubmit">Submit</string>
-    <string name="btok">Ok</string>
     <string name="yes">Yes</string>
-
+    <string name="invite">Invite</string>
+    <string name="msg_NoMatchFriendsFound">No match friends</string>
+    <string name="msg_RejectFriend">You have rejected!</string>
+    <string name="msg_RejectFriendFail">Fail to Reject</string>
+    <string name="msg_LikeFriendFail">Fail to Like</string>
+    <string name="msg_LikeFriend">You have liked!</string>
+    <string name="textTitle_Invite">Invite</string>
 </resources>
 

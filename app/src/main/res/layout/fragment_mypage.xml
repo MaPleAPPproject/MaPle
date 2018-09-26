@@ -16,9 +16,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_margin="10dp"
-            android:layout_weight="1"
+            android:orientation="vertical"
             >
 
             <ImageButton
@@ -26,8 +25,8 @@
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_margin="8dp"
-                android:padding="10dp"
-                android:background="#00000000"/>
+                android:background="#00000000"
+                android:padding="10dp"/>
 
             <TextView
                 android:id="@+id/tvusername"
@@ -37,81 +36,76 @@
                 android:text="Name"
                 android:textSize="18sp" />
         </LinearLayout>
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="10dp"
-            >
-
-            <ImageButton
-                android:id="@+id/btaddNewPost"
-                android:layout_width="wrap_content"
+            android:layout_gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/icon_addpost" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <ImageButton
+                    android:id="@+id/btaddNewPost"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/icon_addpost" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/addNewPost"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_mypage_map" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Visited"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/addNewPost"
-                android:gravity="center"
-                android:textSize="15sp" />
-        </LinearLayout>
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:layout_weight="1">
+                <ImageButton
+                    android:id="@+id/btChart"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_mypage_charts" />
 
-            <ImageButton
-                android:id="@+id/btMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/ic_mypage_map" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/charts"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Visited"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
-
-            <ImageButton
-                android:id="@+id/btChart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/ic_mypage_charts"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/charts"
-                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -121,20 +115,6 @@
         android:layout_height="wrap_content"
         android:background="?android:windowBackground"
         app:tabTextColor="@color/colorPrimary">
-
-        <!--<android.support.design.widget.TabItem-->
-            <!--android:id="@+id/tab"-->
-            <!--android:padding="10dp"-->
-            <!--android:text="Postdetail"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
-
-        <!--<android.support.design.widget.TabItem-->
-            <!--android:id="@id/tab"-->
-            <!--android:padding="10dp"-->
-            <!--android:text="Collection"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"/>-->
 
     </android.support.design.widget.TabLayout>
 

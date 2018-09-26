@@ -104,7 +104,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
             tvdate.setText(picture.getFormatedDate());
             tvcomment.setText(picture.getComment());
         } else {
-            Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
         }
         showdetail();
         tvname.setOnClickListener(new Button.OnClickListener() {
@@ -159,7 +159,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         }else {
                 DrawableCompat.setTint(btcollect.getDrawable(), ContextCompat.getColor(getContext(),
                         R.color.colorRed));
-                Toast.makeText(getActivity(), "already collected", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "already collected", Toast.LENGTH_SHORT).show();
         }
 //      收藏鍵(need to add update when leave/if else change color)
             tvlocation.setOnClickListener(new Button.OnClickListener() {

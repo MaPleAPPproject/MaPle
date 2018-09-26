@@ -63,28 +63,28 @@
 
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/rl01"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/linerlayout_location"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="5dp">-->
+    <!--android:id="@+id/rl01"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/linerlayout_location"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="5dp">-->
 
 
-        <!--<Button-->
-            <!--android:id="@+id/btcurrent"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_marginRight="5dp"-->
-            <!--android:src="@drawable/button_shape"-->
-            <!--android:text="@string/current" />-->
+    <!--<Button-->
+    <!--android:id="@+id/btcurrent"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginRight="5dp"-->
+    <!--android:src="@drawable/button_shape"-->
+    <!--android:text="@string/current" />-->
 
-        <!--<Button-->
-            <!--android:id="@+id/btmap1"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:src="@drawable/button_shape"-->
-            <!--android:text="@string/map" />-->
+    <!--<Button-->
+    <!--android:id="@+id/btmap1"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:src="@drawable/button_shape"-->
+    <!--android:text="@string/map" />-->
 
 
 
@@ -100,7 +100,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
-
         android:layout_below="@id/linerlayout_location"
         >
 
@@ -110,7 +109,6 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:background="@drawable/layoutpost"
-
             android:gravity="top"
             android:hint="@string/what_s_new"
             android:paddingLeft="10dp"
@@ -146,17 +144,3 @@
     </RelativeLayout>
 
 </RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

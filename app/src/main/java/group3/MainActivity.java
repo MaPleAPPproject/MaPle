@@ -1,8 +1,6 @@
 package group3;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,16 +8,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 
-
-import com.android.billingclient.api.BillingClient;
 
 import com.cp102group3maple.violethsu.maple.R;
 
@@ -29,7 +22,7 @@ import java.util.Map;
 
 import group3.explore.ExploreFragment;
 
-import group3.friend.FriendsList;
+import group3.friend.FriendsListFragment;
 import group3.mypage.MypageFragment;
 
 // need to debug mypage頁面一開始沒有tablayout
@@ -131,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavPagerAdapter adapter = new BottomNavPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MypageFragment());
         adapter.addFragment(new ExploreFragment());
-        adapter.addFragment(new FriendsList());
+        adapter.addFragment(new FriendsListFragment());
         viewPager.setAdapter(adapter);
     }
     public class BottomNavPagerAdapter extends FragmentPagerAdapter {

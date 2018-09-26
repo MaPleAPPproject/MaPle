@@ -1,11 +1,13 @@
 package group3.mypage;
 
-import android.app.Activity;
+
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.motion.utils.Oscillator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import group3.Common;
+import group3.MainActivity;
 
 public class Mypage_Chart_Activity extends AppCompatActivity {
 
@@ -34,15 +37,16 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
     private int memberId;
     private HashMap<String, Integer> visitedCount;
     private TextView tvresult, tvresultasia, tvresulteurope, tvresultnorthamerica, tvresultsouthamerica, tvresultafrica, tvresultoceania;
-    private SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
-            MODE_PRIVATE);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chartlayout);
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
+        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        memberId = Integer.valueOf(pref.getString("MemberId",""));
         handleView();
         getVisitedStatic(memberId);
         geoMapView = (GeoMapView) findViewById(R.id.geoMap);
@@ -67,7 +71,7 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
         tvresultafrica = findViewById(R.id.tvresultafrica);
         tvresultoceania = findViewById(R.id.tvresultoceania);
 
-        memberId = Integer.valueOf(pref.getString("MemberId",""));
+
 
 
 
@@ -214,6 +218,17 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
         if (visitedTask != null) {
             visitedTask.cancel(true);
         }
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(Mypage_Chart_Activity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+
     }
 
 

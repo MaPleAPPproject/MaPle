@@ -6,13 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="group3.friend.MatchActivity">
+    tools:context="group3.friend.InviteActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView1"
+        android:id="@+id/recyclerView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-
 
 </android.support.constraint.ConstraintLayout>

@@ -81,8 +81,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
     private CommonTask getProfileTask;
     private ImageTask Icontask;
     private String servlet = "/User_profileServlet";
-    private SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
-            MODE_PRIVATE);
+
 
 
     public Mypage_UserProfile_Activity () {
@@ -100,6 +99,9 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
+        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        memberId = Integer.valueOf(pref.getString("MemberId",""));
         handleView();
         loadProfiles(memberId);
 
@@ -116,7 +118,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         premium = findViewById(R.id.btPremium);
         ibPhotoIcon = findViewById(R.id.ibPhotoIcon);
         tvVipStatus = findViewById(R.id.tvStatusResult);
-        memberId = Integer.valueOf(pref.getString("MemberId",""));
+
 
 
     }
@@ -149,14 +151,14 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
                 etSelfIntro.setText(userProfiles.getSelfIntroduction());
                 int vipStatus = userProfiles.getVipStatus();
 
-                        switch(vipStatus){
-                            case 0:
-                                tvVipStatus.setText(R.string.basic);
-                            case 1:
-                                tvVipStatus.setText(R.string.premium);
-                                premium.setVisibility(View.GONE);
+                switch(vipStatus){
+                    case 0:
+                        tvVipStatus.setText(R.string.basic);
+                    case 1:
+                        tvVipStatus.setText(R.string.premium);
+                        premium.setVisibility(View.GONE);
 
-                        }
+                }
 
 
 
@@ -217,7 +219,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
 
 
 
-}
+    }
 
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -307,6 +309,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent premiumIntent = new Intent(Mypage_UserProfile_Activity.this, Payment.class);
                         startActivity(premiumIntent);
+                        finish();
 
 
 
@@ -484,7 +487,3 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity {
         }
     }
 }
-
-
-
-

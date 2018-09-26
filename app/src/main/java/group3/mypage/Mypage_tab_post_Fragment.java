@@ -83,10 +83,10 @@ public class Mypage_tab_post_Fragment extends Fragment {
                 }.getType();
                 pictures = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (pictures == null||pictures.isEmpty()) {
-                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
             }
             else {
                 rvPost.setAdapter(new Mypage_tab_post_Fragment.PostAdapter(pictures, contentview));
@@ -101,7 +101,7 @@ public class Mypage_tab_post_Fragment extends Fragment {
         if (bundle != null) {
             showAllPosts();
         } else {
-            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();
         }
         rvPost = view.findViewById(R.id.rvPost);
         rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
@@ -146,15 +146,15 @@ public class Mypage_tab_post_Fragment extends Fragment {
             final Picture picture = pictures.get(position);
             String url = Common.URL + "/PictureServlet";
             //發起PostTask 使用picture中的id取的圖檔資料
-            int id = picture.getPostid();
+            final int id = picture.getPostid();
             pictureImageTask = new PostTask(url, id, imageSize, myViewHolder.imageView);
             pictureImageTask.execute();
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(getActivity(),Explore_PostActivity.class);
+                    Intent intent =new Intent(getActivity(),Mypage_SinglePost_Activity.class);
                     Bundle bundle=new Bundle();
-                    bundle.putSerializable("picture", picture);
+                    bundle.putInt("postId", id);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }

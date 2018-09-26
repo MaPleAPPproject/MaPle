@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
@@ -19,8 +20,8 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Common {
 
-    public static String URL = "http://10.0.2.2:8080/MaPle";
-//    public static String URL = "http://192.168.197.12:8080/MaPle";
+//    public static String URL = "http://10.0.2.2:8080/MaPle";
+    public static String URL = "http://192.168.50.224:8080/MaPle";
     public final static String PREF_FILE = "preference";
     private final static String DEFAULT_NAME = "";
     private final static String DEFAULT_EMAIL = "";
@@ -105,6 +106,8 @@ public class Common {
     public SharedPreferences getSharedPreferences(String name, int mode) {
         return getSharedPreferences(PREF_FILE, MODE_PRIVATE);
     }
-
+    public static void showToast(Context context, int messageResId) {
+        Toast.makeText(context, messageResId, Toast.LENGTH_SHORT).show();
+    }
 
 }

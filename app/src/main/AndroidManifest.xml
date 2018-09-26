@@ -4,9 +4,9 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.vending.BILLING" />
-    <!--允許應用程式透過wifi或行動網路定位-->
+    <!-- 允許應用程式透過wifi或行動網路定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!--允許應用程式透過GPS定位-->
+    <!-- 允許應用程式透過GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!--
@@ -19,12 +19,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.android.vending.BILLING" />
     <!-- 使用Context.getExternalFilesDir(String)儲存拍照照片不需要寫入權限，但API 19以前需要讀的權限 -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
-
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -48,24 +46,21 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_path" />
         </provider>
+
         <activity
             android:name="group3.Login"
-            android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="MaPle"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="group3.MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name" />
         <activity android:name="group3.explore.Explore_PostActivity" />
-        <activity android:name="group3.friend.ChatActivity" />
         <activity android:name="group3.friend.Match" />
         <activity android:name="group3.friend.Payment" />
         <activity android:name="group3.friend.Receipt" />
@@ -76,6 +71,7 @@
         <activity android:name="group3.mypage.Mypage_UserProfile_Activity" />
         <activity android:name="group3.mypage.MapLocation" />
         <activity android:name="group3.mypage.Mypage_PostUpdate_Activity" />
+        x
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -104,14 +100,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-
-
         <activity
             android:name="group3.Signup"
             android:label="@string/title_activity_signup"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="group3.friend.MatchActivity" />
+        <activity android:name="group3.friend.InviteActivity"></activity>
     </application>
 
 </manifest>

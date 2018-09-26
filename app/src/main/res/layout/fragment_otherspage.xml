@@ -34,38 +34,29 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tvotherName"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:padding="5dp"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/tvvipicon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:gravity="end" />
-                <!--android:text="VIP"-->
-                android:textColor="@color/colorRed"/>
-        </LinearLayout>
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvotherName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:padding="5dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvvipicon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorRed"/>
+            </LinearLayout>
             <TextView
                 android:id="@+id/tvemail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:padding="5dp"
-                android:textSize="15sp" />
-            <TextView
-                android:id="@+id/tvotherselfintro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -75,6 +66,16 @@
 
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvotherselfintro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"/>
+    </LinearLayout>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout1"
@@ -82,21 +83,6 @@
         android:layout_height="wrap_content"
         android:background="@color/colorBackground"
         app:tabTextColor="@color/colorPrimary">
-
-        <!--<android.support.design.widget.TabItem-->
-            <!--android:id="@+id/tab1"-->
-            <!--android:padding="10dp"-->
-            <!--android:text="Postgrid"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
-
-        <!--<android.support.design.widget.TabItem-->
-            <!--android:id="@id/tab1"-->
-            <!--android:padding="10dp"-->
-            <!--android:text="Postcard"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"/>-->
-
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager

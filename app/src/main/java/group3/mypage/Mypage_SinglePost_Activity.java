@@ -47,8 +47,10 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.my_page_post);
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        memberId = Integer.parseInt(sharedPreferences.getString("MemberId", ""));
+        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        memberId = Integer.valueOf(pref.getString("MemberId",""));
+
         handleView();
 
         Bundle bundle = getIntent().getExtras();
@@ -75,8 +77,7 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
 
 
     public void onReturnClick(View view) {
-        SharedPreferences sharedPreferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        memberId = Integer.valueOf(sharedPreferences.getString("MemberId", ""));
+
 
         Intent intent = new Intent(Mypage_SinglePost_Activity.this, MainActivity.class);
         intent.putExtra("memberId", memberId);
@@ -98,6 +99,7 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
                 Intent modifyIntent = new Intent(this,Mypage_PostUpdate_Activity.class);
                 modifyIntent.putExtra("postId", postId);
                 startActivity(modifyIntent);
+                finish();
 
 
                 return true;
@@ -109,6 +111,9 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         deletePost(postId);
+                        Intent intent = new Intent(Mypage_SinglePost_Activity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 });
                 builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -274,6 +279,3 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
 
     }
 }
-
-
-

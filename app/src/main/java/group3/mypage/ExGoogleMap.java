@@ -93,8 +93,12 @@ public class ExGoogleMap extends FragmentActivity implements OnMapReadyCallback 
 
     private void setUpMap() {
         if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
+//            mMap.setMyLocationEnabled(true);
         }
+        else{
+            ActivityCompat.requestPermissions(ExGoogleMap.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},1);
+        }
+//        mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 

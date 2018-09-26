@@ -40,7 +40,7 @@ public class FriendsFragment extends Fragment {
 
  /*   // 攔截user連線或斷線的Broadcast
     private void registerFriendStateReceiver() {
-        FriendsList activity = (FriendsList) getActivity();
+        FriendsListFragment activity = (FriendsListFragment) getActivity();
         IntentFilter openFilter = new IntentFilter("open");
         IntentFilter closeFilter = new IntentFilter("close");
         FriendStateReceiver friendStateReceiver = new FriendStateReceiver(activity);
@@ -49,8 +49,8 @@ public class FriendsFragment extends Fragment {
     }
     // 攔截user連線或斷線的broadcast，並在RecyclerView呈現
     private class FriendStateReceiver extends BroadcastReceiver {
-        FriendsList activity;
-        FriendStateReceiver(FriendsList activity) {
+        FriendsListFragment activity;
+        FriendStateReceiver(FriendsListFragment activity) {
             this.activity = activity;
         }
 

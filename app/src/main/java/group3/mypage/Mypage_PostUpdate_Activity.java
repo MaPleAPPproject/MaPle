@@ -69,6 +69,9 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpost);
+        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        memberId = Integer.valueOf(pref.getString("MemberId",""));
         handleViews();
         Intent intent = getIntent();
         postId = intent.getIntExtra("postId", 0);
@@ -90,9 +93,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
 //        btCurrent.setOnClickListener(this);
         btmap.setOnClickListener(this);
 //        imageView.setOnClickListener(this);
-        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
-                MODE_PRIVATE);
-        memberId = Integer.valueOf(pref.getString("MemberId",""));
+
 
 
     }
@@ -109,7 +110,13 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btSend:
+                if ((image == null) && (photo == null )) {
 
+                    Toast.makeText(this, "請確認欄位是否有空白", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(image == null){
+
+                }
                 updatePost(postId);
 //                Bundle bundle = new Bundle();
 //                bundle.putInt("postId", postId);
@@ -188,24 +195,40 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
         switch (requestCode) {
             case REQUEST_TAKE_PICTURE:
                 Log.e("take picture", "contenturi = " + contentUri);
-                crop(contentUri);
+                try {
+                    crop(contentUri);
+                }catch (NullPointerException npe){
+                    npe.toString();
+                }finally {
+
+                }
 
                 break;
             case REQUEST_PICK_PICTURE:
-                Uri uri = data.getData();
-                Log.e("pick picture", "uri = " + uri);
-                crop(uri);
+                try{
+                    Uri uri = data.getData();
+                    Log.e("pick picture", "uri = " + uri);
+                    crop(uri);
+                }catch (NullPointerException npe){
+                    npe.toString();
+                }finally {
+
+                }
                 break;
 
             case REQUEST_CROP_PICTURE:
                 Log.e(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
                 try {
-                    picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
-                    Bitmap downSizePicture = Common.downSize(picture, 512);
-                    imageView.setImageBitmap(downSizePicture);
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    downSizePicture.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    image = out.toByteArray();
+                    if(croppedImageUri != null) {
+                        picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
+                        Bitmap downSizePicture = Common.downSize(picture, 512);
+                        imageView.setImageBitmap(downSizePicture);
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        downSizePicture.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        image = out.toByteArray();
+                    }else{
+                        return;
+                    }
 
                 } catch (FileNotFoundException e) {
                     Log.e(TAG, e.toString());
@@ -214,8 +237,9 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
 
             case REQUEST_GET_LOCATION:
 
-                Bundle bundle = data.getExtras();
-                if (bundle != null) {
+
+                try{
+                    Bundle bundle = data.getExtras();
                     latitude = bundle.getDouble("latitude");
                     longitude = bundle.getDouble("longitude");
                     address = bundle.getString("address");
@@ -223,20 +247,22 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
                     countryCode = bundle.getString("countryCode");
                     countryName = bundle.getString("countryName");
 //                    district = bundle.getString("district");
-
-                    if(adminArea==null){
+                    if (adminArea == null) {
                         district = address;
-                    }else{
-                        district = countryName  + adminArea;
-
+                    } else {
+                        district = countryName + "," + adminArea;
                     }
-                        tvLocation.setText(district);
-                        tvLocation.setVisibility(View.VISIBLE);
+                    tvLocation.setText(district);
+                    tvLocation.setVisibility(View.VISIBLE);
+                }catch(Exception e){
+                    e.toString();
+                }finally {
 
-
-                } else
-
-                    Toast.makeText(this, "bundle failed", Toast.LENGTH_SHORT);
+                    if (tvLocation == null) {
+                        Toast.makeText(this, "You didnt pick any location", Toast.LENGTH_SHORT);
+                    }
+                }
+                break;
 
 
             default:
@@ -318,6 +344,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
 
                 etComment.setText(post.getComment());
                 tvLocation.setText(post.getDistrict());
+                tvLocation.setVisibility(View.VISIBLE);
                 //getPostImage
                 int imageSize = getResources().getDisplayMetrics().widthPixels / 3 * 2;
                 Bitmap bitmap = null;
@@ -333,7 +360,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
                     photo = out.toByteArray();
 
                 } else {
-                    Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -347,20 +374,26 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
 
     public void updatePost(int postId) {
 
-        if (image == null) {
-            Toast.makeText(this, R.string.no_Image, Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "請確認欄位是否有空白", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (Common.networkConnected(this)) {
+
+        if (Common.networkConnected(this)) {
             String url = Common.URL + "/CpostServlet";
             String comment = etComment.getText().toString().trim();
             NewPost updatePost = new NewPost(comment, countryCode, address, district, longitude, latitude);
-            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "update");
-            jsonObject.addProperty("postId", postId);
-            jsonObject.addProperty("updatePost", new Gson().toJson(updatePost));
-            jsonObject.addProperty("imageBase64", imageBase64);
+            if(image != null){
+                String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+                jsonObject.addProperty("action", "update");
+                jsonObject.addProperty("postId", postId);
+                jsonObject.addProperty("updatePost", new Gson().toJson(updatePost));
+                jsonObject.addProperty("imageBase64", imageBase64);
+            }else{
+                String imageBase64 = Base64.encodeToString(photo, Base64.DEFAULT);
+                jsonObject.addProperty("action", "update");
+                jsonObject.addProperty("postId", postId);
+                jsonObject.addProperty("updatePost", new Gson().toJson(updatePost));
+                jsonObject.addProperty("imageBase64", imageBase64);
+            }
+
             String jsonOut = jsonObject.toString();
             updateTask = new CommonTask(url, jsonOut);
             int count = 0;
@@ -380,6 +413,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
             Intent intent = new Intent(this, Mypage_SinglePost_Activity.class);
             intent.putExtra("postId", postId);
             startActivity(intent);
+            finish();
 
 
         } else
@@ -453,5 +487,3 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
 
 
 }
-
-

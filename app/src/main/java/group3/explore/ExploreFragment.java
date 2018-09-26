@@ -56,6 +56,7 @@ public class ExploreFragment extends Fragment {
     private PostAdapter adpter;
     List<Picture> picturelist = new ArrayList<>();
     private TextView tvrec;
+    private List<Picture> pictures;
 
 
     //  當點擊照片時會進入另一個activity,用來存放aveInstanceState資訊
@@ -114,7 +115,7 @@ public class ExploreFragment extends Fragment {
     private void showAllPosts() {
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/PictureServlet";
-            List<Picture> pictures = null;
+            pictures = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
             String jsonOut = jsonObject.toString();
@@ -133,7 +134,6 @@ public class ExploreFragment extends Fragment {
             else {
                 adpter=new PostAdapter(pictures, getActivity());
                 rvRecom.setAdapter(adpter);
-                picturelist.addAll(pictures);
             }
         } else {
             Toast.makeText(contentview, R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
@@ -168,18 +168,6 @@ public class ExploreFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_exploretest,container, false);
-//        if ((savedInstanceState != null) && (savedInstanceState.getSerializable("picture") != null)) {
-//            savedInstanceState.getSerializable("picture"); }
-        swipeRefreshLayout =
-                view.findViewById(R.id.swiprefreshlayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                showAllPosts();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
         handleviews(view);
         return view;
 
@@ -262,6 +250,8 @@ public class ExploreFragment extends Fragment {
         @Override
         public boolean onQueryTextChange(String newText) {
             Log.d(TAG, "onQueryTextChange");
+            picturelist.clear();
+            picturelist.addAll(pictures);
             final  List<Picture> filtermodelist=filter(picturelist,newText);
                 adpter.setfilter(filtermodelist);
             return true;

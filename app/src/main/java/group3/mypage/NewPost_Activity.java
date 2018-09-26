@@ -41,6 +41,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -85,8 +86,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     private HashMap<String,Integer> resultMap = new HashMap<>();
     private int postId;
     private int memberId;
-    SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
-            MODE_PRIVATE);
+
 
 //    private GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
 //        @Override
@@ -116,6 +116,8 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpost);
+        SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
         memberId = Integer.valueOf(pref.getString("MemberId",""));
         handleView();
 
@@ -297,13 +299,26 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         switch (requestCode) {
             case REQUEST_TAKE_PICTURE:
                 Log.e("take picture", "contenturi = " + contentUri);
-                crop(contentUri);
+                try {
+                    crop(contentUri);
+                }catch (NullPointerException npe){
+                    npe.toString();
+                }finally {
+
+
+                }
 
                 break;
             case REQUEST_PICK_PICTURE:
-                Uri uri = data.getData();
-                Log.e("pick picture", "uri = " + uri);
-                crop(uri);
+                try{
+                    Uri uri = data.getData();
+                    Log.e("pick picture", "uri = " + uri);
+                    crop(uri);
+                }catch (NullPointerException npe){
+                    npe.toString();
+                }finally {
+
+                }
                 break;
 
             case REQUEST_CROP_PICTURE:
@@ -323,8 +338,8 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
 
             case REQUEST_GET_LOCATION:
 
-                Bundle bundle = data.getExtras();
-                if (bundle != null) {
+                try{
+                    Bundle bundle = data.getExtras();
                     latitude = bundle.getDouble("latitude");
                     longitude = bundle.getDouble("longitude");
                     address = bundle.getString("address");
@@ -332,18 +347,24 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
                     countryCode = bundle.getString("countryCode");
                     countryName = bundle.getString("countryName");
 //                    district = bundle.getString("district");
-                    if(adminArea==null){
+                    if (adminArea == null) {
                         district = address;
-                    }else{
+                    } else {
                         district = countryName + "," + adminArea;
                     }
                     tvLocation.setText(district);
                     tvLocation.setVisibility(View.VISIBLE);
+                }catch(Exception e){
+                    e.toString();
+                }finally {
+
+                    if (tvLocation == null) {
+                        Toast.makeText(this, "You didnt pick any location", Toast.LENGTH_SHORT);
+                    }
+                }
+                break;
 
 
-                } else
-
-                    Toast.makeText(this, "bundle failed", Toast.LENGTH_SHORT);
 
 
             default:
@@ -534,5 +555,10 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
             insertTask.cancel(true);
         }
     }
-}
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+}
