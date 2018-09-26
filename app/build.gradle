@@ -29,7 +29,7 @@ android {
             keyAlias 'key'
             keyPassword 'qwer1234'
             storePassword 'qwer1234'
-            storeFile file('/Users/juiyingchiu/Desktop/MaPle2/MaPle/keystore')
+            storeFile file('../../keystore')
         }
         release {
             keyAlias 'key'

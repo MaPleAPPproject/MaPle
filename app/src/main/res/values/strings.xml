@@ -75,5 +75,7 @@
     <string name="msg_LikeFriendFail">Fail to Like</string>
     <string name="msg_LikeFriend">You have liked!</string>
     <string name="textTitle_Invite">Invite</string>
+    <string name="btSubmit">Submit</string>
+    <string name="btok">Ok</string>
 </resources>
 
