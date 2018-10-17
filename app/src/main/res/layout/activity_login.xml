@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#7EC2CB"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
     android:orientation="vertical"
     android:paddingLeft="50dp"
     android:paddingRight="50dp"
-    android:gravity="center"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     android:theme="@style/AppTheme.NoActionBar"
     tools:context="group3.Login">
 
@@ -32,14 +32,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:paddingLeft="5dp"
         android:background="@drawable/et_shape"
         android:gravity="center"
         android:hint="Email"
-        android:singleLine="true"
         android:inputType="textEmailAddress"
-        android:textColorHint="#CCCCCC"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
         android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
         android:textSize="30dp"
         android:textStyle="bold" />
 
@@ -48,14 +48,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:paddingLeft="5dp"
         android:background="@drawable/et_shape"
         android:gravity="center"
         android:hint="Password"
         android:inputType="textPassword"
+        android:paddingLeft="5dp"
         android:singleLine="true"
-        android:textColorHint="#CCCCCC"
         android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
         android:textSize="30dp"
         android:textStyle="bold" />
 
@@ -68,10 +68,10 @@
 
         <Button
             android:id="@+id/btlogin"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginRight="10dp"
+            android:layout_weight="1"
             android:background="@drawable/button_shape"
             android:text="Log In"
             android:textColor="#FFFFFF"
@@ -80,34 +80,14 @@
 
         <Button
             android:id="@+id/btsignup"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginLeft="10dp"
+            android:layout_weight="1"
             android:background="@drawable/button_shape"
             android:text="Sign Up"
             android:textColor="#FFFFFF"
             android:textSize="23dp"
             android:textStyle="bold" />
     </LinearLayout>
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:gravity="center">-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btfb"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:background="@drawable/fb" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btgplus"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_marginLeft="80dp"-->
-            <!--android:background="@drawable/gplus" />-->
-    <!--</LinearLayout>-->
 </LinearLayout>
