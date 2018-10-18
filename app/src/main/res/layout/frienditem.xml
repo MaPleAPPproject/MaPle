@@ -32,8 +32,7 @@
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/p01" />
+                    android:layout_height="150dp" />
             </LinearLayout>
 
             <LinearLayout

@@ -55,7 +55,7 @@ public class PostTask extends AsyncTask<Object, Integer, Bitmap> {
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
-            imageView.setImageResource(R.drawable.ig);
+            imageView.setImageResource(R.drawable.ic_navigation_explore);
         }
     }
     private Bitmap getRemoteImage(String url, String jsonOut) {

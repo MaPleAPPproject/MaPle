@@ -1,28 +1,36 @@
 package group3.explore;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,19 +52,20 @@ import static com.google.android.gms.common.util.ArrayUtils.contains;
 
 //注意fragment和activity呼叫server時間點不同
 public class ExploreFragment extends Fragment {
+    private ViewPager tabviewPager;
+    private TabLayout tabLayout;
     private static final String TAG = "ExploreFragment";
     private SearchView searchView;
-    private RecyclerView rvRecom;
-    private RecyclerView rvTop;
     private Context contentview;
-    private CommonTask pictureGetAllTask;
     private PostTask pictureImageTask;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private CommonTask pictureGetTopTask;
     private PostAdapter adpter;
-    List<Picture> picturelist = new ArrayList<>();
-    private TextView tvrec;
     private List<Picture> pictures;
+    private TabFragmenttop topFragment;
+    private TabFragmentRecom recFragment;
+    private TabFragmentLocation locFragment;
+    private CommonTask distinctTask;
+    private String[] dataArr;
+    ArrayList<String> distinctList =new ArrayList<>();
 
 
     //  當點擊照片時會進入另一個activity,用來存放aveInstanceState資訊
@@ -77,83 +86,58 @@ public class ExploreFragment extends Fragment {
         setHasOptionsMenu(true);
 
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        showAllPosts();
-        showTopPosts();
-    }
-    private void showTopPosts() {
-        if (Common.networkConnected(getActivity())) {
-            String url = Common.URL + "/PictureServlet";
-            List<Picture> picturestop = null;
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getTop");
-            String jsonOut = jsonObject.toString();
-            pictureGetTopTask = new CommonTask(url, jsonOut);
-            try {
-                String jsonIn = pictureGetTopTask.execute().get();
-                Type listType = new TypeToken<List<Picture>>() {
-                }.getType();
-                picturestop = new Gson().fromJson(jsonIn, listType);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (picturestop == null||picturestop.isEmpty()) {
-                Toast.makeText(contentview,R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
-            }
-            else {
-//                如果成功取得文字資料就將資料傳入adapter繼續後續處理
-//                若是adapter需要圖的話,則是在onBindViewHolder中發起imageTask
-                rvTop.setAdapter(new PostAdapter(picturestop, getActivity()));
-            }
-        } else {
-            Toast.makeText(contentview, R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
-        }
-
-    }
-    private void showAllPosts() {
-        if (Common.networkConnected(getActivity())) {
-            String url = Common.URL + "/PictureServlet";
-            pictures = null;
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
-            String jsonOut = jsonObject.toString();
-            pictureGetAllTask = new CommonTask(url, jsonOut);
-            try {
-                String jsonIn = pictureGetAllTask.execute().get();
-                Type listType = new TypeToken<List<Picture>>() {
-                }.getType();
-                pictures = new Gson().fromJson(jsonIn, listType);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (pictures == null||pictures.isEmpty()) {
-                Toast.makeText(contentview,R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
-            }
-            else {
-                adpter=new PostAdapter(pictures, getActivity());
-                rvRecom.setAdapter(adpter);
-            }
-        } else {
-            Toast.makeText(contentview, R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search, menu);
+        SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
+
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d(TAG, "onQueryTextChange");
+                PagerAdapter pagerAdapter = (PagerAdapter) tabviewPager
+                        .getAdapter();
+                Fragment viewPagerFragment =new Fragment();
+                for (int i = 0; i < pagerAdapter.getCount(); i++) {
+
+                    viewPagerFragment = (Fragment) tabviewPager
+                            .getAdapter().instantiateItem(tabviewPager, i);
+                    if (viewPagerFragment != null
+                            && viewPagerFragment.isAdded()) {
+
+                        if (viewPagerFragment instanceof TabFragmenttop) {
+                            topFragment = (TabFragmenttop) viewPagerFragment;
+                            if (topFragment != null) {
+                                topFragment.beginSearch(newText);
+                            }
+                        } else if (viewPagerFragment instanceof TabFragmentRecom) {
+                            recFragment = (TabFragmentRecom) viewPagerFragment;
+                            if (recFragment != null) {
+                                recFragment.beginSearch(newText);
+                            }
+                        } else if (viewPagerFragment instanceof TabFragmentLocation) {
+                            locFragment = (TabFragmentLocation) viewPagerFragment;
+                            if (locFragment != null) {
+                                locFragment.beginSearch(newText);
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+        };
         searchView.setOnQueryTextListener((SearchView.OnQueryTextListener) queryListener);
         final SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setDropDownBackgroundResource(android.R.color.background_light);
-        // Create a new ArrayAdapter and add data to search auto complete object.
-//        need to add connect from web
-        String dataArr[] = {"Japan" , "Korea" , "Taiwan", "Taipei", "New York", "China", "Thailand", "USA"};
+
         ArrayAdapter<String> districtAdapter = new ArrayAdapter<String>(contentview, android.R.layout.simple_dropdown_item_1line, dataArr);
         searchAutoComplete.setAdapter(districtAdapter);
 
-        // Listen to search view item on click event.
         searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int itemIndex, long id) {
@@ -163,24 +147,124 @@ public class ExploreFragment extends Fragment {
         });
     }
 
+    private void getDistinctList() {
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/PictureServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getDistinct");
+            String jsonOut = jsonObject.toString();
+            distinctTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = distinctTask.execute().get();
+                Type listType = new TypeToken<ArrayList<String>>() {
+                }.getType();
+                distinctList = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (distinctList == null||distinctList.isEmpty()) {
+                Toast.makeText(getActivity(),"貼文不存在",Toast.LENGTH_SHORT).show();
+            }
+            else {
+                dataArr=new String [distinctList.size()];
+                for(int i=0;i<distinctList.size();i++){
+                    dataArr[i] = distinctList.get(i);
+                }
+
+            }
+        } else {
+            Toast.makeText(getActivity(),"網路連線異常", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_exploretest,container, false);
+        View view = inflater.inflate(R.layout.fragment_explore,container, false);
+        getDistinctList();
         handleviews(view);
         return view;
 
     }
 
     private void handleviews(View view) {
-        rvTop = view.findViewById(R.id.rvTop);
-        rvTop.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false) );
-        rvRecom = view.findViewById(R.id.rvRecom);
-        rvRecom.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        tabLayout = view.findViewById(R.id.tablayout2);
+        tabLayout.setupWithViewPager(tabviewPager);
+        tabviewPager= view.findViewById(R.id.tabviewPager2);
+        tabviewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (searchView != null && !searchView.isIconified()) {
+                    //searchView.onActionViewExpanded();
+                    searchView.setIconified(true);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+        tabLayout.addTab(tabLayout.newTab().setText("熱門"));
+        tabLayout.addTab(tabLayout.newTab().setText("推薦"));
+        tabLayout.addTab(tabLayout.newTab().setText("最新"));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
+        setupViewPager(tabviewPager);
         searchView=view.findViewById(R.id.searchview);
-        tvrec=view.findViewById(R.id.tvrec);
+        searchView.setQueryHint("搜尋地點");
         contentview=view.getContext();
+
+    }
+    private void setupViewPager(ViewPager viewPager) {
+        ExploreFragment.TabViewPagerAdapter adapter = new ExploreFragment.TabViewPagerAdapter(getChildFragmentManager());
+        TabFragmenttop tabFragmentRecomTop =new TabFragmenttop();
+        TabFragmentRecom tabFragmentRecomRec =new TabFragmentRecom();
+        TabFragmentLocation tabFragmentRecomLoca =new TabFragmentLocation();
+        adapter.addFragment(tabFragmentRecomTop, "熱門");
+        adapter.addFragment(tabFragmentRecomRec, "推薦");
+        adapter.addFragment(tabFragmentRecomLoca, "最新");
+
+        viewPager.setAdapter(adapter);
+    }
+    public class TabViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> tabfragments = new ArrayList<>();
+        private final List<String> tabfragmentstext = new ArrayList<>();
+        private String tabTitles[] = new String[]{"熱門", "推薦","最新"};
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return tabfragments.get(0);
+                case 1:
+                    return tabfragments.get(1);
+                case 2:
+                    return tabfragments.get(2);
+            }
+            return null;
+        }
+        public TabViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return tabfragments.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            tabfragments.add(fragment);
+            tabfragmentstext.add(title);
+        }
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
     }
     public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
@@ -189,7 +273,6 @@ public class ExploreFragment extends Fragment {
         PostAdapter(List<Picture> pictures, Context context) {
             this.pictures = pictures;
             layoutInflater = LayoutInflater.from(context);
-//            要注意圖片尺寸隨著螢幕縮放 除三等於呈現為螢幕的三分之一大小
             imageSize = getResources().getDisplayMetrics().widthPixels / 3;
         }
 
@@ -208,7 +291,6 @@ public class ExploreFragment extends Fragment {
 
         public void setfilter(List<Picture> listitem)
         {
-            Log.d(TAG, "setfilter");
             pictures=new ArrayList<>();
             pictures.addAll(listitem);
             notifyDataSetChanged();
@@ -244,43 +326,20 @@ public class ExploreFragment extends Fragment {
 
 
     }
-//以下為searchbar的方法
-    SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
 
-        @Override
-        public boolean onQueryTextChange(String newText) {
-            Log.d(TAG, "onQueryTextChange");
-            picturelist.clear();
-            picturelist.addAll(pictures);
-            final  List<Picture> filtermodelist=filter(picturelist,newText);
-                adpter.setfilter(filtermodelist);
-            return true;
-        }
-
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-//            收起鍵盤
-//            更換recycleview 顯示搜尋結果的post
-
-            return false;
-        }
-};
+    //以下為searchbar的方法
 
     @Override
     public void onStop() {
         super.onStop();
-        if (pictureGetAllTask != null) {
-            pictureGetAllTask.cancel(true);
-        }
-        if (pictureGetTopTask != null) {
-            pictureGetTopTask.cancel(true);
-        }
 
         if (pictureImageTask != null) {
             pictureImageTask.cancel(true);
         }
+        if (distinctTask != null) {
+            distinctTask.cancel(true);
+        }
     }
-
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);

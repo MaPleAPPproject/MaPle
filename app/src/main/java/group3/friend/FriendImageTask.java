@@ -52,7 +52,7 @@ class FriendImageTask extends AsyncTask<Object, Integer, Bitmap> {
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
-            imageView.setImageResource(R.drawable.p01); //圖是空值就show錯誤的圖（default_image）
+            imageView.setImageResource(R.drawable.ic_navigation_homepage); //圖是空值就show錯誤的圖（default_image）
         }
     }
 

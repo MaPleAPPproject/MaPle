@@ -8,6 +8,6 @@
 
     <ImageView
         android:id="@+id/ivcollect"
-        android:layout_width="110dp"
-        android:layout_height="110dp" />
+        android:layout_width="140dp"
+        android:layout_height="140dp" />
 </FrameLayout>

@@ -63,7 +63,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
         @Override
         public Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
-            View item_view = layoutInflater.inflate(R.layout.item_view_post, parent, false);
+            View item_view = layoutInflater.inflate(R.layout.explore_pa_otherspage_card, parent, false);
             return new Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder(item_view);
         }
 

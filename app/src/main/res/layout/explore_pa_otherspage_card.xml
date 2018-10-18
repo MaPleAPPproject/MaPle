@@ -1,52 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/postdetail"
+    android:layout_gravity="center">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/postdetail">
-
+    android:layout_gravity="center">
 
     <LinearLayout
         android:id="@+id/linerlayout"
-        android:layout_width="320dp"
-        android:layout_height="82dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp">
 
         <ImageView
             android:id="@+id/personicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="gopage"
-            app:srcCompat="@drawable/ic_navigation_homepage" />
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:padding="10dp"
-            android:text="Nina"
-            android:textSize="20dp" />
-
+            android:textSize="20dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/ivPhoto"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:layout_gravity="center"
-        android:background="@color/colorAccent"
-        android:padding="20dp" />
+        android:layout_marginTop="10dp" />
 
     <LinearLayout
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp">
 
         <ImageView
             android:id="@+id/ivlocation"
@@ -58,13 +64,24 @@
 
         <TextView
             android:id="@+id/tvlocation"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:onClick="googlemap"
-            android:text="New York"
             android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tvcollection"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            tools:ignore="RtlCompat" />
+
 
         <ImageView
             android:id="@+id/btcollect"
@@ -72,15 +89,28 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:padding="5dp"
-            app:srcCompat="@drawable/ic_explore_collect" />
+            android:src="@drawable/ic_explore_collect" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/tvdescription"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="10dp"
+        android:padding="5dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
         android:text="Hello World!!!!!" />
 
+    <TextView
+        android:id="@+id/tvdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:padding="5dp"
+        android:textStyle="italic"/>
 </LinearLayout>
+
+</ScrollView>
