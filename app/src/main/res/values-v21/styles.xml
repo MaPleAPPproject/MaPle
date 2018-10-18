@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="toolbar_hide" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:navigationBarColor">@color/text_color_secondary</item>
+        <item name="android:colorForeground">@color/text_color_secondary</item>
+        <item name="colorPrimary">@color/colorBackground</item>
+        <item name="colorAccent">@color/colorBackground</item>
+    </style>
+</resources>

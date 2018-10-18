@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -39,6 +40,7 @@ public class TabFragment_Collect extends Fragment {
     private Context contentview;
     private Bundle bundle;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +55,8 @@ public class TabFragment_Collect extends Fragment {
         memberid=bundle.getInt("memberid");
         rvCollection = view.findViewById(R.id.rvCollection);
         rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));
+        rvCollection.setNestedScrollingEnabled(false);
         contentview=view.getContext();
-        handleviews(view);
         showAllPosts();
         return view;
 
@@ -85,24 +87,15 @@ public class TabFragment_Collect extends Fragment {
                 Log.e(TAG, e.toString());
             }
             if (pictures == null||pictures.isEmpty()) {
-                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"貼文不存在",Toast.LENGTH_SHORT).show();
             }
             else {
                 rvCollection.setAdapter(new TabFragment_Collect.PostAdapter(pictures, contentview));
             }
         } else {
-            Toast.makeText(getActivity(), R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"網路連線異常", Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    private void handleviews(View view) {
-        if (bundle != null) {
-            showAllPosts();
-        }
-        rvCollection = view.findViewById(R.id.rvCollection);
-        rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));
-        contentview=view.getContext();
     }
 
     public class PostAdapter extends RecyclerView.Adapter<TabFragment_Collect.PostAdapter.MyViewHolder> {

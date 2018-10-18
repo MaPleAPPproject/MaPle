@@ -10,6 +10,8 @@ public class Picture implements Serializable {
     private String comment;
     private long date;
     private String district;
+    private double lat;
+    private double lon;
 
 //    public Picture(int postid, String comment, long date) {
 //        super();
@@ -23,6 +25,15 @@ public class Picture implements Serializable {
         this.comment = comment;
         this.date = date;
         this.district=district;
+    }
+    public Picture(int postid, String comment, long date,String district,double lat,double lon) {
+        super();
+        this.postid = postid;
+        this.comment = comment;
+        this.date = date;
+        this.district=district;
+        this.lat = lat;
+        this.lon = lon;
     }
     public int getPostid() {
         return postid;
@@ -47,13 +58,28 @@ public class Picture implements Serializable {
                 Locale.US);
         return dateFormat.format(new Date(date));
     }
-
     public String getDistrict() {
         return district;
     }
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 }
 

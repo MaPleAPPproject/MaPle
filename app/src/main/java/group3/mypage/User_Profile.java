@@ -11,6 +11,8 @@ public class User_Profile implements Serializable {
     private String userName;
     private String selfIntroduction;
     private int vipStatus;
+    private int postcount;
+    private int collectcount;
 
     public User_Profile(int memberId, String email, String password, String userName, String selfIntroduction, int vipStatus) {
         this.memberId = memberId;
@@ -21,11 +23,13 @@ public class User_Profile implements Serializable {
         this.vipStatus = vipStatus;
     }
 
-    public User_Profile(int memberId,String userName, String selfIntroduction) {
+    public User_Profile(int memberId,String userName, String selfIntroduction, int postcount, int collectcount) {
         super();
         this.memberId = memberId;
         this.userName = userName;
         this.selfIntroduction = selfIntroduction;
+        this.collectcount = collectcount;
+        this.postcount = postcount;
     }
 
     public int getMemberId() {
@@ -74,5 +78,21 @@ public class User_Profile implements Serializable {
 
     public void setVipStatus(int vipStatus) {
         this.vipStatus = vipStatus;
+    }
+
+    public int getPostcount() {
+        return postcount;
+    }
+
+    public void setPostcount(int postcount) {
+        this.postcount = postcount;
+    }
+
+    public int getCollectcount() {
+        return collectcount;
+    }
+
+    public void setCollectcount(int collectcount) {
+        this.collectcount = collectcount;
     }
 }

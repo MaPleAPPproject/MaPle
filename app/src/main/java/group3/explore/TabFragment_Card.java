@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -51,21 +53,15 @@ public class TabFragment_Card extends Fragment {
         View view=inflater.inflate(R.layout.tab_post, container, false);
         bundle=getArguments();
         memberid = bundle.getInt("memberid");
-
         rvPost = view.findViewById(R.id.rvPost);
         rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
+        rvPost.setNestedScrollingEnabled(false);
         contentview=view.getContext();
         showAllPosts();
-//        handleviews(view);
         return view;
 
     }
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        showAllPosts();
-//    }
-//  取得照片
+
     private void showAllPosts() {
 
         if (Common.networkConnected(getActivity())) {
@@ -85,25 +81,16 @@ public class TabFragment_Card extends Fragment {
                 Log.e(TAG, e.toString());
             }
             if (pictures == null||pictures.isEmpty()) {
-                Toast.makeText(getActivity(),R.string.msg_NoNetwork,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"貼文不存在",Toast.LENGTH_SHORT).show();
             }
             else {
                 rvPost.setAdapter(new TabFragment_Card.PostAdapter(pictures,contentview));
             }
         } else {
-            Toast.makeText(getActivity(), R.string.msg_Nonetwork, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "網路連線異常", Toast.LENGTH_SHORT).show();
         }
 
     }
-
-//    private void handleviews(View view) {
-//        if (bundle != null) {
-//            showAllPosts();
-//        }
-//        rvPost = view.findViewById(R.id.rvPost);
-//        rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
-//        contentview=view.getContext();
-//    }
 
     public class PostAdapter extends RecyclerView.Adapter<TabFragment_Card.PostAdapter.MyViewHolder> {
         private int imageSize;

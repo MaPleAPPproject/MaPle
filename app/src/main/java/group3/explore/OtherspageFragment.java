@@ -1,6 +1,8 @@
 package group3.explore;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +11,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,31 +39,45 @@ import group3.mypage.Mypage_tab_colec_Fragment;
 import group3.mypage.User_Profile;
 import group3.mypage.Mypage_tab_post_Fragment;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.support.constraint.motion.MotionScene.TAG;
+import static com.cp102group3maple.violethsu.maple.R.color.colorAccent;
 import static com.cp102group3maple.violethsu.maple.R.color.colorRed;
 
 public class OtherspageFragment extends Fragment {
     private static final String TAG = "OtherspageFragment";
     private ViewPager tabviewPager;
     private TabLayout tabLayout;
-    private String username,email,vipstate;
+    private String username;
     private int memberid;
-    private CommonTask picturefindbyidTask;
     private User_Profile user_Profile;
     private CommonTask otherprofileTask;
     private ImageTask iconTask;
     public Bundle bundlefortab;
+    private SharedPreferences pref;
+    private int userid;
 
     public OtherspageFragment(){};
-    private Fragment fragment;
     private TextView tvName,tvSelf,tvemail,tvvip;
+    public  TextView tvpostcount,tvcollectcount;
     private Bundle  bundle;
     private ImageView imageView;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootview = inflater.inflate(R.layout.fragment_otherspage, container, false);
+        pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        String smemberId = pref.getString("MemberId", "");
+        userid=Integer.parseInt(smemberId);
         bundle=getArguments();
         username=bundle.getString("username");
         memberid=bundle.getInt("memberid");
@@ -67,11 +85,13 @@ public class OtherspageFragment extends Fragment {
         bundlefortab.putInt("memberid",memberid);
         handleviews(rootview);
         getprofile();
+        Toolbar toolbar = (Toolbar) rootview.findViewById(R.id.toolbar);
+        toolbar.setTitle(username);
         tabLayout = rootview.findViewById(R.id.tablayout1);
         tabLayout.setupWithViewPager(tabviewPager);
         tabviewPager= rootview.findViewById(R.id.tabviewPager1);
-        tabLayout.addTab(tabLayout.newTab().setText("Post"));
-        tabLayout.addTab(tabLayout.newTab().setText("Collection"));
+        tabLayout.addTab(tabLayout.newTab().setText("貼文"));
+        tabLayout.addTab(tabLayout.newTab().setText("收藏"));
 //        tablayput綁定viewpager
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
         setupViewPager(tabviewPager);
@@ -79,15 +99,13 @@ public class OtherspageFragment extends Fragment {
     }
 
     private void handleviews(View rootview) {
-        tvName=rootview.findViewById(R.id.tvotherName);
+//        tvName=rootview.findViewById(R.id.tvotherName);
         tvSelf=rootview.findViewById(R.id.tvotherselfintro);
         tvemail=rootview.findViewById(R.id.tvemail);
         tvvip=rootview.findViewById(R.id.tvvipicon);
         imageView=rootview.findViewById(R.id.ivpersonicon);
-//        if(bundle !=null){
-//        }else {
-//            Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
-//        }
+        tvpostcount=rootview.findViewById(R.id.postcount);
+        tvcollectcount=rootview.findViewById(R.id.collectorcount);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -96,15 +114,15 @@ public class OtherspageFragment extends Fragment {
         TabFragment_Collect tabFragment_collect=new TabFragment_Collect();
         tabFragment_card.setArguments(bundlefortab);
         tabFragment_collect.setArguments(bundlefortab);
-        adapter.addFragment(tabFragment_card, "Post");
-        adapter.addFragment(tabFragment_collect, "Collection");
+        adapter.addFragment(tabFragment_card, "貼文");
+        adapter.addFragment(tabFragment_collect, "收藏");
         viewPager.setAdapter(adapter);
     }
 
     public class TabViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> tabfragments = new ArrayList<>();
         private final List<String> tabfragmentstext = new ArrayList<>();
-        private String tabTitles[] = new String[]{"Post", "Collection"};
+        private String tabTitles[] = new String[]{"貼文", "收藏"};
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
@@ -113,7 +131,6 @@ public class OtherspageFragment extends Fragment {
                     return tabfragments.get(1);
             }
             return null;
-//            return tabfragments.get(position);
         }
         public TabViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -136,12 +153,6 @@ public class OtherspageFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        getprofile();
-//    }
-//  取他人資料
     private void getprofile() {
         if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/User_profileServlet";
@@ -149,6 +160,7 @@ public class OtherspageFragment extends Fragment {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findotherById");
             jsonObject.addProperty("memberId", memberid);
+            jsonObject.addProperty("userid",userid);
             String jsonOut = jsonObject.toString();
             otherprofileTask = new CommonTask(url, jsonOut);
             try {
@@ -158,12 +170,13 @@ public class OtherspageFragment extends Fragment {
                 Log.e(TAG, e.toString());
             }
             if (user_Profile == null) {
-                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"貼文不存在",Toast.LENGTH_SHORT).show();
             }
             else {
-                tvName.setText(username);
+//                tvName.setText(username);
                 tvSelf.setText(user_Profile.getSelfIntroduction());
-//                tvName.setText(user_Profile.getUserName());
+                tvpostcount.setText(String.valueOf(user_Profile.getPostcount()));
+                tvcollectcount.setText(String.valueOf(user_Profile.getCollectcount()));
                 if(user_Profile.getVipStatus()==1) {
                     tvvip.setText("VIP");
                     tvvip.setTextColor(getResources().getColor(R.color.colorRed));
@@ -171,7 +184,7 @@ public class OtherspageFragment extends Fragment {
                 tvemail.setText(user_Profile.getEmail());
             }
         } else {
-            Toast.makeText(getActivity(),R.string.msg_Nonetwork,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"網路連線異常",Toast.LENGTH_SHORT).show();
         }
         String url = Common.URL + "/User_profileServlet";
         int iconimageSize = getResources().getDisplayMetrics().widthPixels/3;

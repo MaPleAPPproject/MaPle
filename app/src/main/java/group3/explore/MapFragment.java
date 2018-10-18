@@ -65,7 +65,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         map.getUiSettings().setZoomControlsEnabled(true);
         if (bundle == null) {
-            Toast.makeText(activity,"no location",Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity,"找尋不到該地點",Toast.LENGTH_SHORT).show();
         } else {
             showMap();
         }

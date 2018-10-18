@@ -69,7 +69,6 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"oncreate");
         pref = getActivity().getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         String smemberId = pref.getString("MemberId", "");
@@ -81,8 +80,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        Log.d(TAG,"oncreateview");
-        View view=inflater.inflate(R.layout.explore_pa_postfrag,container,false);
+        View view=inflater.inflate(R.layout.explore_pa_otherspage_card,container,false);
         Picture picture = (Picture) (getArguments() != null ? getArguments().getSerializable("picture") : null);
         bundle=new Bundle();
         bundle.putSerializable("picture", picture);
@@ -91,7 +89,6 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     }
 
     private void handleviews(View view) {
-        Log.d(TAG,"handleviews");
         btcollect=view.findViewById(R.id.btcollect);
         tvname=view.findViewById(R.id.tvName);
         tvcomment=view.findViewById(R.id.tvdescription);
@@ -195,7 +192,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
                 Log.e(TAG, e.toString());
             }
             if (postdetail == null) {
-                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Po文不存在",Toast.LENGTH_SHORT).show();
             }
             else {
                 tvname.setText(postdetail.getUsername());
@@ -203,7 +200,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
                 tvlocation.setText(String.valueOf(postdetail.getDistrict()));
             }
         } else {
-            Toast.makeText(getActivity(),R.string.msg_NoNetwork,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"請確認網路連線",Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -215,7 +212,6 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         fragmentTransaction.replace(R.id.postactivitycontainer, fragment).commit();
     }
     public void onStop() {
-        Log.d(TAG,"onstop");
         super.onStop();
         if (postTask != null) {
             postTask.cancel(true);
@@ -251,43 +247,16 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
                 Log.e(TAG, e.toString());
             }
             if (count == 0) {
-                Toast.makeText(getActivity(),"fail",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"收藏失敗",Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(),"collection ok",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"已加入收藏",Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(getActivity(), "no net", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "網路連線失敗", Toast.LENGTH_SHORT).show();
         }
 
     }
-    private void updatepost() {
 
-        if (Common.networkConnected(getActivity())) {
-            String url = Common.URL + "/PostServlet";
-            //      要取偏好設定的memberid
-            Post post=new Post(postdetail.getMemberId(),postdetail.getPostId(),
-                    newcollectcount,postdetail.getClickcount()+1,picture.getDate());
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "postUpdate");
-            jsonObject.addProperty("post", new Gson().toJson(post));
-            String jsonOut = jsonObject.toString();
-            int count=0;
-            try {
-                String result = new CommonTask(url, jsonOut).execute().get();
-                count = Integer.valueOf(result);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (count == 0) {
-                Toast.makeText(getActivity(),"fail",Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(),"collection to mypage ok",Toast.LENGTH_SHORT).show();
-            }
-        } else {
-        }Toast.makeText(getActivity(), "no net", Toast.LENGTH_SHORT).show();
-
-
-    }
     private boolean iscollectable(int collectorid, int postid) {
         boolean iscollectable=false;
         if (Common.networkConnected(getActivity())) {
@@ -306,7 +275,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
                 iscollectable = false;
             }
         } else {
-            Toast.makeText(getActivity(), "no net", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "網路連線失敗", Toast.LENGTH_SHORT).show();
         }
         return iscollectable;
     }
