@@ -78,5 +78,6 @@
     <string name="btSubmit">Submit</string>
     <string name="btok">Ok</string>
     <string name="search">搜尋</string>
+    <string name="title_activity_mypage_tab_map_fragment">Mypage_tab_map_fragment</string>
 </resources>
 

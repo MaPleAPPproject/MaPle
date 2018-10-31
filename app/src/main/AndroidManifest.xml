@@ -71,7 +71,7 @@
         <activity android:name="group3.mypage.Mypage_UserProfile_Activity" />
         <activity android:name="group3.mypage.MapLocation" />
         <activity android:name="group3.mypage.Mypage_PostUpdate_Activity" />
-        x
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -105,7 +105,10 @@
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="group3.friend.MatchActivity" />
-        <activity android:name="group3.friend.InviteActivity"></activity>
+        <activity android:name="group3.friend.InviteActivity" />
+        <activity
+            android:name="group3.mypage.Mymap_fragment"
+            android:label="@string/title_activity_mypage_tab_map_fragment"></activity>
     </application>
 
 </manifest>

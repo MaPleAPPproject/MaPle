@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import group3.Common;
+import group3.Login;
 import group3.explore.TabFragment_Card;
 import group3.explore.TabFragment_Collect;
 
@@ -101,7 +102,12 @@ public class MypageFragment extends Fragment {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent chartIntent = new Intent(getActivity(), ExGoogleMap.class);
+                SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+                        MODE_PRIVATE);
+                pref.edit()
+                        .putString("MemberId","")
+                        .apply();
+                Intent chartIntent = new Intent(getActivity(), Login.class);
                 startActivity(chartIntent);
             }
         });

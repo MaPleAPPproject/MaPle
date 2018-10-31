@@ -73,7 +73,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/button_shape"
-            android:text="Log In"
+            android:text="登入"
             android:textColor="#FFFFFF"
             android:textSize="25dp"
             android:textStyle="bold" />
@@ -85,7 +85,7 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:background="@drawable/button_shape"
-            android:text="Sign Up"
+            android:text="註冊"
             android:textColor="#FFFFFF"
             android:textSize="23dp"
             android:textStyle="bold" />

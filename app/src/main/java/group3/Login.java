@@ -61,20 +61,20 @@ public class Login extends AppCompatActivity {
                         Toast toast = Toast.makeText(Login.this, "請輸入帳號或密碼", Toast.LENGTH_LONG);
                         toast.show();
                     } else if (isLogin(email, password)) {
-                        SharedPreferences preferences = getSharedPreferences(
-                                Common.PREF_FILE, MODE_PRIVATE);
-                        preferences.edit()
-                                .putBoolean("login", true)
-                                .putString("MemberId", memberId)
-                                .apply();
-                        setResult(RESULT_OK);
+                            SharedPreferences preferences = getSharedPreferences(
+                                    Common.PREF_FILE, MODE_PRIVATE);
+                            preferences.edit()
+                                    .putBoolean("login", true)
+                                    .putString("MemberId", memberId)
+                                    .apply();
+                            setResult(RESULT_OK);
 
-                        Intent intent = new Intent();
-                        intent.setClass(Login.this, MainActivity.class);
-                        startActivity(intent);
-                        Toast.makeText(Login.this, "歡迎使用MaPle", Toast.LENGTH_LONG);
-                        finish();
-                        break;
+                            Intent intent = new Intent();
+                            intent.setClass(Login.this, MainActivity.class);
+                            startActivity(intent);
+//                            Toast.makeText(Login.this, "歡迎使用MaPle", Toast.LENGTH_LONG);
+                            finish();
+                            break;
                     }
                     break;
                 }
@@ -123,16 +123,18 @@ public class Login extends AppCompatActivity {
                 if (result.equals("0")) {
                     Toast toast = Toast.makeText(Login.this, "查無此帳號", Toast.LENGTH_LONG);
                     toast.show();
-                } else {
+                }else if (result.equals("")) {
+                    Toast toast = Toast.makeText(Login.this, "伺服器異常,", Toast.LENGTH_LONG);
+                    toast.show();
+                }else{
                     islogin = true;
                     memberId = result;
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+                connectionError();
             }
         } else {
-            Toast toast = Toast.makeText(Login.this, "連線異常請檢查", Toast.LENGTH_LONG);
-            toast.show();
+            connectionError();
         }
         return islogin;
     }
@@ -180,6 +182,11 @@ public class Login extends AppCompatActivity {
             userValidTask.cancel(true);
             userValidTask = null;
         }
+    }
+
+    private void connectionError() {
+        Toast toast = Toast.makeText(Login.this, "連線異常請檢查", Toast.LENGTH_LONG);
+        toast.show();
     }
 
 }

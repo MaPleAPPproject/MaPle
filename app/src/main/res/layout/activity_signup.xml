@@ -71,7 +71,7 @@
             android:background="@drawable/button_shape"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:text="Submit"
+            android:text="申請帳密"
             android:textSize="25dp"
             android:onClick="onsubmitclick"/>
         <Button
@@ -84,7 +84,7 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:textSize="25dp"
-            android:text="Cancel" />
+            android:text="取消註冊" />
     </LinearLayout>
     <TextView
         android:id="@+id/tvalert"

@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_navigation_friendpage"
         android:title="@string/title_friends" />
 
+    <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/ic_mypage_map"
+        android:title="mymap" />
+
 </menu>

@@ -24,6 +24,7 @@ import group3.explore.ExploreFragment;
 
 import group3.friend.FriendsListFragment;
 import group3.mypage.MypageFragment;
+import group3.mypage.Mymap_fragment;
 
 // need to debug mypage頁面一開始沒有tablayout
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.viewPager);
 //      避免view重複加載
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
         setupViewPager(viewPager);
         final BottomNavigationView navigation =findViewById(R.id.navigation);
         BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -67,11 +68,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navigation_mypage:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(0);
-
                         return true;
 
                     case R.id.navigation_explore:
-                        getSupportActionBar().hide();
+                        getSupportActionBar().show();
                         viewPager.setCurrentItem(1);
 
                         return true;
@@ -79,7 +79,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navigation_friends:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(2);
+                        return true;
 
+                    case R.id.navigation_map:
+                        getSupportActionBar().show();
+                        viewPager.setCurrentItem(3);
                         return true;
                 }
                 return false;
@@ -99,11 +103,17 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         navigation.setSelectedItemId(R.id.navigation_mypage);
                         break;
+
                     case 1:
                         navigation.setSelectedItemId(R.id.navigation_explore);
                         break;
+
                     case 2:
                         navigation.setSelectedItemId(R.id.navigation_friends);
+                        break;
+
+                    case 3:
+                        navigation.setSelectedItemId(R.id.navigation_map);
                         break;
 //                        default:
 //                            navigation.setSelectedItemId(R.id.navigation_mypage);
@@ -125,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new MypageFragment());
         adapter.addFragment(new ExploreFragment());
         adapter.addFragment(new FriendsListFragment());
+        adapter.addFragment(new Mymap_fragment());
         viewPager.setAdapter(adapter);
     }
     public class BottomNavPagerAdapter extends FragmentPagerAdapter {
