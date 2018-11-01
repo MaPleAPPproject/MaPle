@@ -9,6 +9,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -21,14 +24,14 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 public class Common {
 
     public static String URL = "http://10.0.2.2:8080/MaPle";
-//    public static String URL = "http://192.168.50.224:8080/MaPle";
+//        public static String URL = "http://192.168.50.90:8080/MaPle";
     public final static String PREF_FILE = "preference";
     private final static String DEFAULT_NAME = "";
     private final static String DEFAULT_EMAIL = "";
     private final static String DEFAULT_PASSWORD = "";
     private final static String DEFAULT_SELFINTRO = "";
 
-//    public static String URL = "http://10.0.2.2:8080/MaPle";
+    //    public static String URL = "http://10.0.2.2:8080/MaPle";
     public static Bitmap downSize(Bitmap srcPicture, int newSize) {
 
         if (newSize < 20) {
@@ -69,6 +72,8 @@ public class Common {
 
 
     public static final int REQ_EXTERNAL_STORAGE = 0;
+    public static final int REQ_ACCESS_FINE_LOCATION = 1;
+
 
     public static void askPermissions(Activity activity, String[] permissions, int requestCode) {
         Set<String> permissionsRequest = new HashSet<>();
@@ -109,5 +114,7 @@ public class Common {
     public static void showToast(Context context, int messageResId) {
         Toast.makeText(context, messageResId, Toast.LENGTH_SHORT).show();
     }
+
+
 
 }

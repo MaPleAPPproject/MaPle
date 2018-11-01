@@ -24,6 +24,7 @@ import com.google.gson.JsonObject;
 
 public class Login extends AppCompatActivity {
     private final static String URL = "http://10.0.2.2:8080/MaPle";
+//    private final static String URL = "http://192.168.50.90:8080/MaPle";
     private final static String TAG = "Login";
     String memberId;
     //    private Button btfb, btgplus;
@@ -124,7 +125,7 @@ public class Login extends AppCompatActivity {
                     Toast toast = Toast.makeText(Login.this, "查無此帳號", Toast.LENGTH_LONG);
                     toast.show();
                 }else if (result.equals("")) {
-                    Toast toast = Toast.makeText(Login.this, "伺服器異常,", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(Login.this, "伺服器異常", Toast.LENGTH_LONG);
                     toast.show();
                 }else{
                     islogin = true;

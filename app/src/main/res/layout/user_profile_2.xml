@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/dePhotoIcon"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:background="#00000000"
+        android:onClick="onImageClick"
+        android:padding="5dp"
+        app:civ_border_color="#FFFFFF"
+        app:civ_border_width="2dp"
+        app:civ_circle_background_color="#00000000" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutUsernameDisplayMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvtopName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="5dp"
+                android:text="jack"
+                android:textSize="18sp"
+
+                android:textAlignment="center"
+
+                />
+
+            <ImageButton
+                android:id="@+id/ibEditName"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:padding="5dp"
+                android:src="@drawable/ic_edit"
+                android:background="#00000000"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutEditMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/et_layout_style">
+
+            <EditText
+                android:id="@+id/etdisplayname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/et_layout_style"
+                android:padding="5dp"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:textSize="16sp" />
+
+            <!--<TextView-->
+            <!--android:id="@+id/tvNumofWords"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="5dp"-->
+            <!--android:text="10/20"-->
+            <!--android:textSize="16sp" />-->
+
+            <ImageButton
+                android:id="@+id/ibCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/et_layout_style"
+                android:padding="2dp"
+                android:src="@drawable/checked"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp" />
+
+
+            <ImageButton
+                android:id="@+id/ibCross"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/et_layout_style"
+                android:padding="2dp"
+                android:src="@drawable/cancel" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="5dp"
+        android:text="jack@gmail.com"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="normal"/>
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/relativePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeEmail"
+        android:background="@drawable/et_layout_style"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_key" />
+
+        <TextView
+            android:id="@+id/tvPasswordTitle"
+            style="@style/profileItem"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_key"
+            android:padding="6.5sp"
+            android:text="*密碼"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/tvPassword"
+            android:layout_toRightOf="@id/tvPasswordTitle"
+            android:background="@null"
+            android:padding="5dp"
+            android:text="1234567"
+            android:textSize="15sp"
+
+            />
+
+        <ImageButton
+            android:id="@+id/ibShowPWET"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="#00000000"
+            android:src="@drawable/ic_edit"
+            android:padding="8dp"
+            />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearPasswordEditMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/relativeNewPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativePassword"
+            android:background="@drawable/et_layout_style"
+            android:orientation="horizontal"
+            android:padding="5dp"
+
+            >
+
+            <TextView
+                android:id="@+id/tvNewPassword"
+                style="@style/profileItem"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:padding="6.5sp"
+                android:text="*新密碼"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/etNewPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tvNewPassword"
+                android:layout_toRightOf="@+id/tvNewPassword"
+                android:hint="最多輸入20字元                                         "
+                android:padding="5sp"
+                android:textSize="15sp"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:maxLines="1"
+
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativeNewPassword"
+            android:background="@drawable/et_layout_style"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/tvConfirmPassword"
+                style="@style/profileItem"
+                android:layout_width="80sp"
+                android:layout_height="wrap_content"
+                android:padding="6.5sp"
+                android:text="*確認密碼"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/tvConfirmPassword"
+                android:layout_toRightOf="@+id/tvConfirmPassword"
+                android:inputType="textPassword"
+                android:hint="最多輸入20字元                                         "
+                android:textSize="15sp"
+                android:padding="5sp"
+                android:maxLength="20"
+                android:maxLines="1"
+
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/relativePasswordBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/et_layout_style"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:padding="5dp">
+
+            <ImageButton
+                android:id="@+id/ibPasswordCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/et_layout_style"
+                android:padding="2dp"
+                android:layout_marginEnd="5dp"
+
+                android:src="@drawable/checked"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="5dp" />
+
+            <ImageButton
+                android:id="@+id/ibPasswordCross"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/et_layout_style"
+                android:padding="2dp"
+                android:src="@drawable/cancel"
+                />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeVipStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeEmail"
+        android:background="@drawable/et_layout_style"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/ivMemeber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_membership" />
+
+        <TextView
+            android:id="@+id/tvVipStatus"
+            style="@style/profileItem"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ivMemeber"
+            android:padding="6.5sp"
+            android:text=" 方案"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvStatusResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/tvVipStatus"
+            android:layout_toRightOf="@id/tvVipStatus"
+            android:padding="5dp"
+            android:text="1234567"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btPremium"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:layout_toEndOf="@+id/tvStatusResult"
+            android:layout_toRightOf="@+id/tvStatusResult"
+            android:onClick="onPremiumClick"
+            android:paddingHorizontal="5dp"
+            android:text="VIP升級方案"
+            android:textSize="12sp" />
+
+
+    </RelativeLayout>
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/et_layout_style"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/relativeSelfIntro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativeEmail"
+            android:background="@drawable/et_layout_style"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/ivSelfIntro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_selfintro" />
+
+            <TextView
+                android:id="@+id/tvSelfIntro"
+                style="@style/profileItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/ivSelfIntro"
+                android:padding="6.5sp"
+                android:text=" 自我介紹"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
+
+        <EditText
+
+            android:id="@+id/etSelfIntro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvSelfIntro"
+            android:layout_margin="10dp"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="What's new?"
+            android:padding="5dp"
+            android:shadowRadius="1.0"
+
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:background="@drawable/et_layout_style"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvchar100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:text="字數限制100個字元" />
+
+            <TextView
+                android:id="@+id/tvcharNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="5dp"
+        android:baselineAligned="true"
+        android:gravity="end"
+        android:orientation="horizontal"
+
+        >
+
+
+        <Button
+            android:id="@+id/btCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onCancelClick"
+            android:padding="5dp"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/btSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onSaveClick"
+            android:padding="5dp"
+            android:text="@string/save" />
+    </LinearLayout>
+</LinearLayout>

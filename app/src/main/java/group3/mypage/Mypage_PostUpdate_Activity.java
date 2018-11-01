@@ -52,7 +52,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
     private int postId;
     private CommonTask getPostTask, updateTask;
     private TextView tvLocation;
-    private ImageView imageView;
+    private ImageView imageView,ivMarker;
     private Button btCurrent, btmap, btCancel, btSend;
     private EditText etComment;
     private byte[] photo;
@@ -83,15 +83,14 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
         tvLocation = findViewById(R.id.tvLocation);
         tvLocation.setVisibility(View.GONE);
         imageView = findViewById(R.id.ibPhoto);
-//        btCurrent = findViewById(R.id.btcurrent);
-        btmap = findViewById(R.id.btmap);
+        ivMarker = findViewById(R.id.ivMarker);
         btCancel = findViewById(R.id.btcancel);
         btSend = findViewById(R.id.btSend);
         etComment = findViewById(R.id.etComment);
         btSend.setOnClickListener(this);
         btCancel.setOnClickListener(this);
 //        btCurrent.setOnClickListener(this);
-        btmap.setOnClickListener(this);
+        ivMarker.setOnClickListener(this);
 //        imageView.setOnClickListener(this);
 
 
@@ -132,21 +131,8 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
 
                 break;
 
-//            case R.id.btcurrent:
-//                LocationManager locationManager = (LocationManager) getSystemService(Activity.LOCATION_SERVICE);
-//                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(this, "請允許使用GPS服務", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//                Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-//                GPSisopen(locationManager);
-//
-//
-//                LatLng gps = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-//
-//                break;
 
-            case R.id.btmap:
+            case R.id.ivMarker:
                 Intent mapIntent = new Intent(this, MapLocation.class);
                 startActivityForResult(mapIntent, REQUEST_GET_LOCATION);
 

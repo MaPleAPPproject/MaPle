@@ -35,7 +35,7 @@ import group3.explore.TabFragment_Card;
 import static android.content.Context.MODE_PRIVATE;
 
 public class Mypage_tab_post_Fragment extends Fragment {
-    private static final String TAG = "Ｍypage_tab_post_Fragment";
+    private static final String TAG = "ＭypagetabpostFragment";
     private CommonTask pictureGetAllTask;
     private RecyclerView rvPost;
     private int memberid;

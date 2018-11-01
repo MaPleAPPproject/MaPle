@@ -11,9 +11,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -23,7 +28,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import group3.Common;
 import group3.Picture;
@@ -34,10 +42,11 @@ import group3.explore.PostTask;
 import group3.explore.TabFragment_Collect;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.support.constraint.motion.utils.Oscillator.TAG;
 
 public class Mypage_tab_colec_Fragment extends Fragment {
     private static final String TAG = "Mypage_tab_colec_Fragment";
-    private CommonTask pictureGetAllTask;
+    private CommonTask pictureGetAllTask,deletePostTask;
     private RecyclerView rvCollection;
     private int memberid;
     private PostTask pictureImageTask;
@@ -108,10 +117,10 @@ public class Mypage_tab_colec_Fragment extends Fragment {
         }
         rvCollection = view.findViewById(R.id.rvCollection);
         rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));
-        contentview=view.getContext();
+        contentview = view.getContext();
     }
 
-    public class PostAdapter extends RecyclerView.Adapter<Mypage_tab_colec_Fragment.PostAdapter.MyViewHolder> {
+    public class PostAdapter extends RecyclerView.Adapter<Mypage_tab_colec_Fragment.PostAdapter.MyViewHolder> implements View.OnLongClickListener {
         private int imageSize;
         private List<Picture> pictures;
         private LayoutInflater layoutInflater;
@@ -122,6 +131,12 @@ public class Mypage_tab_colec_Fragment extends Fragment {
 
 
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
+        }
+
 
         class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
@@ -163,8 +178,71 @@ public class Mypage_tab_colec_Fragment extends Fragment {
                 }
             });
 
+            registerForContextMenu(myViewHolder.itemView);
+
+
+
         }
     }
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater inflater = getActivity().getMenuInflater();
+//        inflater.inflate(R.menu.collection_delete, menu);
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//        switch (item.getItemId()) {
+//            case R.id.collectionDelete:
+//                int collId = getView().getId();
+//                deleteCollection(collId);
+//
+//
+//                return true;
+//            default:
+//                return super.onContextItemSelected(item);
+//        }
+//
+//
+//
+//    }
+
+    public void deleteCollection(int collId){
+
+
+        if (Common.networkConnected(getContext())) {
+            String url = Common.URL + "/CpostServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "deleteColl");
+            jsonObject.addProperty("collId", collId);
+            String jsonOut = jsonObject.toString();
+            deletePostTask = new CommonTask(url, jsonOut);
+            int count = 0;
+            try {
+                String jsonIn = deletePostTask.execute().get();
+                count = Integer.valueOf(jsonIn);
+
+            } catch (Exception e) {
+                Log.e("Myoage_tab_collection", e.toString());
+            }
+            if (count != 0 ) {
+                Toast.makeText(getActivity(), "Your post has deleted", Toast.LENGTH_SHORT).show();
+            } else {
+
+                Toast.makeText(getActivity(), "Fail to delete the post", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            Toast.makeText(getActivity(), "no_profile", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
 
     @Override
     public void onStop() {

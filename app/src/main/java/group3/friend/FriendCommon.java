@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 public class FriendCommon {
     public static String URL = "http://192.168.197.12:8080/MaPle";
-
+//    public static String URL = "http://192.168.50.90:8080/MaPle";
     // check if the device connect to the network
     public static boolean networkConnected(Activity activity) {
         ConnectivityManager conManager =

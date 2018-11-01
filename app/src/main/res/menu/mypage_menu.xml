@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/action_addpost"
+        android:icon="@drawable/plus"
+        android:title="新增貼文"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_logout"
+        android:icon="@drawable/logout"
+        android:title="登出"
+
+        app:showAsAction="never" />
+</menu>

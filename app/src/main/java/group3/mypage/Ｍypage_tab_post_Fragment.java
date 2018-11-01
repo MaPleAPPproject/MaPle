@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -19,6 +20,7 @@ import java.util.List;
 import group3.Postdetail;
 
 public class Ｍypage_tab_post_Fragment extends Fragment {
+    private FloatingActionButton fab;
 
     @Nullable
     @Override
@@ -33,6 +35,8 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
         RecyclerView rvPost = view.findViewById(R.id.rvPost);
         rvPost.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
 //        rvPost.setAdapter(new Ｍypage_tab_post_Fragment.PostAdapter(getPosts(), getActivity()));
+
+
     }
 
     public class PostAdapter extends RecyclerView.Adapter<Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder> {
@@ -63,7 +67,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
         @Override
         public Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
-            View item_view = layoutInflater.inflate(R.layout.explore_pa_otherspage_card, parent, false);
+            View item_view = layoutInflater.inflate(R.layout.item_view_post, parent, false);
             return new Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder(item_view);
         }
 

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -48,8 +50,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+
 import group3.Common;
 import group3.MainActivity;
+
 
 import static android.support.constraint.motion.utils.Oscillator.TAG;
 
@@ -58,11 +62,12 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     private static final int REQUEST_PICK_PICTURE = 2;
     private static final int REQUEST_CROP_PICTURE = 3;
     private static final int REQUEST_GET_LOCATION = 4;
+
+
     private static final int RESULT_OK = 0;
 
-    private ImageButton camera_btn;
-    private ImageButton gallery_btn;
-    private ImageView ibPhoto;
+
+    private ImageView ibPhoto,ivMarker;
     private Button btsend, btcancel, btcurrent, btmap;
     private EditText etComment;
     private File file;
@@ -88,22 +93,6 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     private int memberId;
 
 
-//    private GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
-//        @Override
-//        public void onConnected(@Nullable Bundle bundle) {
-//            Log.i(TAG,"GoogleApiClient" );
-//            if(ActivityCompat.checkSelfPermission((this), Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-//                lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-//                LocationRequest locationRequest = LocationRequet.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-//            }
-//        }
-//
-//        @Override
-//        public void onConnectionSuspended(int i) {
-//
-//        }
-//    }
-
 
     public static boolean isIntentAvailable(Context context, Intent intent) {
 
@@ -122,6 +111,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         handleView();
 
 
+
     }
 
 
@@ -132,14 +122,14 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         btcancel = findViewById(R.id.btcancel);
         ibPhoto.setImageResource(R.drawable.addimage);
 
-        btmap = findViewById(R.id.btmap);
         etComment = findViewById(R.id.etComment);
         tvLocation = findViewById(R.id.tvLocation);
-        tvLocation.setVisibility(View.GONE);
+        ivMarker = findViewById(R.id.ivMarker);
+
         btsend.setOnClickListener(this);
         btcancel.setOnClickListener(this);
-//        btcurrent.setOnClickListener(this);
-        btmap.setOnClickListener(this);
+        ivMarker.setOnClickListener(this);
+
 
 
 
@@ -158,7 +148,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
                 bundle.putString("location",tvLocation.getText().toString().trim());
                 Intent sendIntent = new Intent(this, Mypage_SinglePost_Activity.class);
                 sendIntent.putExtras(bundle);
-                Toast.makeText(this, "Your post successfully created", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "您的貼文已新增成功", Toast.LENGTH_SHORT).show();
                 startActivity(sendIntent);
                 break;
 
@@ -168,23 +158,8 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
 
                 break;
 
-//            case R.id.btcurrent:
-//                LocationManager locationManager = (LocationManager) getSystemService(Activity.LOCATION_SERVICE);
-//                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(this, "請允許使用GPS服務", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//                Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-//                GPSisopen(locationManager);
-//
-//
-//                LatLng gps = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-//
 
-
-//                break;
-
-            case R.id.btmap:
+            case R.id.ivMarker:
                 Intent mapIntent = new Intent(this, MapLocation.class);
                 startActivityForResult(mapIntent, REQUEST_GET_LOCATION);
 
@@ -236,6 +211,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         gallery_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent1, REQUEST_PICK_PICTURE);
@@ -325,7 +301,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
                 Log.e(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
                 try {
                     picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
-                    Bitmap downSizePicture = Common.downSize(picture, 512);
+                    Bitmap downSizePicture = Common.downSize(picture, 900);
                     ibPhoto.setImageBitmap(downSizePicture);
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     downSizePicture.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -359,7 +335,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
                 }finally {
 
                     if (tvLocation == null) {
-                        Toast.makeText(this, "You didnt pick any location", Toast.LENGTH_SHORT);
+                        Toast.makeText(this, "請選擇您的位置", Toast.LENGTH_SHORT);
                     }
                 }
                 break;
@@ -370,52 +346,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
             default:
         }
 
-//        if (resultCode == RESULT_OK) {
-//
-//            switch (requestCode) {
-//                case REQUEST_TAKE_PICTURE:
-//                    Log.e("take picture", "contenturi = " + contentUri);
-//                    crop(contentUri);
-//
-//                    break;
-//
-//                case REQUEST_CROP_PICTURE:
-//                    Log.e(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
-//                    try {
-//                        picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(croppedImageUri));
-//                        Bitmap downSizePicture = Common.downSize(picture, 512);
-//                        ibPhoto.setImageBitmap(downSizePicture);
-//                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//                        downSizePicture.compress(Bitmap.CompressFormat.JPEG, 100, out);
-//                        image = out.toByteArray();
-//
-//                    } catch (FileNotFoundException e) {
-//                        Log.e(TAG, e.toString());
-//                    }
-//                    break;
-//
-//                case REQUEST_GET_LOCATION:
-//
-//                    Bundle bundle = data.getExtras();
-//                    if (bundle != null) {
-//                        latitude = bundle.getDouble("latitude");
-//                        longitude = bundle.getDouble("longitude");
-//                        address = bundle.getString("address");
-//                        adminArea = bundle.getString("adminArea");
-//                        countryCode = bundle.getString("countryCode");
-//                        countryName = bundle.getString("countryName");
-//                        district = bundle.getString("district");
-//                        display = countryName + adminArea;
-//                        tvLocation.setText(display);
-//
-//
-//                    } else
-//                        Toast.makeText(this, "bundle failed", Toast.LENGTH_SHORT);
-//
-//
-//                default:
-//            }
-//        }
+
     }
 
     public void crop(Uri srcImageUri) {
@@ -429,8 +360,8 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
             cropIntent.putExtra("crop", "true");
             cropIntent.putExtra("aspectX", 1);
             cropIntent.putExtra("aspectY", 1);
-            cropIntent.putExtra("outputX", 180);
-            cropIntent.putExtra("outputY", 180);
+            cropIntent.putExtra("outputX", 1000);
+            cropIntent.putExtra("outputY", 1000);
             cropIntent.putExtra("scale", true);
             cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, croppedImageUri);
             cropIntent.putExtra("return-data", true);
@@ -455,32 +386,7 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         return result;
     }
 
-//    private void GPSisopen(LocationManager locationManager) {
-//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            Toast.makeText(this, "請打開GPS", Toast.LENGTH_SHORT);
-//            final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-//            dialog.setTitle("請打開GPS連接");
-//            dialog.setMessage("為了獲取定位服務，請先打開GPS");
-//            dialog.setPositiveButton("設置", new android.content.DialogInterface.OnClickListener() {
-//
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                    startActivityForResult(intent, 0);
-//                }
-//            });
-//            dialog.setNegativeButton("取消", new android.content.DialogInterface.OnClickListener() {
-//
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    dialogInterface.dismiss();
-//                }
-//            });
-//
-//            dialog.show();
-//        }
-//    }
+
 
 
     public void insert(int memberId) {
@@ -548,6 +454,8 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
     }
 
 
+
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -561,4 +469,6 @@ public class NewPost_Activity extends AppCompatActivity implements View.OnClickL
         super.onResume();
 
     }
+
+
 }

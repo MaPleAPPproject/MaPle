@@ -70,7 +70,7 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
         ivPhoto = findViewById(R.id.ivPhoto);
         tvLocation = findViewById(R.id.tvlocation);
         tvDescription = findViewById(R.id.tvDescription);
-        tvshowTimeStamp = findViewById(R.id.tvShowTimeStamp);
+        tvshowTimeStamp = findViewById(R.id.tvshowTimeStamp);
         btReturn = findViewById(R.id.btReturn);
 
     }

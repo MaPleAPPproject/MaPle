@@ -1,54 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <RelativeLayout
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
+        android:layout_gravity="top|start"
         android:background="#FFFFFF"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/etLocationName"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/btConfirm"
+            android:src="@drawable/ic_search"
+            android:layout_gravity="center_vertical"
+            />
+
+        <AutoCompleteTextView
+            android:id="@+id/actLocationName"
+            android:layout_width="279dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:hint="@string/hint_etLocationName"
             android:inputType="text"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/btConfirm" />
-
-        <Button
-        android:id="@+id/btConfirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:onClick="onConfirmClick"
-        android:text="@string/btSubmit"
-        android:layout_toStartOf="@+id/btBacktoNewPost"
-        android:layout_toLeftOf="@+id/btBacktoNewPost" />
+            />
 
 
         <Button
-            android:id="@+id/btBacktoNewPost"
+            android:id="@+id/btConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:onClick="onBackToNewPostClick"
-            android:text="@string/btok"
-            android:layout_alignParentRight="true" />
-    </RelativeLayout>
+            android:onClick="onConfirmClick"
+            android:text="搜尋"
 
-</FrameLayout>
+            />
+
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <ImageButton
+            android:id="@+id/ibMyLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onMyLocationClick"
+            android:src="@drawable/ic_location"
+            android:layout_gravity="right"
+            android:layout_margin="6dp"
+            android:background="#b4f7f6f6"
+            />
+
+
+    </FrameLayout>
+
+
+</LinearLayout>
