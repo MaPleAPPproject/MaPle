@@ -42,7 +42,7 @@ import group3.Common;
 import group3.Picture;
 import group3.mypage.CommonTask;
 
-public class TabFragmentLocation extends Fragment implements OnMapReadyCallback {
+public class TabFragmentLocation extends Fragment {
     private static final String TAG = "TabFragmenttop";
     private CommonTask pictureGetTopTask;
     private RecyclerView recyclerView;
@@ -60,8 +60,8 @@ public class TabFragmentLocation extends Fragment implements OnMapReadyCallback 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SupportMapFragment supportMapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.exploremap);
-        supportMapFragment.getMapAsync(this);
+//        SupportMapFragment supportMapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.exploremap);
+//        supportMapFragment.getMapAsync(this);
 
     }
 
@@ -107,47 +107,6 @@ private void showAllPosts() {
 
 }
 
-    private void showMap(List<Picture> picturelist) {
-        for(int i = 0;i < picturelist.size();i++) {
-            picturelocation = picturelist.get(i);
-            LatLng cameratarget = new LatLng(picturelist.get(0).getLat(),picturelist.get(0).getLon());
-            LatLng position = new LatLng(picturelocation.getLat(), picturelocation.getLon());
-            int posid = picturelocation.getPostid();
-
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(cameratarget)
-                    .zoom(2)
-                    .build();
-            CameraUpdate cameraUpdate = CameraUpdateFactory
-                    .newCameraPosition(cameraPosition);
-            map.animateCamera(cameraUpdate);
-
-            // ic_add spot on the map
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .position(position)
-                    .draggable(false)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.flag))
-                    .anchor(0, 1));
-            marker.setTag(posid);
-        }
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.map = googleMap;
-        if (ActivityCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            map.setMyLocationEnabled(true);
-        }
-        map.getUiSettings().setZoomControlsEnabled(true);
-        if (picturestop == null) {
-            Toast.makeText(getActivity(),"找尋不到該地點",Toast.LENGTH_SHORT).show();
-        } else {
-            showMap(picturestop);
-        }
-
-    }
 
     public class PostAdapter extends RecyclerView.Adapter<TabFragmentLocation.PostAdapter.MyViewHolder> {
         private int imageSize;

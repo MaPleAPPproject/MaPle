@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.navigation_explore:
-                        getSupportActionBar().show();
+                        getSupportActionBar().hide();
                         viewPager.setCurrentItem(1);
 
                         return true;

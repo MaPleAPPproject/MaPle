@@ -47,7 +47,7 @@ public class MypageFragment extends Fragment {
     private ViewPager tabviewPager;
     private TabLayout tabLayout;
     private ImageButton addNewPost, map, chart;
-    private TextView mTextView,tvSelfIntroMyPage;
+    private TextView mTextView,tvSelfIntroMyPage, tvPostCount, tvCollectCount;
     private Bundle bundle;
     private int memberId;
     private CommonTask getNameTask;
@@ -150,6 +150,8 @@ public class MypageFragment extends Fragment {
         snapshot = rootview.findViewById(R.id.desnapshot);
         snapshot.setImageResource(R.drawable.icon_facev);
         tvSelfIntroMyPage = rootview.findViewById(R.id.tvSelfIntroMyPage);
+        tvCollectCount = rootview.findViewById(R.id.collectorcount);
+        tvPostCount = rootview.findViewById(R.id.postcount);
 
 
 
@@ -250,8 +252,9 @@ public class MypageFragment extends Fragment {
             String url = Common.URL + "/User_profileServlet";
             User_Profile userProfiles = null;
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "findById");
+            jsonObject.addProperty("action", "findotherById");
             jsonObject.addProperty("memberId", memberId);
+            jsonObject.addProperty("userid",memberId);
             String jsonOut = jsonObject.toString();
             getNameTask = new CommonTask(url, jsonOut);
             try {
@@ -266,6 +269,8 @@ public class MypageFragment extends Fragment {
             } else {
                 userName.setText(userProfiles.getUserName());
                 tvSelfIntroMyPage.setText(userProfiles.getSelfIntroduction());
+                tvPostCount.setText(String.valueOf(userProfiles.getPostcount()));
+                tvCollectCount.setText(String.valueOf(userProfiles.getCollectcount()));
 
 
             }
@@ -309,4 +314,9 @@ public class MypageFragment extends Fragment {
 //    }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadForMypage();
+    }
 }
