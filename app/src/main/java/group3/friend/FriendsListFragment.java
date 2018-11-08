@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -61,8 +62,7 @@ public class FriendsListFragment extends Fragment {
     private String vipStatus;
     private Payment payment;
     private EasyDialog easyDialog;
-
-
+    private HashMap<String, String> friendKeyMap = new HashMap<String, String>();
 
 
     @Override
@@ -77,7 +77,6 @@ public class FriendsListFragment extends Fragment {
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 "userAccountDetail", MODE_PRIVATE);
         vipStatus = preferences.getString("userVipStatus", "");
-
 
 
     }
@@ -136,6 +135,9 @@ public class FriendsListFragment extends Fragment {
                 Type listType = new TypeToken<List<User_Profile>>() {
                 }.getType();
                 friendsList = new Gson().fromJson(jsonIn, listType);
+                for (User_Profile user : friendsList) {
+                    friendKeyMap.put(String.valueOf(user.getMemberId()), user.getUserName());
+                }
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
@@ -168,13 +170,21 @@ public class FriendsListFragment extends Fragment {
             StateMessage stateMessage = new Gson().fromJson(message, StateMessage.class);
             String type = stateMessage.getType();
             String friend = stateMessage.getUser();
-            String friendName = stateMessage.getUserName();
+            String friendName;
+
+            if (friendKeyMap != null) {
+                friendName = friendKeyMap.get(friend);
+            } else {
+                showAllfriends();
+                friendName = friendKeyMap.get(friend);
+            }
+
             switch (type) {
                 // 有user連線
                 case "open":
                     // 如果是自己連線
                     List<String> onlineFriendList = new ArrayList<>(stateMessage.getUsers());
-                    for(String name : onlineFriendList){
+                    for (String name : onlineFriendList) {
                         Log.d(TAG, name);
                     }
                     SocketCommon.setonlineFriendList(onlineFriendList);
@@ -256,7 +266,7 @@ public class FriendsListFragment extends Fragment {
 
             //取消沒在線上的朋友清單的chat按鈕
 
-            if (onlineFriendList == null||vipStatus.equals("0") ) {
+            if (onlineFriendList == null || vipStatus.equals("0")) {
                 viewHolder.btChat.setEnabled(false);
                 final int color = getResources().getColor(R.color.colorGray);
                 viewHolder.btChat.setBackgroundColor(color);
@@ -301,13 +311,12 @@ public class FriendsListFragment extends Fragment {
                     bundle.putString("friend", friendStr);
 
 
-
                     Log.d(TAG, "friend : " + friend + "friendName : " + friendName);
                     intent.putExtras(bundle);
 
 
                     intent.setClass(getActivity(), ChatActivity.class);
-                    intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP );
+                    intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }
             });
@@ -329,6 +338,7 @@ public class FriendsListFragment extends Fragment {
             }
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -368,6 +378,7 @@ public class FriendsListFragment extends Fragment {
             friendImageTask = null;
         }
     }
+
     public void paymentDialog(final Context context) {
         final android.support.v4.app.FragmentTransaction ft =
                 getFragmentManager().beginTransaction();

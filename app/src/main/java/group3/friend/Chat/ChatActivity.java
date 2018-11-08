@@ -37,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -68,6 +69,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private String userName;
     private String friendName;
     private Activity activity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
