@@ -86,6 +86,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
     private CommonTask uploadTask;
     private User_Profile userprofile;
     private int memberId;
+    private User_Profile userProfiles;
     private CommonTask getProfileTask;
     private ImageTask Icontask;
     private String servlet = "/User_profileServlet",userNameChanged;
@@ -296,7 +297,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
 
         if (Common.networkConnected(this)) {
             String url = Common.URL + "/User_profileServlet";
-            User_Profile userProfiles = null;
+
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findById");
             jsonObject.addProperty("memberId", memberId);

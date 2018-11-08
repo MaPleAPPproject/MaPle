@@ -2,19 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/optionmenu_invite"
-        android:icon="@drawable/star"
-        android:title="@string/invite"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/optionmenu_match"
-        android:icon="@drawable/favorite"
-        android:title="@string/menumatch"
-        app:showAsAction="always"/>
-    <item
         android:id="@+id/optionmenu_payment"
         android:icon="@drawable/money"
         android:title="@string/payment"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/optionmenu_invite"
+        android:icon="@drawable/inviation"
+        android:title="@string/invite"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/optionmenu_match"
+        android:icon="@drawable/people"
+        android:title="@string/menumatch"
+        app:showAsAction="always"/>
+
 
 </menu>

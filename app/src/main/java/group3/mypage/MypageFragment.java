@@ -54,6 +54,7 @@ public class MypageFragment extends Fragment {
     private TextView userName;
     private byte[] image;
     private SharedPreferences pref;
+    public static String UserName;
 
     private CircleImageView snapshot;
 
@@ -268,9 +269,11 @@ public class MypageFragment extends Fragment {
                 Toast.makeText(getActivity(), "no_profile", Toast.LENGTH_SHORT).show();
             } else {
                 userName.setText(userProfiles.getUserName());
+                UserName = userProfiles.getUserName();
                 tvSelfIntroMyPage.setText(userProfiles.getSelfIntroduction());
                 tvPostCount.setText(String.valueOf(userProfiles.getPostcount()));
                 tvCollectCount.setText(String.valueOf(userProfiles.getCollectcount()));
+
 
 
             }

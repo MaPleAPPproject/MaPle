@@ -2,6 +2,7 @@ package group3.friend;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class MatchActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FriendTask friendGetAllTask;
     private FriendImageTask friendImageTask;
+    private int memberid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,9 @@ public class MatchActivity extends AppCompatActivity {
         setContentView(activity_match);
         setTitle(R.string.textTitle_Match);
         handleViews();
+        SharedPreferences pref = getApplication().getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        memberid = Integer.valueOf(pref.getString("MemberId",""));
     }
 
     @Override
@@ -67,7 +72,7 @@ public class MatchActivity extends AppCompatActivity {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
             //之後要用會員登入的偏好設定取得會員資料
-            jsonObject.addProperty("memberid", 6);
+            jsonObject.addProperty("memberid", memberid);
             String jsonOut = jsonObject.toString();
             friendGetAllTask = new FriendTask(url, jsonOut);
             try {
@@ -157,7 +162,7 @@ public class MatchActivity extends AppCompatActivity {
                     String url = Common.URL + "/MatchServlet";
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "friendReject");
-                    jsonObject.addProperty("memberid", 6);
+                    jsonObject.addProperty("memberid", memberid);
                     jsonObject.addProperty("friendid", friendid);
                     String jsonOut = jsonObject.toString();
                     friendGetAllTask = new FriendTask(url, jsonOut);
@@ -188,7 +193,7 @@ public class MatchActivity extends AppCompatActivity {
                     String url = Common.URL + "/MatchServlet";
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "findByIds");
-                    jsonObject.addProperty("memberid", 6);
+                    jsonObject.addProperty("memberid", memberid);
                     jsonObject.addProperty("friendid", friendid);
                     String jsonOut = jsonObject.toString();
                     Log.d(TAG, jsonOut);

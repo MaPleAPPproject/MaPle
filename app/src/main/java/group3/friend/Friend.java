@@ -10,6 +10,7 @@ public class Friend{
     private int friendid;
     private static Serializable friends;
 
+
     public Friend(int memberid, int matchid, String messageRoom, int relationshipStatus, int friendid) {
         this.memberid = memberid;
         this.matchid = matchid;

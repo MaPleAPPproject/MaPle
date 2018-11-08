@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-
 import com.cp102group3maple.violethsu.maple.R;
 
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import java.util.Map;
 
 import group3.explore.ExploreFragment;
 
+import group3.friend.Chat.SocketCommon;
 import group3.friend.FriendsListFragment;
 import group3.mypage.MypageFragment;
 import group3.mypage.Mymap_fragment;
@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         memberId = Integer.parseInt(pref.getString("MemberId", ""));
         Log.d(TAG,"test"+memberId);
+
+// created socket connection.
+
 
 //        if (userList.containsKey("user"+memberId)) {
 //            // TODO: 2018/9/14 呼叫自動登陸List 頁面
@@ -171,5 +174,11 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        SocketCommon.disconnectServer();
+        super.onDestroy();
     }
 }
