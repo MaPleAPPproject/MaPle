@@ -64,7 +64,6 @@
         <activity android:name="group3.friend.Match" />
         <activity android:name="group3.friend.Chat.ChatActivity" />
         <activity android:name="group3.friend.Payment" />
-        <activity android:name="group3.friend.Receipt" />
         <activity android:name="group3.friend.Friend_PostActivity" />
         <activity android:name="group3.mypage.NewPost_Activity" />
         <activity android:name="group3.mypage.Mypage_SinglePost_Activity" />

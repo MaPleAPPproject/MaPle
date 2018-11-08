@@ -32,6 +32,7 @@ public class ChatWebSocketClient extends WebSocketClient {
     public static String friendInChat;
 
 
+
     public ChatWebSocketClient(URI serverURI, Context context) {
         // Draft_17是連接協議，就是標準的RFC 6455（JSR256）
         super(serverURI, new Draft_17());
@@ -127,13 +128,14 @@ public class ChatWebSocketClient extends WebSocketClient {
         bundle.putString("friend", chatMessage.getSender());
         bundle.putString("messageType", chatMessage.getMessageType());
         bundle.putString("messageContent", chatMessage.getContent());
+        bundle.putString("friendName", chatMessage.getSenderName());
         intent.putExtras(bundle);
         // 必須設定成FLAG_UPDATE_CURRENT，否則會用舊的Bundle
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // API 26開始要加上channel id設定
         Notification notification = new NotificationCompat.Builder(context, channelId)
-                .setContentTitle("message from " + chatMessage.getSender())
+                .setContentTitle("message from " + chatMessage.getSenderName())
                 //.setContentText() 要判斷是文字還是圖，圖就不能秀
                 .setSmallIcon(android.R.drawable.ic_menu_info_details)
                 .setAutoCancel(true)

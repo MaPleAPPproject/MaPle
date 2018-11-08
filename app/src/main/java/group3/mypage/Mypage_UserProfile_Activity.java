@@ -57,6 +57,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import group3.Common;
 import group3.MainActivity;
 import group3.friend.Payment;
+import kale.ui.view.dialog.EasyDialog;
 
 import static android.support.constraint.motion.utils.Oscillator.TAG;
 import static android.view.KeyEvent.KEYCODE_B;
@@ -96,6 +97,8 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
     private int selectionStart;
     private int selectionEnd,maxNum = 100;
     private LinearLayout linearLayoutEditMode,linearLayoutUsernameDisplayMode,linearPasswordEditMode;
+    private EasyDialog easyDialog;
+    private Payment payment;
 
 
     public Mypage_UserProfile_Activity () {
@@ -119,6 +122,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
         handleView();
         loadProfiles(memberId);
         wordCalculator();
+        payment = new Payment(this, this);
 
 
 
@@ -457,9 +461,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
 
 
     public void onPremiumClick(View view) {
-
-        confirmExit(Payment.class);
-
+        paymentDialog(Mypage_UserProfile_Activity.this);
     }
 
     protected void onStart() {
@@ -621,6 +623,27 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
         }
     }
 
+    public void paymentDialog(final Context context) {
 
+        EasyDialog.Builder builder = EasyDialog.builder(context);
+        DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                payment.pay();
+            }
+        };
+        builder.setTitle(R.string.paymentAlertTitle)
+                .setIcon(R.drawable.googlepay)
+                .setMessage(R.string.paymentAgreement)
+                .setOnCancelListener(null)
+                .setOnDismissListener(null)
+
+                .setPositiveButton("同意", OkClick)
+                .setNegativeButton("取消", null)
+//                .setNeutralButton("ignore", this)
+                .setCancelable(true);
+
+        easyDialog = builder.build();
+        easyDialog.show(getSupportFragmentManager());
+    }
 
 }

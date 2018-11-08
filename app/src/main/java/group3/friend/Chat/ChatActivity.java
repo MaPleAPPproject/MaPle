@@ -73,27 +73,28 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        getUserName();
         setTitle(R.string.textTitle_Chat);
         handleviews();
         broadcastManager = LocalBroadcastManager.getInstance(this);
         registerChatReceiver();
-
         SharedPreferences pref = this.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
-        userName = pref.getString("userName", "");
         memberid = pref.getString("MemberId", "");
         activity = this;
-
-        userName = MypageFragment.UserName;
 
 
         // 取得前頁傳來的聊天對象
         if (getIntent().getStringExtra("friendName") != null) {
             friendName = getIntent().getStringExtra("friendName"); //取得聊天的朋友
+        } else {
+            friendName = getIntent().getStringExtra("userName");
         }
 
         if (getIntent().getStringExtra("friend") != null) {
             friend = getIntent().getStringExtra("friend"); //取得聊天的朋友
+        } else {
+
         }
         setTitle("friend: " + friendName);
 
@@ -103,19 +104,34 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         String messageType = getIntent().getStringExtra("messageType");//messageType分辨是文字訊息？圖片訊息？
         if (messageType != null) { //不是空值代表對方先傳訊息，透過通知才點入此聊天室
             String messageContent = getIntent().getStringExtra("messageContent");
+
+
+            Bundle bundle = getIntent().getExtras();
+            for (String key : bundle.keySet()) {
+                Object value = bundle.get(key);
+                Log.d(TAG, String.format("%s %s (%s)", key,
+                        value.toString(), value.getClass().getName()));
+            }
             switch (messageType) {
                 case "text":
-                    showMessage(friend, messageContent, true);
+                    showMessage(friendName, messageContent, true);
                     break;
                 case "image":
                     byte[] image = Base64.decode(messageContent, Base64.DEFAULT);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-                    showImage(friend, bitmap, true);
+                    showImage(friendName, bitmap, true);
                     break;
                 default:
                     break;
             }
         }
+    }
+
+    private void getUserName() {
+        SharedPreferences preferences = getSharedPreferences(
+                "userAccountDetail", MODE_PRIVATE);
+        userName = preferences.getString("userName", "");
+
     }
 
 
@@ -149,6 +165,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
         // 設定目前聊天對象
         ChatWebSocketClient.friendInChat = friend;
+
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager != null) {
@@ -192,13 +209,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     showToast(R.string.text_MessageEmpty);
                     return;
                 }
-                String sender = userName;
-                showMessage(sender, message, false); //showMessage是判斷讓訊息左或右，左邊是自己的訊息，右邊是對方的訊息
+
+                showMessage(userName, message, false); //showMessage是判斷讓訊息左或右，左邊是自己的訊息，右邊是對方的訊息
                 // 將輸入的訊息清空
                 etMessage.setText(null);
                 // 將欲傳送的對話訊息轉成JSON後送出
-                sender = String.valueOf(this.memberid);
-                ChatMessage chatMessage = new ChatMessage("chat", sender, userName, friend, message, "text"); //message type可用數字代替更佳
+
+                ChatMessage chatMessage = new ChatMessage("chat", memberid, userName, friend, message, "text"); //message type可用數字代替更佳
                 String chatMessageJson = new Gson().toJson(chatMessage);
                 chatWebSocketClient.send(chatMessageJson);
                 Log.d(TAG, "output: " + chatMessageJson);
@@ -239,11 +256,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                         Bitmap bitmap = BitmapFactory.decodeStream(
                                 getContentResolver().openInputStream(croppedImageUri));
                         Bitmap downsizedImage = Common.downSize(bitmap, newSize);
-                        String sender = memberid;
-                        showImage(sender, downsizedImage, false);
+
+                        showImage(userName, downsizedImage, false);
                         // 將欲傳送的對話訊息轉成JSON後送出
                         String message = Base64.encodeToString(bitmapToPNG(downsizedImage), Base64.DEFAULT);
-                        ChatMessage chatMessage = new ChatMessage("chat", sender, friendName, friend, message, "image");
+                        ChatMessage chatMessage = new ChatMessage("chat", memberid, userName, friend, message, "image");
                         String chatMessageJson = new Gson().toJson(chatMessage);
                         chatWebSocketClient.send(chatMessageJson);
                         Log.d(TAG, "output: " + chatMessageJson);
@@ -309,10 +326,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
             friendName = chatMessage.getSenderName();
 
-            friend = chatMessage.getSender();
-
-
             // 接收到聊天訊息，若發送者與目前聊天對象相同，就顯示訊息
+//            if(friend == null){
+//                friend = sender;
+//            }
             if (sender.equals(friend)) {
                 switch (messageType) {
                     case "text":
@@ -321,11 +338,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     case "image":
                         byte[] image = Base64.decode(chatMessage.getContent(), Base64.DEFAULT);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-                        showImage(sender, bitmap, true);
+                        showImage(friendName, bitmap, true);
                         break;
                     default:
                         break;
                 }
+
             }
             Log.d(TAG, "received message: " + message);
         }

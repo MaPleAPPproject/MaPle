@@ -1,6 +1,7 @@
 package group3.friend;
 
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -42,6 +43,7 @@ import group3.friend.Chat.ChatActivity;
 import group3.friend.Chat.SocketCommon;
 import group3.friend.Chat.StateMessage;
 import group3.mypage.User_Profile;
+import kale.ui.view.dialog.EasyDialog;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
@@ -56,6 +58,9 @@ public class FriendsListFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private int memberid;
     private LocalBroadcastManager broadcastManager;
+    private String vipStatus;
+    private Payment payment;
+    private EasyDialog easyDialog;
 
 
 
@@ -64,10 +69,17 @@ public class FriendsListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
-        activity.setTitle(R.string.textTitle_Friend);
+//        activity.setTitle(R.string.textTitle_Friend);
         SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         memberid = Integer.valueOf(pref.getString("MemberId", ""));
+        payment = new Payment(this.getContext(), this.getActivity());
+        SharedPreferences preferences = getActivity().getSharedPreferences(
+                "userAccountDetail", MODE_PRIVATE);
+        vipStatus = preferences.getString("userVipStatus", "");
+
+
+
     }
 
     @Nullable
@@ -156,6 +168,7 @@ public class FriendsListFragment extends Fragment {
             StateMessage stateMessage = new Gson().fromJson(message, StateMessage.class);
             String type = stateMessage.getType();
             String friend = stateMessage.getUser();
+            String friendName = stateMessage.getUserName();
             switch (type) {
                 // 有user連線
                 case "open":
@@ -165,7 +178,7 @@ public class FriendsListFragment extends Fragment {
                         Log.d(TAG, name);
                     }
                     SocketCommon.setonlineFriendList(onlineFriendList);
-                    Toast.makeText(activity, friend + "正在線上", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, friendName + "正在線上", Toast.LENGTH_SHORT).show();
 
                     // 重刷聊天清單
                     recyclerView.getAdapter().notifyDataSetChanged();
@@ -175,7 +188,7 @@ public class FriendsListFragment extends Fragment {
                     // 將斷線的user從聊天清單中移除
                     SocketCommon.getonlineFriendList().remove(friend);
                     recyclerView.getAdapter().notifyDataSetChanged();
-                    Toast.makeText(activity, friend + "已經下線囉", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, friendName + "已經下線囉", Toast.LENGTH_SHORT).show();
                     break;
             }
             Log.d(TAG, "message: " + message);
@@ -207,6 +220,7 @@ public class FriendsListFragment extends Fragment {
                 tvName = frienditem.findViewById(R.id.tvName);
                 tvIntro = frienditem.findViewById(R.id.tvIntro);
                 btChat = frienditem.findViewById(R.id.btChat);
+
             }
         }
 
@@ -242,7 +256,7 @@ public class FriendsListFragment extends Fragment {
 
             //取消沒在線上的朋友清單的chat按鈕
 
-            if (onlineFriendList == null ) {
+            if (onlineFriendList == null||vipStatus.equals("0") ) {
                 viewHolder.btChat.setEnabled(false);
                 final int color = getResources().getColor(R.color.colorGray);
                 viewHolder.btChat.setBackgroundColor(color);
@@ -306,22 +320,29 @@ public class FriendsListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.fl_option, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
+        if (payment.vipStatus == 1) {
+            MenuItem menuItem = menu.findItem(R.id.optionmenu_payment);
+            if (menuItem != null) {
+                menuItem.setVisible(false);
+            } else {
+                Log.w(TAG, "matchbtPremium is null");
+            }
+        }
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            //這裡要判斷使用者是否為vip
+
             case R.id.optionmenu_match:
                 Intent intentmatch = new Intent();
                 intentmatch.setClass(getActivity(), MatchActivity.class);
                 startActivity(intentmatch);
                 break;
             case R.id.optionmenu_payment:
-                Intent intentpayment = new Intent();
-                intentpayment.setClass(getActivity(), Payment.class);
-                startActivity(intentpayment);
+                paymentDialog(getContext());
+
+
                 break;
             case R.id.optionmenu_invite:
                 Intent intentinvite = new Intent();
@@ -346,6 +367,30 @@ public class FriendsListFragment extends Fragment {
             friendImageTask.cancel(true);
             friendImageTask = null;
         }
+    }
+    public void paymentDialog(final Context context) {
+        final android.support.v4.app.FragmentTransaction ft =
+                getFragmentManager().beginTransaction();
+
+        EasyDialog.Builder builder = EasyDialog.builder(context);
+        DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                payment.pay();
+            }
+        };
+        builder.setTitle(R.string.paymentAlertTitle)
+                .setIcon(R.drawable.googlepay)
+                .setMessage(R.string.paymentAgreement)
+                .setOnCancelListener(null)
+                .setOnDismissListener(null)
+
+                .setPositiveButton("同意", OkClick)
+                .setNegativeButton("取消", null)
+//                .setNeutralButton("ignore", this)
+                .setCancelable(true);
+
+        easyDialog = builder.build();
+        easyDialog.show(getFragmentManager());
     }
 }
 
