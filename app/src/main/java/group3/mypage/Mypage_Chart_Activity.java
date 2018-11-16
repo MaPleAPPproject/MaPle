@@ -3,6 +3,7 @@ package group3.mypage;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.motion.utils.Oscillator;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +38,7 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
     private int memberId;
     private HashMap<String, Integer> visitedCount;
     private TextView tvresult, tvresultasia, tvresulteurope, tvresultnorthamerica, tvresultsouthamerica, tvresultafrica, tvresultoceania;
-
+    private final String TAG = "Mypage_Chart_Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,25 +98,31 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
                 Log.e(Oscillator.TAG, e.toString());
             }
             if (countryCodeSet == null) {
-                Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Fail to get contrycodeset from server.");
             } else {
+                if (!countryCodeSet.isEmpty()) {
+                    for (String code : countryCodeSet) {
 
+                        if (code == "TWN") {
+                            geoMapView.setCountryColor("TW", "#00BDBD");
+                        } else {
+                            geoMapView.setCountryColor(code, "#00BDBD");
+                        }
 
-                for (String code : countryCodeSet) {
-
-                    if (code == "TWN") {
-                        geoMapView.setCountryColor("TW", "#00BDBD");
-                    } else {
-                        geoMapView.setCountryColor(code, "#00BDBD");
+                        geoMapView.refresh();
+                        return;
                     }
+                } else {
+                    return;
 
-                    geoMapView.refresh();
                 }
 
             }
 
         } else {
-            Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+//
+            Log.e(TAG, "Fail to connect to server.");
         }
 
     }
@@ -157,6 +164,7 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
                             int countryAmountTol = 234;
                             String percentTol = "(" + value + "/" + countryAmountTol + ")   " + df.format(value*100.0f / countryAmountTol) + "%";
                             tvresult.setText(percentTol);
+                            tvresult.setTextColor(Color.rgb(30,163,193));
                             break;
 
                         case "Asia":

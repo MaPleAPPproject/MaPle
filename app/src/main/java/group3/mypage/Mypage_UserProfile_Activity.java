@@ -177,6 +177,8 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
                 linearLayoutEditMode.setVisibility(View.VISIBLE);
                 linearLayoutUsernameDisplayMode.setVisibility(View.GONE);
                 etdisplayname.setText(tvName.getText().toString().trim());
+
+
                 break;
 
             case R.id.ibCheck:
@@ -288,7 +290,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
 
 
 
-    private void hideSoftKeyboard(Context context, EditText editText) {
+    public void hideSoftKeyboard(Context context, EditText editText) {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
@@ -317,6 +319,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
             if (userProfiles == null) {
                 Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
             } else {
+
                 tvName.setText(userProfiles.getUserName());
                 tvPassword.setText(userProfiles.getPassword());
                 tvEmail.setText(userProfiles.getEmail());

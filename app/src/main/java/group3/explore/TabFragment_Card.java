@@ -2,41 +2,30 @@ package group3.explore;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
-import com.google.android.gms.flags.impl.SharedPreferencesFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
 import group3.Common;
 import group3.Picture;
-import group3.Postdetail;
 import group3.mypage.CommonTask;
-
-import static android.content.Context.MODE_PRIVATE;
-import static com.google.android.gms.flags.impl.SharedPreferencesFactory.getSharedPreferences;
-import static group3.Common.PREF_FILE;
 
 public class TabFragment_Card extends Fragment {
     private static final String TAG = "TabFragment_Card";
@@ -54,6 +43,7 @@ public class TabFragment_Card extends Fragment {
         bundle=getArguments();
         memberid = bundle.getInt("memberid");
         rvPost = view.findViewById(R.id.rvPost);
+//        EmptyRecyclerView rvPost = view.findViewById(R.id.erview);
         rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
         rvPost.setNestedScrollingEnabled(false);
         contentview=view.getContext();

@@ -81,8 +81,8 @@ public class MypageFragment extends Fragment {
         loadForMypage();
         tabLayout = rootview.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(tabviewPager);
-        tabLayout.addTab(tabLayout.newTab().setText("Post"));
-        tabLayout.addTab(tabLayout.newTab().setText("Collection"));
+        tabLayout.addTab(tabLayout.newTab().setText("貼文"));
+        tabLayout.addTab(tabLayout.newTab().setText("收藏"));
         tabviewPager = rootview.findViewById(R.id.tabviewPager);
 //        tablayput綁定viewpager
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabviewPager));
@@ -97,29 +97,7 @@ public class MypageFragment extends Fragment {
             }
         });
 
-//        addNewPost.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent newPostIntent = new Intent(getActivity(), NewPost_Activity.class);
-//                startActivity(newPostIntent);
-//
-//            }
-//        });
-//
-//        chart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent chartIntent = new Intent(getActivity(), Mypage_Chart_Activity.class);
-//                startActivity(chartIntent);
-//            }
-//        });
-//        map.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent chartIntent = new Intent(getActivity(), ExGoogleMap.class);
-//                startActivity(chartIntent);
-//            }
-//        });
+
         return rootview;
 
     }
@@ -149,7 +127,7 @@ public class MypageFragment extends Fragment {
     private void handleviews(View rootview) {
         userName = rootview.findViewById(R.id.tvusername);
         snapshot = rootview.findViewById(R.id.desnapshot);
-        snapshot.setImageResource(R.drawable.icon_facev);
+        snapshot.setImageResource(R.drawable.adduser);
         tvSelfIntroMyPage = rootview.findViewById(R.id.tvSelfIntroMyPage);
         tvCollectCount = rootview.findViewById(R.id.collectorcount);
         tvPostCount = rootview.findViewById(R.id.postcount);
@@ -268,13 +246,11 @@ public class MypageFragment extends Fragment {
             if (userProfiles == null) {
                 Toast.makeText(getActivity(), "no_profile", Toast.LENGTH_SHORT).show();
             } else {
-                userName.setText(userProfiles.getUserName());
-                tvSelfIntroMyPage.setText(userProfiles.getSelfIntroduction());
+                String userNameString = userProfiles.getUserName();
+                    userName.setText(userNameString);
+                    tvSelfIntroMyPage.setText(userProfiles.getSelfIntroduction());
                 tvPostCount.setText(String.valueOf(userProfiles.getPostcount()));
                 tvCollectCount.setText(String.valueOf(userProfiles.getCollectcount()));
-
-
-
             }
 
             int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
@@ -316,9 +292,4 @@ public class MypageFragment extends Fragment {
 //    }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadForMypage();
-    }
 }

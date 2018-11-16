@@ -34,7 +34,7 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
     private ImageView personIcon, ivPhoto;
     private TextView tvName, tvLocation, tvDescription,tvshowTimeStamp;
     private String comment, location;
-    private Button btReturn;
+
     private int postId;
     private byte[] photo;
     private byte[] profileIcon;
@@ -71,18 +71,11 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
         tvLocation = findViewById(R.id.tvlocation);
         tvDescription = findViewById(R.id.tvDescription);
         tvshowTimeStamp = findViewById(R.id.tvshowTimeStamp);
-        btReturn = findViewById(R.id.btReturn);
 
     }
 
 
-    public void onReturnClick(View view) {
 
-
-        Intent intent = new Intent(Mypage_SinglePost_Activity.this, MainActivity.class);
-        intent.putExtra("memberId", memberId);
-        startActivity(intent);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,8 +99,8 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
             case R.id.newPost_delete:
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(Mypage_SinglePost_Activity.this);
-                builder.setMessage("Are you sure that you want to delete this post ?")
-                        .setTitle("Delete");
+                builder.setMessage("確定要刪除這篇貼文嗎?")
+                        .setTitle("刪除貼文");
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         deletePost(postId);
@@ -124,6 +117,14 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
+
+                return true;
+            case R.id.backToMyPage:
+                Intent intent = new Intent(Mypage_SinglePost_Activity.this, MainActivity.class);
+                intent.putExtra("memberId", memberId);
+                startActivity(intent);
+
+
 
                 return true;
             default:
@@ -173,32 +174,35 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
                     photo = out.toByteArray();
 
                 } else {
-                    Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
+                    Log.e("SinglePost", "loadData _ getpostImage failed");
 
                 }
                 //getPhotoIcon
 
-                int imageIconSize = getResources().getDisplayMetrics().widthPixels / 4;
-                Bitmap iconBitmap = null;
-                try {
-                    iconBitmap = new ImageTask(url, memberId, imageIconSize, personIcon).execute().get();
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-                if (iconBitmap != null) {
-                    ivPhoto.setImageBitmap(iconBitmap);
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    iconBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    photo = out.toByteArray();
-
-                } else {
-                    Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
-
-                }
+//                int imageIconSize = getResources().getDisplayMetrics().widthPixels / 4;
+//                Bitmap iconBitmap = null;
+//                try {
+//                    iconBitmap = new ImageTask(url, memberId, imageIconSize, personIcon).execute().get();
+//                } catch (Exception e) {
+//                    Log.e(TAG, e.toString());
+//                }
+//                if (iconBitmap != null) {
+//                    ivPhoto.setImageBitmap(iconBitmap);
+//                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                    iconBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+//                    photo = out.toByteArray();
+//
+//                } else {
+////                    Toast.makeText(this, "沒有圖片", Toast.LENGTH_SHORT).show();
+//                    Log.e("SinglePost", "loadData _ getphotoIcon failed");
+//
+//                }
             }
 
         } else {
-            Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "網路連線發生問題", Toast.LENGTH_SHORT).show();
+            Log.e("SinglePost", "loadData _ No network connection");
         }
 
 
@@ -218,16 +222,16 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
-            if (bitmap != null) {
-                personIcon.setImageBitmap(bitmap);
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                profileIcon = out.toByteArray();
-
-            } else {
-                Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
-
-            }
+//            if (bitmap != null) {
+//                personIcon.setImageBitmap(bitmap);
+//                ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+//                profileIcon = out.toByteArray();
+//
+//            } else {
+//                Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
+//
+//            }
         }
     }
 
@@ -252,10 +256,10 @@ public class Mypage_SinglePost_Activity extends AppCompatActivity {
                 Log.e(TAG, e.toString());
             }
             if (count != 0 ) {
-                Toast.makeText(this, "Your post has deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "貼文已成功刪除", Toast.LENGTH_SHORT).show();
             } else {
 
-                Toast.makeText(this, "Fail to delete the post", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "未成功刪除貼文", Toast.LENGTH_SHORT).show();
             }
 
         } else {

@@ -7,6 +7,12 @@
         android:title="@string/title_home" />
 
     <item
+        android:id="@+id/navigation_map"
+        android:icon="@drawable/ic_mypage_map"
+        android:title="佔領圖" />
+
+
+    <item
         android:id="@+id/navigation_explore"
         android:icon="@drawable/ic_navigation_explore"
         android:title="@string/title_explore" />
@@ -16,9 +22,5 @@
         android:icon="@drawable/ic_navigation_friendpage"
         android:title="@string/title_friends" />
 
-    <item
-        android:id="@+id/navigation_map"
-        android:icon="@drawable/ic_mypage_map"
-        android:title="mymap" />
 
 </menu>
