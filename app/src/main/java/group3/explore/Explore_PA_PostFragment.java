@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.cp102group3maple.violethsu.maple.R;
 import com.google.android.gms.flags.impl.SharedPreferencesFactory;
@@ -50,7 +51,8 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "Explore_PA_PostFragment";
     private Button btBack;
     private ImageView imageView,ivicon;
-    private ImageView btcollect;
+//    private ImageView btcollect;
+    private ToggleButton btcollect;
     private TextView tvname,tvlocation,tvcomment,tvdate,tvcollectcount,tvclickcount;
     private android.support.v4.app.Fragment fragment;
     private Bundle bundle;
@@ -61,10 +63,10 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     private Postdetail postdetail;
     private CommonTask collectTask;
     private CommonTask collectcheckTask;
-    private int newcollectcount;
-    private CommonTask updatepostTask;
     private int collectorid;
     private SharedPreferences pref;
+    private CommonTask collectOffTask;
+    private int collectCount;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +87,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         bundle=new Bundle();
         bundle.putSerializable("picture", picture);
         handleviews(view);
+        btcollect.setOnClickListener(new checkButton_OnclickLister());
         return view;
     }
 
@@ -141,24 +144,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
-        if (!iscollectable(collectorid,postdetail.getPostId())) {
-            DrawableCompat.setTint(btcollect.getDrawable(), ContextCompat.getColor(getContext(),
-                    R.color.colorPrimaryDark));
-            btcollect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DrawableCompat.setTint(btcollect.getDrawable(), ContextCompat.getColor(getContext(),
-                            R.color.colorRed));
-                    tvcollectcount.setText(String.valueOf(postdetail.getCollectioncount()+1));
-                    addcollect();
-                }
-            });
-        }else {
-                DrawableCompat.setTint(btcollect.getDrawable(), ContextCompat.getColor(getContext(),
-                        R.color.colorRed));
-//                Toast.makeText(getActivity(), "already collected", Toast.LENGTH_SHORT).show();
-        }
-//      收藏鍵(need to add update when leave/if else change color)
+
             tvlocation.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -198,6 +184,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
                 tvname.setText(postdetail.getUsername());
                 tvcollectcount.setText(String.valueOf(postdetail.getCollectioncount()));
                 tvlocation.setText(String.valueOf(postdetail.getDistrict()));
+                iscollectable(collectorid,postdetail.getPostId());
             }
         } else {
             Toast.makeText(getActivity(),"請確認網路連線",Toast.LENGTH_SHORT).show();
@@ -228,6 +215,9 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         if (collectcheckTask != null) {
             collectcheckTask.cancel(true);
         }
+        if (collectOffTask != null) {
+            collectOffTask.cancel(true);
+        }
     }
 
     private void addcollect() {
@@ -239,16 +229,19 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
             jsonObject.addProperty("action", "userpreInsert");
             jsonObject.addProperty("userpe", new Gson().toJson(userPreference));
             String jsonOut = jsonObject.toString();
+            collectTask = new CommonTask(url, jsonOut);
             int count = 0;
             try {
-                String result = new CommonTask(url, jsonOut).execute().get();
+                String result = collectTask.execute().get();
                 count = Integer.valueOf(result);
+
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
             if (count == 0) {
                 Toast.makeText(getActivity(),"收藏失敗",Toast.LENGTH_SHORT).show();
             } else {
+                showdetail();
                 Toast.makeText(getActivity(),"已加入收藏",Toast.LENGTH_SHORT).show();
             }
         } else {
@@ -256,7 +249,33 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
         }
 
     }
-
+    private void cancelcollect(int collectorid, int postid) {
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/UserPreferenceServlet";
+            //      要取偏好設定的memberid
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "userpreDelete");
+            jsonObject.addProperty("postid", postid);
+            jsonObject.addProperty("collectorid", collectorid);//      要取偏好設定的memberid
+            String jsonOut = jsonObject.toString();
+            collectOffTask = new CommonTask(url, jsonOut);
+            int count = 0;
+            try {
+                String result = collectOffTask.execute().get();
+                count = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (count == 0) {
+                Toast.makeText(getActivity(),"取消收藏失敗",Toast.LENGTH_SHORT).show();
+            } else {
+                showdetail();
+                Toast.makeText(getActivity(),"已刪除收藏",Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getActivity(), "網路連線失敗", Toast.LENGTH_SHORT).show();
+        }
+    }
     private boolean iscollectable(int collectorid, int postid) {
         boolean iscollectable=false;
         if (Common.networkConnected(getActivity())) {
@@ -274,6 +293,7 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
                 Log.e(TAG, e.toString());
                 iscollectable = false;
             }
+            btcollect.setChecked(!iscollectable);
         } else {
             Toast.makeText(getActivity(), "網路連線失敗", Toast.LENGTH_SHORT).show();
         }
@@ -283,6 +303,19 @@ public class Explore_PA_PostFragment extends android.support.v4.app.Fragment {
     public void onStart() {
         super.onStart();
         showdetail();
+    }
+
+   private class checkButton_OnclickLister implements ToggleButton.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            if (btcollect.isChecked()) {
+                cancelcollect(collectorid,postdetail.getPostId());//isChecked() ->true 為按鈕被選取
+
+            }else {
+                addcollect();
+            }
+        }
     }
 
 }

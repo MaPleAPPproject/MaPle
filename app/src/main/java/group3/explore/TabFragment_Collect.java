@@ -87,11 +87,13 @@ public class TabFragment_Collect extends Fragment {
                 Log.e(TAG, e.toString());
             }
             if (pictures == null||pictures.isEmpty()) {
-                Toast.makeText(getActivity(),"貼文不存在",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),"貼文不存在",Toast.LENGTH_SHORT).show();
+//                imageView.setVisibility(View.VISIBLE);
             }
             else {
                 rvCollection.setAdapter(new TabFragment_Collect.PostAdapter(pictures, contentview));
             }
+
         } else {
             Toast.makeText(getActivity(),"網路連線異常", Toast.LENGTH_SHORT).show();
         }

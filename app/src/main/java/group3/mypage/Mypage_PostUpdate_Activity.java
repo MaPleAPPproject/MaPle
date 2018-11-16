@@ -63,6 +63,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
     private Bitmap picture;
     private byte[] image;
     private  int memberId;
+    private User_Profile userProfiles;
 
 
     @Override
@@ -76,6 +77,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
         Intent intent = getIntent();
         postId = intent.getIntExtra("postId", 0);
         loadPost(postId);
+
 
     }
 

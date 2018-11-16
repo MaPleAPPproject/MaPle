@@ -1,11 +1,14 @@
 package group3.friend;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -34,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group3.Common;
+import group3.Login;
 import group3.friend.Billing.BillingManager;
 import group3.friend.Billing.BillingUpdatesListener;
 import group3.friend.Billing.OrderListDataType;
@@ -42,51 +46,57 @@ import group3.mypage.CommonTask;
 import group3.mypage.ImageTask;
 import group3.mypage.User_Profile;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.support.constraint.motion.utils.Oscillator.TAG;
 
-public class Payment extends AppCompatActivity implements PurchaseHistoryResponseListener {
-    private ImageButton itPaymentConfirm;
-    private RadioGroup rgPaymentType;
-    private RadioButton rbGooglePay, rbCreditCard;
-    private FragmentManager fragmentManager;
-    private TextView tvReceipt;
-
-    private int vipStatus = 0;
-
+public class Payment implements PurchaseHistoryResponseListener {
+    public int vipStatus;
     private BillingManager mBillingManager;
-    private BillingClient mBillingClient;
     private static final String TAG = "Payment";
     private ServerConnect serverConnect;
-    private int memberId = 2;
+    private int memberId;
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     private String urlToOrderList = ServerConnect.URL + "/ReceiptServlet";
-    private String urlToUserAccount = ServerConnect.URL + "/User_profileServlet";
+    private String userUrl = Common.URL + "/User_profileServlet";
+    private Activity activity;
+    private String userName;
+    private String email;
+    private String password;
+    private String selfIntroduction;
+    private byte[] image;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private Context context;
 
 
-        if (false) {
-            setContentView(R.layout.receipt);
-            //           receiptFragment();
-        } else {
-            setContentView(R.layout.activity_payment);
-            handleView();
-            defaultVipStatus();
-            clickEven();
-            initProgress();
+    public Payment(Context context, Activity activity) {
+        this.activity = activity;
+        this.context = context;
+
+        mBillingManager = new BillingManager(activity, new MyBillingUpdateListener());
+
+        SharedPreferences preferences = activity.getSharedPreferences(
+                "userAccountDetail", MODE_PRIVATE);
+        if (preferences.getString("userMemberId", "")!= null) {
+            memberId = Integer.parseInt(preferences.getString("userMemberId", ""));
+        }
+        defaultVipStatus();
+        if (vipStatus == 0) {
+            OrderListDataType data = null;
+            data = findByID(memberId, urlToOrderList);
+            if (data != null) {
+                Log.d(TAG, "data = null.");
+            } else {
+                Log.d(TAG, "Data:" + data);
+            }
         }
     }
 
+
     private void defaultVipStatus() {
 
-        memberId = Integer.parseInt(getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE)
-                .getString("MemberId", ""));
+        if (Common.networkConnected(context)) {
 
-        if (Common.networkConnected(this)) {
-            String userUrl = Common.URL + "/User_profileServlet";
             User_Profile userProfiles = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findById");
@@ -97,76 +107,39 @@ public class Payment extends AppCompatActivity implements PurchaseHistoryRespons
             try {
                 String jsonIn = getProfileTask.execute().get();
                 Log.d(TAG, jsonIn);
-                userProfiles = new Gson().fromJson(jsonIn, User_Profile.class);
-                } catch (Exception e) {
+                userProfiles = gson.fromJson(jsonIn, User_Profile.class);
+            } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
             if (userProfiles == null) {
-                Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "no_profile", Toast.LENGTH_SHORT).show();
             } else {
                 this.vipStatus = userProfiles.getVipStatus();
-                switch (vipStatus) {
-                    case 0:
-                        break;
-                    case 1:
-                        itPaymentConfirm.setVisibility(View.GONE);
-                        break;
-                }
+                this.userName = userProfiles.getUserName();
+                this.selfIntroduction = userProfiles.getSelfIntroduction();
+                this.email = userProfiles.getEmail();
+                this.password = userProfiles.getPassword();
             }
         }
     }
 
-    private void handleView() {
-        itPaymentConfirm = findViewById(R.id.btPayment);
-        rgPaymentType = findViewById(R.id.rgPaymentType);
-        rbCreditCard = findViewById(R.id.rbCreditCard);
-        rbGooglePay = findViewById(R.id.rbGooglePay);
-        rgPaymentType.setVisibility(View.INVISIBLE);
 
-    }
-
-    private void initProgress() {
+    public void pay() {
         List<String> skuList = new ArrayList<>();
-        skuList.add(mBillingManager.getProduct());
+        if (mBillingManager.getProduct() != null) {
 
-        mBillingManager.querySkuDetailsAsync(skuList);
+            skuList.add(mBillingManager.getProduct());
+            mBillingManager.querySkuDetailsAsync(skuList);
+            mBillingManager.initiatePurchaseFlow(mBillingManager.getProduct(), BillingClient.SkuType.INAPP);
 
-    }
-
-    private void clickEven() {
-        mBillingManager = new BillingManager(this, new MyBillingUpdateListener());
-        itPaymentConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (vipStatus == 1) {
-
-                    OrderListDataType data = null;
-                    data = findByID(memberId, urlToOrderList);
-                    if (data != null) {
-                        String text = "Member ID : " + data.getMemberid() + "\nOrder ID : " + data.getOrderid() + "\nOrder Data : " + data.getOrderdate();
-                        Log.d(TAG, text);
-                        tvReceipt.setText(text);
-                    } else {
-                        ServerConnect.showToast(Payment.this, R.string.no_data_from_db);
-                    }
-                } else {
-                    List<String> skuList = new ArrayList<>();
-                    skuList.add(mBillingManager.getProduct());
-                    mBillingManager.querySkuDetailsAsync(skuList);
-                    pay();
-
-                }
-            }
-        });
-    }
-
-    private void pay() {
-        mBillingManager.initiatePurchaseFlow(mBillingManager.getProduct(), BillingClient.SkuType.INAPP);
+        } else {
+            Log.w(TAG, "getProduct is null.");
+        }
         //       mBillingManager.consumeAsync(“token”); // comsume item methon
     }
 
     private OrderListDataType findByID(int id, String Url) {
-        if (ServerConnect.networkConnected(Payment.this)) {
+        if (ServerConnect.networkConnected(activity)) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findById");
             jsonObject.addProperty("id", id);
@@ -185,7 +158,7 @@ public class Payment extends AppCompatActivity implements PurchaseHistoryRespons
             }
 
         } else {
-            ServerConnect.showToast(Payment.this, R.string.msg_Nonetwork);
+            ServerConnect.showToast(context, R.string.msg_Nonetwork);
         }
         return null;
     }
@@ -201,6 +174,7 @@ public class Payment extends AppCompatActivity implements PurchaseHistoryRespons
         public void onBillingClientSetupFinished() {
             mBillingManager.queryPurchases();
 
+
         }
 
         @Override
@@ -215,7 +189,7 @@ public class Payment extends AppCompatActivity implements PurchaseHistoryRespons
 
             for (Purchase p : purchases) {
 
-                if (ServerConnect.networkConnected(Payment.this)) {
+                if (ServerConnect.networkConnected(activity)) {
                     OrderListDataType data = null;
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "infoInsert");
@@ -233,21 +207,57 @@ public class Payment extends AppCompatActivity implements PurchaseHistoryRespons
                         Log.e(TAG, e.toString());
                     }
                     if (count == 0) {
-                        ServerConnect.showToast(Payment.this, R.string.msg_insertFail);
+                        ServerConnect.showToast(context, R.string.msg_insertFail);
                     } else {
-                        ServerConnect.showToast(Payment.this, R.string.msg_InsertSuccess);
+                        ServerConnect.showToast(context, R.string.msg_InsertSuccess);
                     }
+
+
+                    int imageSize = activity.getResources().getDisplayMetrics().widthPixels / 4;
+                    Bitmap bitmap = null;
+
+                    try {
+                        bitmap = new ImageTask(userUrl, memberId, imageSize).execute().get();
+
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    if (bitmap != null) {
+
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        image = out.toByteArray();
+
+                    } else {
+                        Toast.makeText(context, "no_image", Toast.LENGTH_SHORT).show();
+//                    ibPhotoIcon.setImageResource(R.drawable.icon_facev);
+                    }
+                    User_Profile vipStatusUpdate = new User_Profile(memberId, email, password, userName, selfIntroduction, vipStatus);
+                    String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+                    jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", "update");
+                    jsonObject.addProperty("memberId", memberId);
+                    jsonObject.addProperty("userprofile", new Gson().toJson(vipStatusUpdate));
+                    jsonObject.addProperty("imageBase64", imageBase64);
+                    int updatecount = 0;
+                    try {
+                        String result = new CommonTask(userUrl, jsonObject.toString()).execute().get();
+                        updatecount = Integer.valueOf(result);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    if (updatecount == 0) {
+                        Toast.makeText(context, "update failed", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "update successful", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 } else {
-                    ServerConnect.showToast(Payment.this, R.string.msg_Nonetwork);
+                    ServerConnect.showToast(context, R.string.msg_Nonetwork);
                 }
 
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        mBillingClient.endConnection();
-        super.onDestroy();
     }
 }

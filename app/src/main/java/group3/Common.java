@@ -9,9 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -19,11 +16,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static android.content.Context.*;
-import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Common {
 
-    public static String URL = "http://10.0.2.2:8080/MaPle_2";
+    public static String URL = "http://10.0.2.2:8080/MaPle";
+    private static final String TAG = "Common";
 //        public static String URL = "http://192.168.50.90:8080/MaPle";
     public final static String PREF_FILE = "preference";
     private final static String DEFAULT_NAME = "";
@@ -31,7 +28,7 @@ public class Common {
     private final static String DEFAULT_PASSWORD = "";
     private final static String DEFAULT_SELFINTRO = "";
 
-    //    public static String URL = "http://10.0.2.2:8080/MaPle";
+
     public static Bitmap downSize(Bitmap srcPicture, int newSize) {
 
         if (newSize < 20) {
