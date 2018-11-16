@@ -112,7 +112,7 @@
                 android:layout_margin="8dp"
                 android:padding="7dp"
                 android:maxLength="100"
-                android:text="因應雙11購物節到來，Yahoo奇摩購物事業群業務總經理蔡伯璟表示：「Yahoo奇摩身為最受台灣消費者信賴的電商品牌，秉持『好的生活真的不貴』核心精神，這次推出『不留後路5告狂！』五大優惠活動，設計了多種趣味創新機制，邀請消費者以有趣好玩方式，"/>
+             />
 
         </LinearLayout>
     </LinearLayout>

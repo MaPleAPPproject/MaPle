@@ -247,10 +247,13 @@ public class MypageFragment extends Fragment {
                 Toast.makeText(getActivity(), "no_profile", Toast.LENGTH_SHORT).show();
             } else {
                 String userNameString = userProfiles.getUserName();
-                    userName.setText(userNameString);
-                    tvSelfIntroMyPage.setText(userProfiles.getSelfIntroduction());
+                userName.setText(userNameString);
+                tvSelfIntroMyPage.setText(userProfiles.getSelfIntroduction());
                 tvPostCount.setText(String.valueOf(userProfiles.getPostcount()));
                 tvCollectCount.setText(String.valueOf(userProfiles.getCollectcount()));
+
+
+
             }
 
             int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
@@ -292,4 +295,9 @@ public class MypageFragment extends Fragment {
 //    }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadForMypage();
+    }
 }
