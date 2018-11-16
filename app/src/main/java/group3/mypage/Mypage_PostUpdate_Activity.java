@@ -68,7 +68,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_newpost);
+        setContentView(R.layout.activity_updatepost);
         SharedPreferences pref = getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         memberId = Integer.valueOf(pref.getString("MemberId",""));
@@ -245,7 +245,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
                 }finally {
 
                     if (tvLocation == null) {
-                        Toast.makeText(this, "You didnt pick any location", Toast.LENGTH_SHORT);
+                        Toast.makeText(this, "別忘了選擇地點喔！", Toast.LENGTH_SHORT);
                     }
                 }
                 break;
@@ -325,7 +325,9 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
                 Log.e(TAG, e.toString());
             }
             if (post == null) {
-                Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+//
+                Log.e("PostUpdate_Activity", "Fail to load post from server.");
+
             } else {
 
                 etComment.setText(post.getComment());
@@ -333,6 +335,7 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
                 tvLocation.setVisibility(View.VISIBLE);
                 //getPostImage
                 int imageSize = getResources().getDisplayMetrics().widthPixels / 3 * 2;
+//                int imageSize = 900;
                 Bitmap bitmap = null;
                 try {
                     bitmap = new PostImageTask(url, postId, imageSize, imageView).execute().get();
@@ -347,13 +350,15 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
 
                 } else {
 //                    Toast.makeText(this, "no_image", Toast.LENGTH_SHORT).show();
+                    Log.e("PostUpdate_Activity", "Fail to load post photo from server.");
 
                 }
 
             }
 
         } else {
-            Toast.makeText(this, "no_profile", Toast.LENGTH_SHORT).show();
+//           Toast.makeText(this, getString(R.string.msg_Nonetwork), Toast.LENGTH_SHORT).show();
+            Log.e("PostUpdate_Activity", "Fail to connect to server");
         }
     }
 
@@ -391,9 +396,9 @@ public class Mypage_PostUpdate_Activity extends AppCompatActivity implements Vie
                 Log.e(TAG, e.toString());
             }
             if (count == 0) {
-                Toast.makeText(this, "update failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "您的貼文更新失敗，請再試一次.", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "update successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "您的貼文已成功更改", Toast.LENGTH_SHORT).show();
             }
 
             Intent intent = new Intent(this, Mypage_SinglePost_Activity.class);

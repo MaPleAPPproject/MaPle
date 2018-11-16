@@ -229,7 +229,17 @@ public class MapLocation extends AppCompatActivity implements OnMapReadyCallback
 
             moveCameraPosition(position);
             convertToPositionData(addressList);
-            showMarker(position, countryName, addressLine);
+
+            if (adminArea == null) {
+                district = addressLine;
+            } else {
+                district = countryName + "," + adminArea;
+            }
+
+            showMarker(position, countryName, district);
+
+
+
 
 
 
@@ -267,11 +277,15 @@ public class MapLocation extends AppCompatActivity implements OnMapReadyCallback
                 }
                 convertToPositionData(lstAddress);
                 addressLine = lstAddress.get(0).getAddressLine(0);
-                if (addressLine != null) {
 
-                    showMarker(latLng, countryName, addressLine);
-
+                if (adminArea == null) {
+                    district = addressLine;
+                } else {
+                    district = countryName + "," + adminArea;
                 }
+
+                showMarker(latLng, countryName, district);
+
             }
         });
 
@@ -349,7 +363,14 @@ public class MapLocation extends AppCompatActivity implements OnMapReadyCallback
             }
 
             convertToPositionData(lstAddress);
-            showMarker(myLocation, countryName, addressLine);
+            if (adminArea == null) {
+                district = addressLine;
+            } else {
+                district = countryName + "," + adminArea;
+            }
+
+            showMarker(myLocation, countryName, district);
+
 
         }
 

@@ -2,6 +2,7 @@ package group3;
 
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -12,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,6 +23,8 @@ import com.cp102group3maple.violethsu.maple.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+
+import group3.mypage.Mypage_UserProfile_Activity;
 
 
 public class Login extends AppCompatActivity {
@@ -56,6 +61,7 @@ public class Login extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btlogin: {
+                    hideSoftKeyboard(Login.this,etpassword );
                     String password = etpassword.getText().toString().trim();
                     String email = etloemail.getText().toString().trim();
                     if (email.length() <= 0 || password.length() <= 0) {
@@ -80,6 +86,7 @@ public class Login extends AppCompatActivity {
                     break;
                 }
                 case R.id.btsignup: {
+
                     Intent intent = new Intent();
                     intent.setClass(Login.this, Signup.class);
                     startActivity(intent);
@@ -188,6 +195,13 @@ public class Login extends AppCompatActivity {
     private void connectionError() {
         Toast toast = Toast.makeText(Login.this, "連線異常請檢查", Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    public void hideSoftKeyboard(Context context, EditText editText) {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
     }
 
 }

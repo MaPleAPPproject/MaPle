@@ -69,7 +69,7 @@ public class ImageTask extends AsyncTask<Object,Integer,Bitmap> {
         if(bitmap != null){
             imageView.setImageBitmap(bitmap);
         }else{
-            imageView.setImageResource(R.drawable.icon_facev);
+            imageView.setImageResource(R.drawable.adduser);
 
         }
 

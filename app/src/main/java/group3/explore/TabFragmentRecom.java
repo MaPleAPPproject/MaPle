@@ -59,6 +59,7 @@ public class TabFragmentRecom extends Fragment {
         View view=inflater.inflate(R.layout.tab_post, container, false);
 
         recyclerView = view.findViewById(R.id.rvPost);
+
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
         contentview=view.getContext();
         showAllPosts();

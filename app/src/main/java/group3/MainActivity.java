@@ -70,21 +70,24 @@ public class MainActivity extends AppCompatActivity {
                         viewPager.setCurrentItem(0);
                         return true;
 
-                    case R.id.navigation_explore:
+                    case R.id.navigation_map:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(1);
 
                         return true;
-                    //點擊下方朋友選單時，跑出朋友清單
-                    case R.id.navigation_friends:
+
+                    case R.id.navigation_explore:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(2);
                         return true;
 
-                    case R.id.navigation_map:
+                    //點擊下方朋友選單時，跑出朋友清單
+                    case R.id.navigation_friends:
                         getSupportActionBar().show();
                         viewPager.setCurrentItem(3);
                         return true;
+
+
                 }
                 return false;
             }
@@ -103,18 +106,19 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         navigation.setSelectedItemId(R.id.navigation_mypage);
                         break;
-
                     case 1:
-                        navigation.setSelectedItemId(R.id.navigation_explore);
+                        navigation.setSelectedItemId(R.id.navigation_map);
                         break;
 
                     case 2:
-                        navigation.setSelectedItemId(R.id.navigation_friends);
+                        navigation.setSelectedItemId(R.id.navigation_explore);
                         break;
 
                     case 3:
-                        navigation.setSelectedItemId(R.id.navigation_map);
+                        navigation.setSelectedItemId(R.id.navigation_friends);
                         break;
+
+
 //                        default:
 //                            navigation.setSelectedItemId(R.id.navigation_mypage);
 //                            initContent();
@@ -133,9 +137,10 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         BottomNavPagerAdapter adapter = new BottomNavPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MypageFragment());
+        adapter.addFragment(new Mymap_fragment());
         adapter.addFragment(new ExploreFragment());
         adapter.addFragment(new FriendsListFragment());
-        adapter.addFragment(new Mymap_fragment());
+
         viewPager.setAdapter(adapter);
     }
     public class BottomNavPagerAdapter extends FragmentPagerAdapter {

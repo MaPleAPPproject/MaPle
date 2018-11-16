@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/action_charts"
-        android:icon="@drawable/ic_mypage_black_charts"
+        android:icon="@drawable/piechart"
         app:showAsAction="always"
+
         android:title="charts" />
 
 </menu>

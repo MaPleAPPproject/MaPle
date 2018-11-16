@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -53,6 +54,8 @@ public class Mypage_tab_colec_Fragment extends Fragment {
     private Context contentview;
     private Bundle bundle;
     private SharedPreferences pref;
+    private TextView tvCollection;
+    private ImageView ivCollection;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +102,8 @@ public class Mypage_tab_colec_Fragment extends Fragment {
             }
             if (pictures == null||pictures.isEmpty()) {
 //                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+                rvCollection.setVisibility(View.GONE);
+                ivCollection.setVisibility(View.VISIBLE);
             }
             else {
                 rvCollection.setAdapter(new Mypage_tab_colec_Fragment.PostAdapter(pictures, contentview));
@@ -110,14 +115,18 @@ public class Mypage_tab_colec_Fragment extends Fragment {
     }
 
     private void handleviews(View view) {
+
+        ivCollection = view.findViewById(R.id.ivCollection);
+        rvCollection = view.findViewById(R.id.rvCollection);
+        rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));
+        contentview = view.getContext();
         if (bundle != null) {
             showAllPosts();
         } else {
 //            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();
         }
-        rvCollection = view.findViewById(R.id.rvCollection);
-        rvCollection.setLayoutManager(new GridLayoutManager(contentview,3));
-        contentview = view.getContext();
+
+
     }
 
     public class PostAdapter extends RecyclerView.Adapter<Mypage_tab_colec_Fragment.PostAdapter.MyViewHolder> implements View.OnLongClickListener {

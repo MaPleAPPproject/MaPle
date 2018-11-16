@@ -9,12 +9,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cp102group3maple.violethsu.maple.R;
@@ -31,6 +31,8 @@ import group3.Postdetail;
 import group3.explore.Explore_PostActivity;
 import group3.explore.PostTask;
 import group3.explore.TabFragment_Card;
+import group3.mypage.CommonTask;
+import group3.mypage.Mypage_SinglePost_Activity;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -43,6 +45,9 @@ public class Mypage_tab_post_Fragment extends Fragment {
     private Context contentview;
     private Bundle bundle;
     private SharedPreferences pref;
+    private ImageView ivShare;
+    private ProgressBar progressBar;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +61,7 @@ public class Mypage_tab_post_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.tab_post, container, false);
+        View view = inflater.inflate(R.layout.tab_post, container, false);
         handleviews(view);
         return view;
 
@@ -81,12 +86,18 @@ public class Mypage_tab_post_Fragment extends Fragment {
                 String jsonIn = pictureGetAllTask.execute().get();
                 Type listType = new TypeToken<List<Picture>>() {
                 }.getType();
+                progressBar.setVisibility(View.GONE);
                 pictures = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
 //                Log.e(TAG, e.toString());
             }
             if (pictures == null||pictures.isEmpty()) {
-//                Toast.makeText(getActivity(),R.string.msg_NoPost,Toast.LENGTH_SHORT).show();
+//
+               progressBar.setVisibility(View.GONE);
+                rvPost.setVisibility(View.GONE);
+                ivShare.setVisibility(View.VISIBLE);
+
+
             }
             else {
                 rvPost.setAdapter(new Mypage_tab_post_Fragment.PostAdapter(pictures, contentview));
@@ -98,15 +109,29 @@ public class Mypage_tab_post_Fragment extends Fragment {
     }
 
     private void handleviews(View view) {
-        if (bundle != null) {
-            showAllPosts();
-        } else {
-//            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();
-        }
+        ivShare = (ImageView) view.findViewById(R.id.ivShare);
+
         rvPost = view.findViewById(R.id.rvPost);
         rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
         contentview=view.getContext();
+        progressBar = view.findViewById(R.id.pregressBar);
+        if (bundle != null) {
+
+
+            showAllPosts();
+        } else {
+//            rvPost.setVisibility(View.GONE);
+//            ivShare.setVisibility(View.VISIBLE);
+//            tvEmpty.setVisibility(View.VISIBLE);
+
+//            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
+
+
+
 
     public class PostAdapter extends RecyclerView.Adapter<Mypage_tab_post_Fragment.PostAdapter.MyViewHolder> {
         private int imageSize;

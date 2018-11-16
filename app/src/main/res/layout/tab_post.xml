@@ -5,10 +5,33 @@ android:orientation="vertical"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
 
+    <ProgressBar
+    android:id="@+id/pregressBar"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_gravity="center"
+        android:layout_margin="40dp"/>
+
 <android.support.v7.widget.RecyclerView
     android:id="@+id/rvPost"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+
 
 </android.support.v7.widget.RecyclerView>
+
+
+
+
+    <ImageView
+        android:id="@+id/ivShare"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:src="@drawable/share"/>
+
+
+
+
 </LinearLayout>

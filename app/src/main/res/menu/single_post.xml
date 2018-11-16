@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/backToMyPage"
+        android:icon="@drawable/face_white"
+        android:title="我的頁面"
+        app:showAsAction="always"
+        />
     <item
         android:id="@+id/newPost_modify"
         android:icon="@drawable/icon_modify"

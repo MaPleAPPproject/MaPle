@@ -20,7 +20,8 @@ import java.util.List;
 import group3.Postdetail;
 
 public class Ｍypage_tab_post_Fragment extends Fragment {
-    private FloatingActionButton fab;
+
+
 
     @Nullable
     @Override
@@ -39,6 +40,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
 
     }
 
+
     public class PostAdapter extends RecyclerView.Adapter<Ｍypage_tab_post_Fragment.PostAdapter.MyViewHolder> {
         List<Postdetail> postdetails;
         Context context;
@@ -51,7 +53,7 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return postdetails.size();
+            return postdetails.size() != 0 ? postdetails.size() : 0;
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
@@ -115,3 +117,5 @@ public class Ｍypage_tab_post_Fragment extends Fragment {
 
 
 }
+
+
