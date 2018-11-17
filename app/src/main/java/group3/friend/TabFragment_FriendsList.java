@@ -1,7 +1,6 @@
 package group3.friend;
 
 import android.content.BroadcastReceiver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -23,9 +22,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,65 +40,60 @@ import group3.friend.Chat.ChatActivity;
 import group3.friend.Chat.SocketCommon;
 import group3.friend.Chat.StateMessage;
 import group3.mypage.User_Profile;
-import kale.ui.view.dialog.EasyDialog;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
 
-public class FriendsListFragment extends Fragment {
-    private static final String TAG = "FriendsListFragment";
+public class TabFragment_FriendsList extends Fragment {
+    private static final String TAG = "TabFragment_FriendsList";
     private FragmentActivity activity;
     private FriendTask friendGetAllTask;
     private FriendImageTask friendImageTask;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int memberid;
-    private LocalBroadcastManager broadcastManager;
     private String vipStatus;
-    private Payment payment;
-    private EasyDialog easyDialog;
+//    private static List<String> onlineFriendList;
+    private LocalBroadcastManager broadcastManager;
     private HashMap<String, String> friendKeyMap = new HashMap<String, String>();
+
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
-//        activity.setTitle(R.string.textTitle_Friend);
-        SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+        activity.setTitle(R.string.textTitle);
+        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         memberid = Integer.valueOf(pref.getString("MemberId", ""));
-        payment = new Payment(this.getContext(), this.getActivity());
-        SharedPreferences preferences = getActivity().getSharedPreferences(
+        SharedPreferences preferences = activity.getSharedPreferences(
                 "userAccountDetail", MODE_PRIVATE);
         vipStatus = preferences.getString("userVipStatus", "");
-
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.activity_friends_list, container, false);
-        setHasOptionsMenu(true);
-        swipeRefreshLayout =
-                view.findViewById(R.id.swiprefreshlayout1);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                showAllfriends();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        View view = inflater.inflate(R.layout.fragment_tab_friendslist, container, false);
         handleViews(view);
+        setHasOptionsMenu(true);
+
 
 
         // 初始化LocalBroadcastManager並註冊BroadcastReceiver
         broadcastManager = LocalBroadcastManager.getInstance(activity);
         registerFriendStateReceiver();
+
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeView(view);
+            }
+            return view;
+        }
 
         return view;
     }
@@ -111,13 +102,23 @@ public class FriendsListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         showAllfriends();
-        String userName = String.valueOf(FriendsListFragment.this.memberid);
+        String userName = String.valueOf(TabFragment_FriendsList.this.memberid);
         SocketCommon.connectServer(userName, getActivity());
     }
 
     private void handleViews(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
+
+        swipeRefreshLayout = view.findViewById(R.id.swlfreindlist);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                showAllfriends();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void showAllfriends() {
@@ -207,7 +208,7 @@ public class FriendsListFragment extends Fragment {
     }
 
 
-    private class friendAdapter extends RecyclerView.Adapter<FriendsListFragment.friendAdapter.MyViewHolder> {
+    private class friendAdapter extends RecyclerView.Adapter<TabFragment_FriendsList.friendAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         private List<User_Profile> friendsList;
         private int imageSize;
@@ -221,16 +222,16 @@ public class FriendsListFragment extends Fragment {
         class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
             TextView tvIntro, tvName;
-            Button btChat;
+            Button btChat,btProfile;
 
 
             MyViewHolder(View frienditem) {
                 super(frienditem);
                 imageView = frienditem.findViewById(R.id.imageView);
                 tvName = frienditem.findViewById(R.id.tvName);
-                tvIntro = frienditem.findViewById(R.id.tvIntro);
+//                tvIntro = frienditem.findViewById(R.id.tvIntro);
                 btChat = frienditem.findViewById(R.id.btChat);
-
+                btProfile = frienditem.findViewById(R.id.btProfile);
             }
         }
 
@@ -242,17 +243,18 @@ public class FriendsListFragment extends Fragment {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-            View frienditem = layoutInflater.inflate(R.layout.frienditem, viewGroup, false);
-            return new FriendsListFragment.friendAdapter.MyViewHolder(frienditem);
+            View frienditem = layoutInflater.inflate(R.layout.item_friendlist, viewGroup, false);
+            return new TabFragment_FriendsList.friendAdapter.MyViewHolder(frienditem);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull FriendsListFragment.friendAdapter.MyViewHolder viewHolder, int position) {
+        public void onBindViewHolder(@NonNull TabFragment_FriendsList.friendAdapter.MyViewHolder viewHolder, int position) {
 
             final User_Profile friends = friendsList.get(position);
             final String friendName = String.valueOf(friends.getUserName());
             viewHolder.tvName.setText(friendName);
-            viewHolder.tvIntro.setText(String.valueOf(friends.getSelfIntroduction()));
+//            viewHolder.tvName.setText(String.valueOf(friends.getUserName()));
+//            viewHolder.tvIntro.setText(String.valueOf(friends.getSelfIntroduction()));
 
             //連線至User_profileServlet端的Servlet
             String url = Common.URL + "/User_profileServlet";
@@ -265,7 +267,6 @@ public class FriendsListFragment extends Fragment {
             List<String> onlineFriendList = SocketCommon.getonlineFriendList();
 
             //取消沒在線上的朋友清單的chat按鈕
-
             if (onlineFriendList == null || vipStatus.equals("0")) {
                 viewHolder.btChat.setEnabled(false);
                 final int color = getResources().getColor(R.color.colorGray);
@@ -284,9 +285,8 @@ public class FriendsListFragment extends Fragment {
             }
 
 
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.btProfile.setOnClickListener(new View.OnClickListener() {
 
-                //點擊之後透friendid轉過MemberId去相對應的個人頁面
                 @Override
                 public void onClick(View v) {
 
@@ -299,7 +299,6 @@ public class FriendsListFragment extends Fragment {
                 }
             });
 
-            //按下chat按鈕後
             viewHolder.btChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -315,54 +314,12 @@ public class FriendsListFragment extends Fragment {
                     intent.putExtras(bundle);
 
 
-                    intent.setClass(getActivity(), ChatActivity.class);
+                    intent.setClass(activity, ChatActivity.class);
                     intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }
             });
         }
-    }
-
-    //右上方的選單按鈕
-    //vio:改成fragment的onCreateOptionMenu
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.fl_option, menu);
-        super.onCreateOptionsMenu(menu, menuInflater);
-        if (payment.vipStatus == 1) {
-            MenuItem menuItem = menu.findItem(R.id.optionmenu_payment);
-            if (menuItem != null) {
-                menuItem.setVisible(false);
-            } else {
-                Log.w(TAG, "matchbtPremium is null");
-            }
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-
-            case R.id.optionmenu_match:
-                Intent intentmatch = new Intent();
-                intentmatch.setClass(getActivity(), MatchActivity.class);
-                startActivity(intentmatch);
-                break;
-            case R.id.optionmenu_payment:
-                paymentDialog(getContext());
-
-
-                break;
-            case R.id.optionmenu_invite:
-                Intent intentinvite = new Intent();
-                intentinvite.setClass(getActivity(), InviteActivity.class);
-                startActivity(intentinvite);
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-        return true;
     }
 
     @Override
@@ -379,29 +336,6 @@ public class FriendsListFragment extends Fragment {
         }
     }
 
-    public void paymentDialog(final Context context) {
-        final android.support.v4.app.FragmentTransaction ft =
-                getFragmentManager().beginTransaction();
 
-        EasyDialog.Builder builder = EasyDialog.builder(context);
-        DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                payment.pay();
-            }
-        };
-        builder.setTitle(R.string.paymentAlertTitle)
-                .setIcon(R.drawable.googlepay)
-                .setMessage(R.string.paymentAgreement)
-                .setOnCancelListener(null)
-                .setOnDismissListener(null)
-
-                .setPositiveButton("同意", OkClick)
-                .setNegativeButton("取消", null)
-//                .setNeutralButton("ignore", this)
-                .setCancelable(true);
-
-        easyDialog = builder.build();
-        easyDialog.show(getFragmentManager());
-    }
 }
 

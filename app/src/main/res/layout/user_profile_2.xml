@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-     >
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,8 +7,8 @@
 
 
 
-
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/dePhotoIcon"
         android:layout_width="130dp"
         android:layout_height="130dp"
@@ -45,11 +40,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:padding="5dp"
-                android:text=""
+                android:text="jack"
                 android:textSize="18sp"
-                android:textStyle="bold"
+
                 android:textAlignment="center"
-                android:background="#00000000"
 
                 />
 
@@ -74,6 +68,7 @@
                 android:id="@+id/etdisplayname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/et_layout_style"
                 android:padding="5dp"
                 android:maxLength="20"
                 android:maxLines="1"
@@ -91,20 +86,20 @@
                 android:id="@+id/ibCheck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/et_layout_style"
                 android:padding="2dp"
                 android:src="@drawable/checked"
                 android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#00000000"/>
+                android:layout_marginRight="5dp" />
 
 
             <ImageButton
                 android:id="@+id/ibCross"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/et_layout_style"
                 android:padding="2dp"
-                android:src="@drawable/cancel"
-                android:background="#00000000"/>
+                android:src="@drawable/cancel" />
 
         </LinearLayout>
     </LinearLayout>
@@ -275,7 +270,7 @@
                 android:id="@+id/ibPasswordCheck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#00000000"
+                android:background="@drawable/et_layout_style"
                 android:padding="2dp"
                 android:layout_marginEnd="5dp"
 
@@ -287,7 +282,7 @@
                 android:id="@+id/ibPasswordCross"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#00000000"
+                android:background="@drawable/et_layout_style"
                 android:padding="2dp"
                 android:src="@drawable/cancel"
                 />
@@ -466,4 +461,3 @@
             android:text="@string/save" />
     </LinearLayout>
 </LinearLayout>
-</ScrollView>

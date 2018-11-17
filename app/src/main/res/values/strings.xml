@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">MaPle</string>
-    <string name="title_home">我的頁面</string>
-    <string name="title_explore">探索</string>
+    <string name="title_home">My page</string>
+    <string name="title_explore">Explore</string>
     <string name="title_friends">好友</string>
-    <string name="btchat">CHAT</string>
+    <string name="btchat">聊天</string>
     <string name="userlink">Name</string>
     <string name="intro">Intro</string>
     <string name="textTitle_FLists">Friends List</string>
     <string name="match">Match</string>
     <string name="textTitle_Match">隨機配對好友</string>
     <string name="menumatch">Match</string>
-    <string name="payment">Payment</string>
+    <string name="payment">升級VIP</string>
     <string name="msg_NoCameraAppsFound">No camera apps found</string>
     <string name="what_s_new">What\'s new?</string>
     <string name="name">姓名</string>
@@ -70,23 +70,28 @@
     <string name="yes">Yes</string>
     <string name="invite">Invite</string>
     <string name="msg_NoMatchFriendsFound">沒有可配對的朋友</string>
-<string name="msg_RejectFriend">您已經拒絕</string>
-<string name="msg_RejectFriendFail">拒絕失敗</string>
-<string name="msg_LikeFriendFail">發送邀請失敗</string>
-<string name="msg_LikeFriend">您已經發送交友邀請</string>
-<string name="textTitle_Invite">好友邀請函</string>
-<string name="btSubmit">Submit</string>
-<string name="btok">Ok</string>
-<string name="search">搜尋</string>
-<string name="title_activity_mypage_tab_map_fragment">Mypage_tab_map_fragment</string>
-<string name="textTitle_Chat">聊天</string>
-<string name="text_NoCameraApp">沒有能啟用的相機應用程式</string>
-<string name="text_Message">聊天訊息不可為空</string>
-<string name="text_MessageEmpty">聊天訊息不可為空</string>
-<string name="textTitle_Friend">朋友清單</string>
-<string name="paymentAgreement">尊榮會員升等服務 \n 現在升等VIP立即開啟聊天室功能~!
+    <string name="msg_RejectFriend">您已經拒絕</string>
+    <string name="msg_RejectFriendFail">拒絕失敗</string>
+    <string name="msg_LikeFriendFail">發送邀請失敗</string>
+    <string name="msg_LikeFriend">您已經接受交友邀請</string>
+    <string name="textTitle_Invite">好友邀請函</string>
+    <string name="btSubmit">Submit</string>
+    <string name="btok">Ok</string>
+    <string name="search">搜尋</string>
+    <string name="title_activity_mypage_tab_map_fragment">Mypage_tab_map_fragment</string>
+    <string name="textTitle_Chat">聊天</string>
+    <string name="text_NoCameraApp">沒有能啟用的相機應用程式</string>
+    <string name="text_Message">聊天訊息不可為空</string>
+    <string name="text_MessageEmpty">聊天訊息不可為空</string>
+    <string name="textTitle">Maple</string>
+    <string name="paymentAgreement">尊榮會員升等服務 \n 現在升等VIP立即開啟聊天室功能~!
         \n\n 1. 簡介\n適用條款。感謝您使用 Google Play。Google Play 是由 Google LLC (以下簡稱「Google」或「我們」；地址為 1600 Amphitheatre Parkway, Mountain View California 94043, USA) 所提供的服務。您在使用 Google Play 及該服務所提供的應用程式 (包括 Android 免安裝應用程式)、遊戲、音樂、電影、書籍、雜誌，或是其他數位內容或服務 (以下簡稱「內容)」) 時，必須遵守本《Google Play 服務條款》和《Google 服務條款》(以下簡稱《Google ToS》)，以下兩者合稱「條款」。如《Google ToS》所述，Google Play 為一種「服務」。如《Google Play 服務條款》和《Google ToS》之間有所牴觸，應以《Google Play 服務條款》為準。
     </string>
-<string name="paymentAlertTitle">內購尊榮會員升等服務</string>
-    </resources>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btprofile">個人頁面</string>
+    <string name="paymentAlertTitle">內購尊榮會員升等服務</string>
+    <string name="paymentAgreement">尊榮會員升等服務 \\n 現在升等VIP立即開啟聊天室功能~!         \\n\\n 1. 簡介\\n適用條款。感謝您使用 Google Play。Google Play 是由 Google LLC (以下簡稱「Google」或「我們」；地址為 1600 Amphitheatre Parkway, Mountain View California 94043, USA) 所提供的服務。您在使用 Google Play 及該服務所提供的應用程式 (包括 Android 免安裝應用程式)、遊戲、音樂、電影、書籍、雜誌，或是其他數位內容或服務 (以下簡稱「內容)」) 時，必須遵守本《Google Play 服務條款》和《Google 服務條款》(以下簡稱《Google ToS》)，以下兩者合稱「條款」。如《Google ToS》所述，Google Play 為一種「服務」。如《Google Play 服務條款》和《Google ToS》之間有所牴觸，應以《Google Play 服務條款》為準。</string>
+</resources>
 

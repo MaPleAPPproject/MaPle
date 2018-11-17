@@ -61,9 +61,8 @@
             android:name="group3.MainActivity"
             android:label="@string/app_name" />
         <activity android:name="group3.explore.Explore_PostActivity" />
-        <activity android:name="group3.friend.Match" />
-        <activity android:name="group3.friend.Chat.ChatActivity" />
         <activity android:name="group3.friend.Payment" />
+        <activity android:name="group3.friend.Chat.ChatActivity" />
         <activity android:name="group3.friend.Friend_PostActivity" />
         <activity android:name="group3.mypage.NewPost_Activity" />
         <activity android:name="group3.mypage.Mypage_SinglePost_Activity" />

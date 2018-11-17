@@ -128,7 +128,7 @@ public class MatchActivity extends AppCompatActivity {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-            View matchView = layoutInflater.inflate(R.layout.matchitem, viewGroup, false);
+            View matchView = layoutInflater.inflate(R.layout.item_match_invite, viewGroup, false);
             return new MyViewHolder(matchView);
         }
 

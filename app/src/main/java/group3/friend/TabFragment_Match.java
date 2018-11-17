@@ -3,12 +3,14 @@ package group3.friend;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,46 +31,73 @@ import java.util.List;
 import group3.Common;
 import group3.mypage.User_Profile;
 
-public class InviteActivity extends AppCompatActivity {
-    private static final String TAG = "InviteActivity";
+
+public class TabFragment_Match extends Fragment {
+    private static final String TAG = "TabFragment_Match";
+    private FragmentActivity activity;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private FriendTask friendGetAllTask;
     private FriendImageTask friendImageTask;
     private int memberid;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invite);
-        setTitle(R.string.textTitle_Invite);
-        handleViews();
-        SharedPreferences pref = getApplication().getSharedPreferences(Common.PREF_FILE,
-                MODE_PRIVATE);
+        activity = getActivity();
+        SharedPreferences pref = getActivity().getSharedPreferences(Common.PREF_FILE,
+                Context.MODE_PRIVATE);
         memberid = Integer.valueOf(pref.getString("MemberId",""));
+
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_tab_match, container, false);
+        handleViews(view);
+
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeView(view);
+            }
+            return view;
+        }
+
+//        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
+//        pagerSnapHelper.attachToRecyclerView(recyclerView);
+        return view;
+    }
+
+    private void handleViews(View view) {
+        recyclerView = view.findViewById(R.id.rvMatch);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
+
+        swipeRefreshLayout = view.findViewById(R.id.swlmatch);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                showMatchfriends();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
-        showAllfriends();
+        showMatchfriends();
     }
 
-    private void handleViews() {
-        recyclerView = findViewById(R.id.recyclerView2);
-        recyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(1,
-                        StaggeredGridLayoutManager.HORIZONTAL));
-        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
-        pagerSnapHelper.attachToRecyclerView(recyclerView);
-    }
-
-    private void showAllfriends() {
-        if (Common.networkConnected(this)) {
+    private void showMatchfriends() {
+        if (Common.networkConnected(activity)) {
             String url = Common.URL + "/MatchServlet";
             List<User_Profile> mfriendsList = null;
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAllinvite");
-            //之後要用會員登入的偏好設定取得會員資料
+            jsonObject.addProperty("action", "getAll");
             jsonObject.addProperty("memberid", memberid);
             String jsonOut = jsonObject.toString();
             friendGetAllTask = new FriendTask(url, jsonOut);
@@ -81,22 +110,26 @@ public class InviteActivity extends AppCompatActivity {
                 Log.e(TAG, e.toString());
             }
             if (mfriendsList == null || mfriendsList.isEmpty()) {
-                Common.showToast(this, R.string.msg_NoMatchFriendsFound);
+                Common.showToast(activity, R.string.msg_NoMatchFriendsFound);
             } else {
-                recyclerView.setAdapter(new inviteAdapter(this, mfriendsList));
+                recyclerView.setAdapter(new TabFragment_Match.matchAdapter(activity, mfriendsList));
             }
         } else {
-            Common.showToast(this, R.string.msg_NoNetwork);
+            Common.showToast(activity, R.string.msg_NoNetwork);
         }
     }
 
-    private class inviteAdapter extends RecyclerView.Adapter<InviteActivity.inviteAdapter.MyViewHolder> {
+    public interface OnFragmentInteractionListener {
+    }
+
+
+    private class matchAdapter extends RecyclerView.Adapter<TabFragment_Match.matchAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         private List<User_Profile> mfriendsList;
         private int imageSize;
         private ImageButton ibLike, ibReject;
 
-        inviteAdapter(Context context, List<User_Profile> mfriendsList) {
+        matchAdapter(Context context, List<User_Profile> mfriendsList) {
             this.layoutInflater = LayoutInflater.from(context);
             this.mfriendsList = mfriendsList;
             imageSize = getResources().getDisplayMetrics().widthPixels / 4;
@@ -107,13 +140,13 @@ public class InviteActivity extends AppCompatActivity {
             private ImageView imageView;
             private TextView tvIntro, tvName;
 
-            MyViewHolder(View inviteView) {
-                super(inviteView);
-                imageView = inviteView.findViewById(R.id.imageView1);
-                tvIntro = inviteView.findViewById(R.id.tvIntro1);
-                tvName = inviteView.findViewById(R.id.tvName1);
-                ibReject = inviteView.findViewById(R.id.ibReject);
-                ibLike = inviteView.findViewById(R.id.ibLike);
+            MyViewHolder(View matchView) {
+                super(matchView);
+                imageView = matchView.findViewById(R.id.imageView1);
+                tvIntro = matchView.findViewById(R.id.tvIntro1);
+                tvName = matchView.findViewById(R.id.tvName1);
+                ibReject = matchView.findViewById(R.id.ibReject);
+                ibLike = matchView.findViewById(R.id.ibLike);
             }
         }
 
@@ -124,13 +157,13 @@ public class InviteActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public InviteActivity.inviteAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-            View inviteView = layoutInflater.inflate(R.layout.item_match_invite, viewGroup, false);
-            return new InviteActivity.inviteAdapter.MyViewHolder(inviteView);
+        public TabFragment_Match.matchAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+            View matchView = layoutInflater.inflate(R.layout.item_match_invite, viewGroup, false);
+            return new TabFragment_Match.matchAdapter.MyViewHolder(matchView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull InviteActivity.inviteAdapter.MyViewHolder viewHolder, final int position) {
+        public void onBindViewHolder(@NonNull TabFragment_Match.matchAdapter.MyViewHolder viewHolder, final int position) {
             final User_Profile friends = mfriendsList.get(position);
             //連線至User_profileServlet端的Servlet
             String url = Common.URL + "/User_profileServlet";
@@ -147,7 +180,7 @@ public class InviteActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putString("tvname", friends.getUserName());
                     bundle.putInt("memberid", friends.getMemberId());
-                    Intent intent = new Intent(InviteActivity.this, Friend_PostActivity.class);
+                    Intent intent = new Intent(activity, Friend_PostActivity.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
@@ -171,12 +204,12 @@ public class InviteActivity extends AppCompatActivity {
                         Log.e(TAG, e.toString());
                     }
                     if (count == 1) {
-                        Toast.makeText(InviteActivity.this, R.string.msg_RejectFriend, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.msg_RejectFriend, Toast.LENGTH_SHORT).show();
                         mfriendsList.remove(position);
                         recyclerView.getAdapter().notifyDataSetChanged();
 
                     } else {
-                        Toast.makeText(InviteActivity.this, R.string.msg_RejectFriendFail, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.msg_RejectFriendFail, Toast.LENGTH_SHORT).show();
                         mfriendsList.remove(position);
                         recyclerView.getAdapter().notifyDataSetChanged();
                     }
@@ -189,10 +222,11 @@ public class InviteActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     String url = Common.URL + "/MatchServlet";
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "findByIds2");
-                    jsonObject.addProperty("memberid", friendid);
-                    jsonObject.addProperty("friendid", memberid);
+                    jsonObject.addProperty("action", "findByIds");
+                    jsonObject.addProperty("memberid", memberid);
+                    jsonObject.addProperty("friendid", friendid);
                     String jsonOut = jsonObject.toString();
+                    Log.d(TAG, jsonOut);
                     friendGetAllTask = new FriendTask(url, jsonOut);
                     int count = 0;
                     try {
@@ -202,12 +236,12 @@ public class InviteActivity extends AppCompatActivity {
                         Log.e(TAG, e.toString());
                     }
                     if (count == 0) {
-                        Toast.makeText(InviteActivity.this, R.string.msg_LikeFriendFail, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.msg_LikeFriendFail, Toast.LENGTH_SHORT).show();
                         mfriendsList.remove(position);
                         recyclerView.getAdapter().notifyDataSetChanged();
 
                     } else {
-                        Toast.makeText(InviteActivity.this, R.string.msg_LikeFriend, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, R.string.msg_LikeFriend, Toast.LENGTH_SHORT).show();
                         mfriendsList.remove(position);
                         recyclerView.getAdapter().notifyDataSetChanged();
                     }
@@ -219,5 +253,15 @@ public class InviteActivity extends AppCompatActivity {
             }
         }
     }
-}
 
+
+
+
+
+
+
+
+
+
+
+}
