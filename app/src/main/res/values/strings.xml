@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MaPle</string>
-    <string name="title_home">My page</string>
-    <string name="title_explore">Explore</string>
+    <string name="title_home">個人頁面</string>
+    <string name="title_explore">探索</string>
     <string name="title_friends">好友</string>
     <string name="btchat">聊天</string>
     <string name="userlink">Name</string>
@@ -84,9 +84,6 @@
     <string name="text_Message">聊天訊息不可為空</string>
     <string name="text_MessageEmpty">聊天訊息不可為空</string>
     <string name="textTitle">Maple</string>
-    <string name="paymentAgreement">尊榮會員升等服務 \n 現在升等VIP立即開啟聊天室功能~!
-        \n\n 1. 簡介\n適用條款。感謝您使用 Google Play。Google Play 是由 Google LLC (以下簡稱「Google」或「我們」；地址為 1600 Amphitheatre Parkway, Mountain View California 94043, USA) 所提供的服務。您在使用 Google Play 及該服務所提供的應用程式 (包括 Android 免安裝應用程式)、遊戲、音樂、電影、書籍、雜誌，或是其他數位內容或服務 (以下簡稱「內容)」) 時，必須遵守本《Google Play 服務條款》和《Google 服務條款》(以下簡稱《Google ToS》)，以下兩者合稱「條款」。如《Google ToS》所述，Google Play 為一種「服務」。如《Google Play 服務條款》和《Google ToS》之間有所牴觸，應以《Google Play 服務條款》為準。
-    </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

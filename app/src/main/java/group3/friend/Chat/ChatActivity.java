@@ -46,7 +46,6 @@ import java.util.Set;
 
 import group3.Common;
 import group3.friend.Friend;
-import group3.friend.FriendsListFragment;
 import group3.mypage.MypageFragment;
 import group3.mypage.Mypage_UserProfile_Activity;
 import group3.mypage.User_Profile;

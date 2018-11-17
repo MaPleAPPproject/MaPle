@@ -274,7 +274,7 @@ public class TabFragment_FriendsList extends Fragment {
             } else {
                 if (onlineFriendList.contains(friend)) {
                     viewHolder.btChat.setEnabled(true);
-                    final int color = getResources().getColor(R.color.blue_d);
+                    final int color = getResources().getColor(R.color.colorPrimary);
                     viewHolder.btChat.setBackgroundColor(color);
 
                 } else {
