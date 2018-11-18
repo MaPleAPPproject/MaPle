@@ -86,20 +86,22 @@ public class Mypage_tab_post_Fragment extends Fragment {
                 String jsonIn = pictureGetAllTask.execute().get();
                 Type listType = new TypeToken<List<Picture>>() {
                 }.getType();
-                progressBar.setVisibility(View.GONE);
+//                progressBar.setVisibility(View.GONE);
                 pictures = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
 //                Log.e(TAG, e.toString());
             }
             if (pictures == null||pictures.isEmpty()) {
-//
-               progressBar.setVisibility(View.GONE);
+
+//               progressBar.setVisibility(View.GONE);
                 rvPost.setVisibility(View.GONE);
                 ivShare.setVisibility(View.VISIBLE);
 
 
             }
             else {
+                ivShare.setVisibility(View.GONE);
+                rvPost.setVisibility(View.VISIBLE);
                 rvPost.setAdapter(new Mypage_tab_post_Fragment.PostAdapter(pictures, contentview));
             }
         } else {
@@ -114,14 +116,14 @@ public class Mypage_tab_post_Fragment extends Fragment {
         rvPost = view.findViewById(R.id.rvPost);
         rvPost.setLayoutManager(new GridLayoutManager(contentview,3));
         contentview=view.getContext();
-        progressBar = view.findViewById(R.id.pregressBar);
+//        progressBar = view.findViewById(R.id.pregressBar);
         if (bundle != null) {
 
 
             showAllPosts();
         } else {
-//            rvPost.setVisibility(View.GONE);
-//            ivShare.setVisibility(View.VISIBLE);
+            rvPost.setVisibility(View.GONE);
+            ivShare.setVisibility(View.VISIBLE);
 //            tvEmpty.setVisibility(View.VISIBLE);
 
 //            Toast.makeText(getActivity(), "no bundle", Toast.LENGTH_SHORT).show();

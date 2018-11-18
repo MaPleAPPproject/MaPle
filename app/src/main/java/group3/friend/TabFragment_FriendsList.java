@@ -81,8 +81,6 @@ public class TabFragment_FriendsList extends Fragment {
         handleViews(view);
         setHasOptionsMenu(true);
 
-
-
         // 初始化LocalBroadcastManager並註冊BroadcastReceiver
         broadcastManager = LocalBroadcastManager.getInstance(activity);
         registerFriendStateReceiver();

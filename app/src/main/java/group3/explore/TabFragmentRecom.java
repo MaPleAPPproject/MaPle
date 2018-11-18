@@ -56,7 +56,7 @@ public class TabFragmentRecom extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.tab_post, container, false);
+        View view=inflater.inflate(R.layout.explore_tab_recom, container, false);
 
         recyclerView = view.findViewById(R.id.rvPost);
 

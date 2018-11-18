@@ -77,9 +77,9 @@ public class Payment implements PurchaseHistoryResponseListener {
 
         SharedPreferences preferences = activity.getSharedPreferences(
                 "userAccountDetail", MODE_PRIVATE);
-        if (preferences.getString("userMemberId", "")!= null) {
-            memberId = Integer.parseInt(preferences.getString("userMemberId", ""));
-        }
+//        if (preferences.getString("userMemberId", "")!= null) {
+//            memberId = Integer.parseInt(preferences.getString("userMemberId", ""));
+//        }
         defaultVipStatus();
         if (vipStatus == 0) {
             OrderListDataType data = null;

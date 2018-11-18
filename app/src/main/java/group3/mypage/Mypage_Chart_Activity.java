@@ -104,14 +104,8 @@ public class Mypage_Chart_Activity extends AppCompatActivity {
                 if (!countryCodeSet.isEmpty()) {
                     for (String code : countryCodeSet) {
 
-                        if (code == "TWN") {
-                            geoMapView.setCountryColor("TW", "#00BDBD");
-                        } else {
-                            geoMapView.setCountryColor(code, "#00BDBD");
-                        }
-
+                        geoMapView.setCountryColor(code, "#00BDBD");
                         geoMapView.refresh();
-                        return;
                     }
                 } else {
                     return;
