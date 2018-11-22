@@ -19,9 +19,11 @@ import static android.content.Context.*;
 
 public class Common {
 
-//    public static String URL = "http://10.0.2.2:8080/MaPle";
+
     private static final String TAG = "Common";
-        public static String URL = "http://192.168.196.165:8080/MaPle";
+    public static String IP = "10.0.2.2";
+//    public static String IP = "192.168.196.69";
+    public static String URL = "http://"+IP+":8080/MaPle";
     public final static String PREF_FILE = "preference";
     private final static String DEFAULT_NAME = "";
     private final static String DEFAULT_EMAIL = "";

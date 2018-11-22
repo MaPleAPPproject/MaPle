@@ -97,7 +97,9 @@ public class ChatWebSocketClient extends WebSocketClient {
 
     @Override
     public void onError(Exception ex) {
+
         Log.d(TAG, "onError: exception = " + ex.toString());
+
     }
 
     private void sendMessageBroadcast(String messageType, String message) {

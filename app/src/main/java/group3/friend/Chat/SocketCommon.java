@@ -11,23 +11,20 @@ import java.util.List;
 import java.util.Map;
 
 
+import static group3.Common.IP;
+
+
 public class SocketCommon {
     private static Map<String, String> friendInChat ;
 
     private static final String TAG = "SocketCommon";
     public final static String SERVER_URI =
-            "ws://10.0.2.2:8080/WSChatAdv_Web/ChatServer/";
+            "ws://"+IP+":8080/MaPle/ChatServer/";
     public static ChatWebSocketClient chatWebSocketClient;
     private static List<String> onlinefriendList = new ArrayList<>();
 
 
-    public static Map<String, String> getFriendInChat() {
-        return friendInChat;
-    }
 
-    public static void setFriendInChat(Map<String, String> friendInChat) {
-        SocketCommon.friendInChat = friendInChat;
-    }
 
     // 建立WebSocket連線
     public static void connectServer(String userName, Context context) {
@@ -83,4 +80,10 @@ public class SocketCommon {
         }
         return srcBitmap;
     }
+    public static void reconnect(){
+        if (chatWebSocketClient != null) {
+
+        }
+    }
+
 }

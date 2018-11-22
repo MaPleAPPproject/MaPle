@@ -38,6 +38,7 @@ import group3.Common;
 import group3.Login;
 import group3.explore.TabFragment_Card;
 import group3.explore.TabFragment_Collect;
+import group3.friend.Chat.SocketCommon;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -159,6 +160,7 @@ public class MypageFragment extends Fragment {
                 pref.edit()
                         .putString("MemberId","")
                         .apply();
+                SocketCommon.disconnectServer();
                 Intent chartIntent = new Intent(getActivity(), Login.class);
                 startActivity(chartIntent);
 

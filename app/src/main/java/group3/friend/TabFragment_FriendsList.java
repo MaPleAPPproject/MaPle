@@ -54,7 +54,6 @@ public class TabFragment_FriendsList extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private int memberid;
     private String vipStatus;
-//    private static List<String> onlineFriendList;
     private LocalBroadcastManager broadcastManager;
     private HashMap<String, String> friendKeyMap = new HashMap<String, String>();
 
@@ -101,7 +100,9 @@ public class TabFragment_FriendsList extends Fragment {
         super.onStart();
         showAllfriends();
         String userName = String.valueOf(TabFragment_FriendsList.this.memberid);
+
         SocketCommon.connectServer(userName, getActivity());
+
     }
 
     private void handleViews(View view) {
@@ -187,8 +188,9 @@ public class TabFragment_FriendsList extends Fragment {
                         Log.d(TAG, name);
                     }
                     SocketCommon.setonlineFriendList(onlineFriendList);
-                    Toast.makeText(activity, friendName + "正在線上", Toast.LENGTH_SHORT).show();
-
+                    if(friendName != null) {
+                        Toast.makeText(activity, friendName + "正在線上", Toast.LENGTH_SHORT).show();
+                    }
                     // 重刷聊天清單
                     recyclerView.getAdapter().notifyDataSetChanged();
                     break;

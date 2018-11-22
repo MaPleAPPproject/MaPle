@@ -48,18 +48,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userAccountPrepare();
         SharedPreferences pref = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         memberId = Integer.parseInt(pref.getString("MemberId", ""));
         Log.d(TAG,"test"+memberId);
-        String userName = String.valueOf(memberId);
-
-//        SocketCommon.connectServer(userName, this);
-
-//        if (userList.containsKey("user"+memberId)) {
-//            // TODO: 2018/9/14 呼叫自動登陸List 頁面
-//        } else {
-//            // TODO: 2018/9/14 呼叫loginActivity
-//        }
 
         viewPager = findViewById(R.id.viewPager);
 //      避免view重複加載

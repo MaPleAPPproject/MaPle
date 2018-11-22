@@ -25,6 +25,7 @@ import java.util.HashMap;
 import group3.Common;
 import group3.Login;
 
+import group3.friend.Chat.SocketCommon;
 import kale.ui.view.dialog.EasyDialog;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -136,9 +137,6 @@ public class FriendFragment extends Fragment {
         switch (item.getItemId()) {
 
             case R.id.optionmenu_payment:
-//                Intent intentpayment = new Intent();
-//                intentpayment.setClass(activity, Payment.class);
-//                startActivity(intentpayment);
                 paymentDialog(getContext());
                 break;
 
@@ -150,6 +148,7 @@ public class FriendFragment extends Fragment {
                     .apply();
                 Intent intentLogout = new Intent();
                 intentLogout.setClass(activity, Login.class);
+                SocketCommon.disconnectServer();
                 startActivity(intentLogout);
                 break;
 
@@ -162,7 +161,6 @@ public class FriendFragment extends Fragment {
     public void paymentDialog(final Context context) {
         final android.support.v4.app.FragmentTransaction ft =
                 getFragmentManager().beginTransaction();
-
 
 
         EasyDialog.Builder builder = EasyDialog.builder(context);

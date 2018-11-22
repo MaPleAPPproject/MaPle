@@ -100,7 +100,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         } else {
 
         }
-        setTitle("friend: " + friendName);
+        setTitle(friendName);
 
 
         // 設定目前聊天對象
