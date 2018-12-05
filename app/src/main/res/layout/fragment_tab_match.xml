@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="6dp"
+    android:paddingBottom="50dp"
     android:orientation="vertical"
     tools:context="group3.friend.TabFragment_Match">
 
@@ -13,8 +14,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMatch"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

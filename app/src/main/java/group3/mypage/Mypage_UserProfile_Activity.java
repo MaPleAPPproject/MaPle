@@ -122,7 +122,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
         handleView();
         loadProfiles(memberId);
         wordCalculator();
-        payment = new Payment(this, this);
+        payment = new Payment(this, this, memberId);
 
 
 

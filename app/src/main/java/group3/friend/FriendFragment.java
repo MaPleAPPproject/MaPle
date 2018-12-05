@@ -50,10 +50,12 @@ public class FriendFragment extends Fragment {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         memberid = Integer.valueOf(pref.getString("MemberId", ""));
-        payment = new Payment(this.getContext(), this.activity);
+
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 "userAccountDetail", MODE_PRIVATE);
         vipStatus = preferences.getString("userVipStatus", "");
+
+        payment = new Payment(this.getContext(), this.activity, memberid);
     }
 
     @Override
@@ -167,6 +169,7 @@ public class FriendFragment extends Fragment {
         DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 payment.pay();
+                
             }
         };
         builder.setTitle(R.string.paymentAlertTitle)

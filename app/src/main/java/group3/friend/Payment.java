@@ -4,8 +4,10 @@ package group3.friend;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+
+import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -69,17 +71,16 @@ public class Payment implements PurchaseHistoryResponseListener {
     private Context context;
 
 
-    public Payment(Context context, Activity activity) {
+    public Payment(Context context, Activity activity, int memberId) {
         this.activity = activity;
         this.context = context;
+        this.memberId = memberId;
 
         mBillingManager = new BillingManager(activity, new MyBillingUpdateListener());
 
         SharedPreferences preferences = activity.getSharedPreferences(
                 "userAccountDetail", MODE_PRIVATE);
-//        if (preferences.getString("userMemberId", "")!= null) {
-//            memberId = Integer.parseInt(preferences.getString("userMemberId", ""));
-//        }
+
         defaultVipStatus();
         if (vipStatus == 0) {
             OrderListDataType data = null;
@@ -126,10 +127,13 @@ public class Payment implements PurchaseHistoryResponseListener {
 
     public void pay() {
         List<String> skuList = new ArrayList<>();
+
         if (mBillingManager.getProduct() != null) {
 
             skuList.add(mBillingManager.getProduct());
+
             mBillingManager.querySkuDetailsAsync(skuList);
+
             mBillingManager.initiatePurchaseFlow(mBillingManager.getProduct(), BillingClient.SkuType.INAPP);
 
         } else {
@@ -188,76 +192,40 @@ public class Payment implements PurchaseHistoryResponseListener {
         public void onPurchasesUpdated(List<Purchase> purchases) {
 
             for (Purchase p : purchases) {
-
-                if (ServerConnect.networkConnected(activity)) {
-                    OrderListDataType data = null;
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "infoInsert");
-                    jsonObject.addProperty("id", memberId);
-                    data = new OrderListDataType(memberId);
-                    jsonObject.addProperty("data", gson.toJson(data));
-                    String jsonOut = jsonObject.toString();
-                    int count = 0;
-                    serverConnect = new ServerConnect(urlToOrderList, jsonOut);
-                    try {
-                        String result = new ServerConnect(urlToOrderList, jsonObject.toString()).execute().get();
-                        count = Integer.valueOf(result);
-
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-                    if (count == 0) {
-                        ServerConnect.showToast(context, R.string.msg_insertFail);
-                    } else {
-                        ServerConnect.showToast(context, R.string.msg_InsertSuccess);
-                    }
-
-
-                    int imageSize = activity.getResources().getDisplayMetrics().widthPixels / 4;
-                    Bitmap bitmap = null;
-
-                    try {
-                        bitmap = new ImageTask(userUrl, memberId, imageSize).execute().get();
-
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-                    if (bitmap != null) {
-
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        image = out.toByteArray();
-
-                    } else {
-                        Toast.makeText(context, "no_image", Toast.LENGTH_SHORT).show();
-//                    ibPhotoIcon.setImageResource(R.drawable.icon_facev);
-                    }
-                    User_Profile vipStatusUpdate = new User_Profile(memberId, email, password, userName, selfIntroduction, vipStatus);
-                    String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
-                    jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "update");
-                    jsonObject.addProperty("memberId", memberId);
-                    jsonObject.addProperty("userprofile", new Gson().toJson(vipStatusUpdate));
-                    jsonObject.addProperty("imageBase64", imageBase64);
-                    int updatecount = 0;
-                    try {
-                        String result = new CommonTask(userUrl, jsonObject.toString()).execute().get();
-                        updatecount = Integer.valueOf(result);
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-                    if (updatecount == 0) {
-                        Toast.makeText(context, "update failed", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "update successful", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                } else {
-                    ServerConnect.showToast(context, R.string.msg_Nonetwork);
-                }
+                vipStatusUpdate();
 
             }
         }
+
+
+    }
+    public boolean vipStatusUpdate() {
+        boolean isUpdated = false;
+        if (ServerConnect.networkConnected(activity)) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "vipStatusUpdate");
+            jsonObject.addProperty("memberId", memberId);
+            String jsonOut = jsonObject.toString();
+
+            serverConnect = new ServerConnect(userUrl, jsonOut);
+            try {
+                String jsonIn = serverConnect.execute().get();
+                Log.d(TAG, "result:" + jsonIn);
+                if (jsonIn.equals(1)) {
+                    isUpdated = true;
+                    Fragment currentFragment = activity.getFragmentManager().findFragmentByTag("FriendFragment");
+                    FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
+                    fragmentTransaction.detach(currentFragment);
+                    fragmentTransaction.attach(currentFragment);
+                    fragmentTransaction.commit();
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+        } else {
+            ServerConnect.showToast(context, R.string.msg_Nonetwork);
+        }
+        return isUpdated;
     }
 }
