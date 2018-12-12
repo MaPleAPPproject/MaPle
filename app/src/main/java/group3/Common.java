@@ -21,8 +21,8 @@ public class Common {
 
 
     private static final String TAG = "Common";
-    public static String IP = "10.0.2.2";
-//    public static String IP = "192.168.196.124";
+//    public static String IP = "10.0.2.2";
+    public static String IP = "192.168.196.220";
     public static String URL = "http://"+IP+":8080/MaPle";
     public final static String PREF_FILE = "preference";
     private final static String DEFAULT_NAME = "";

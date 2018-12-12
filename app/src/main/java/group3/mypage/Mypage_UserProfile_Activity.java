@@ -1,7 +1,6 @@
 package group3.mypage;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -10,11 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,10 +23,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.EventLog;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,7 +33,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,9 +43,7 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Member;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import group3.Common;
@@ -60,7 +52,6 @@ import group3.friend.Payment;
 import kale.ui.view.dialog.EasyDialog;
 
 import static android.support.constraint.motion.utils.Oscillator.TAG;
-import static android.view.KeyEvent.KEYCODE_B;
 
 
 public class Mypage_UserProfile_Activity extends AppCompatActivity implements View.OnClickListener {
@@ -98,7 +89,6 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
     private int selectionEnd,maxNum = 100;
     private LinearLayout linearLayoutEditMode,linearLayoutUsernameDisplayMode,linearPasswordEditMode;
     private EasyDialog easyDialog;
-    private Payment payment;
 
 
     public Mypage_UserProfile_Activity () {
@@ -122,7 +112,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
         handleView();
         loadProfiles(memberId);
         wordCalculator();
-        payment = new Payment(this, this, memberId);
+
 
 
 
@@ -631,7 +621,7 @@ public class Mypage_UserProfile_Activity extends AppCompatActivity implements Vi
         EasyDialog.Builder builder = EasyDialog.builder(context);
         DialogInterface.OnClickListener OkClick = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                payment.pay();
+
             }
         };
         builder.setTitle(R.string.paymentAlertTitle)

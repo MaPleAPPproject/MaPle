@@ -28,8 +28,10 @@ import group3.mypage.Mypage_UserProfile_Activity;
 
 
 public class Login extends AppCompatActivity {
-    private final static String URL = "http://10.0.2.2:8080/MaPle";
-//    private final static String URL = "http://192.168.50.90:8080/MaPle";
+
+
+
+    public final static String URL = Common.URL;
     private final static String TAG = "Login";
     String memberId;
     //    private Button btfb, btgplus;

@@ -1,5 +1,6 @@
 package group3.friend;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,7 +34,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FriendFragment extends Fragment {
     private static final String TAG = "FriendFragment";
-    private FragmentActivity activity;
+    private Activity activity;
     private int memberid;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -54,7 +55,7 @@ public class FriendFragment extends Fragment {
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 "userAccountDetail", MODE_PRIVATE);
         vipStatus = preferences.getString("userVipStatus", "");
-
+        this.activity = this.getActivity();
         payment = new Payment(this.getContext(), this.activity, memberid);
     }
 

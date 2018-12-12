@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import group3.friend.Payment;
+
 
 public class BillingManager implements PurchasesUpdatedListener {
 
@@ -40,7 +42,6 @@ public class BillingManager implements PurchasesUpdatedListener {
     private int mBillingClientResponseCode;
     private BillingUpdatesListener mBillingUpdatesListener;
     private Set<String> mTokensToBeConsumed;
-    private static final String BASE_64_ENCODED_PUBLIC_KEY = "IIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAleLT8EKOJxM2M0R2XC5JuksRWAtr/VwVNnyZKdetZVLSgvY4xYW2LlP2b0nJctuQT3IJmtumpeaMug5iCeiCDXfIicddBQEOy4lUmFeCiD6CuB5+qi/hQDDpl/ZZtnuPd3ihMecpOUgHAHHk1hX9IvmI4PISohzspJhjEcgCdcQLDdqtJnMhgcbnc8O86Yn6ZqpmR2+lyNo0i10uDpOENX66d/nB8t6YembAX/urBQWo+bJiCFeZQXMBMwyR1J9LRYx0tJqRccUKrOIi4ybQJJDwzQN3yRaTxf8rMKo78l6/fT2EB9LjtFadw/GrMQWDR6708xhv4aR2tDLpw/3MxQIDAQAB";
     private final List<Purchase> mPurchases = new ArrayList<>();
 
     public String getProduct() {
@@ -123,24 +124,28 @@ public class BillingManager implements PurchasesUpdatedListener {
         };
         executeServiceRequest(queryRequest);
     }
+
+
+
     public void initiatePurchaseFlow(final String skuId, final @SkuType String billingType) {
-        initiatePurchaseFlow(skuId,null, billingType );
-    }
 
-    public void initiatePurchaseFlow(final String skuId,
-                                     final ArrayList<String> oldSkus,
-                                     final @SkuType String billingType) {
-        Runnable purchaseFlowRequest = new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "Launching in-app purchase flow. Replace old SKU? " + (oldSkus != null));
-                BillingFlowParams purchaseParams = BillingFlowParams.newBuilder()
-                        .setSku(skuId).setType(billingType).build();
-                mBillingClient.launchBillingFlow(mActivity, purchaseParams);
-            }
-        };
+       if (mBillingClient.isReady()) {
+           Runnable purchaseFlowRequest = new Runnable() {
 
-        executeServiceRequest(purchaseFlowRequest);
+
+               @Override
+               public void run() {
+
+                   BillingFlowParams purchaseParams = BillingFlowParams.newBuilder()
+                           .setSku(skuId)
+
+                           .setType(billingType).build();
+                   mBillingClient.launchBillingFlow(mActivity, purchaseParams);
+               }
+           };
+
+           executeServiceRequest(purchaseFlowRequest);
+       }
     }
 
 

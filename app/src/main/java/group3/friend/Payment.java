@@ -3,53 +3,30 @@ package group3.friend;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import android.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsParams;
-import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.cp102group3maple.violethsu.maple.R;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.android.billingclient.api.PurchaseHistoryResponseListener;
 
-import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import group3.Common;
-import group3.Login;
 import group3.friend.Billing.BillingManager;
 import group3.friend.Billing.BillingUpdatesListener;
 import group3.friend.Billing.OrderListDataType;
 import group3.friend.Billing.ServerConnect;
 import group3.mypage.CommonTask;
-import group3.mypage.ImageTask;
 import group3.mypage.User_Profile;
-
-import static android.content.Context.MODE_PRIVATE;
-import static android.support.constraint.motion.utils.Oscillator.TAG;
 
 public class Payment implements PurchaseHistoryResponseListener {
     public int vipStatus;
@@ -60,7 +37,7 @@ public class Payment implements PurchaseHistoryResponseListener {
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     private String urlToOrderList = ServerConnect.URL + "/ReceiptServlet";
     private String userUrl = Common.URL + "/User_profileServlet";
-    private Activity activity;
+    private Activity mActivity;
     private String userName;
     private String email;
     private String password;
@@ -72,23 +49,20 @@ public class Payment implements PurchaseHistoryResponseListener {
 
 
     public Payment(Context context, Activity activity, int memberId) {
-        this.activity = activity;
+        this.mActivity = activity;
         this.context = context;
         this.memberId = memberId;
 
         mBillingManager = new BillingManager(activity, new MyBillingUpdateListener());
-
-        SharedPreferences preferences = activity.getSharedPreferences(
-                "userAccountDetail", MODE_PRIVATE);
 
         defaultVipStatus();
         if (vipStatus == 0) {
             OrderListDataType data = null;
             data = findByID(memberId, urlToOrderList);
             if (data != null) {
-                Log.d(TAG, "data = null.");
-            } else {
                 Log.d(TAG, "Data:" + data);
+            } else {
+                Log.d(TAG, "Data = null");
             }
         }
     }
@@ -129,21 +103,18 @@ public class Payment implements PurchaseHistoryResponseListener {
         List<String> skuList = new ArrayList<>();
 
         if (mBillingManager.getProduct() != null) {
-
             skuList.add(mBillingManager.getProduct());
-
             mBillingManager.querySkuDetailsAsync(skuList);
-
             mBillingManager.initiatePurchaseFlow(mBillingManager.getProduct(), BillingClient.SkuType.INAPP);
 
         } else {
             Log.w(TAG, "getProduct is null.");
         }
-        //       mBillingManager.consumeAsync(“token”); // comsume item methon
+
     }
 
     private OrderListDataType findByID(int id, String Url) {
-        if (ServerConnect.networkConnected(activity)) {
+        if (ServerConnect.networkConnected(mActivity)) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findById");
             jsonObject.addProperty("id", id);
@@ -201,7 +172,7 @@ public class Payment implements PurchaseHistoryResponseListener {
     }
     public boolean vipStatusUpdate() {
         boolean isUpdated = false;
-        if (ServerConnect.networkConnected(activity)) {
+        if (ServerConnect.networkConnected(mActivity)) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "vipStatusUpdate");
             jsonObject.addProperty("memberId", memberId);
@@ -213,8 +184,8 @@ public class Payment implements PurchaseHistoryResponseListener {
                 Log.d(TAG, "result:" + jsonIn);
                 if (jsonIn.equals(1)) {
                     isUpdated = true;
-                    Fragment currentFragment = activity.getFragmentManager().findFragmentByTag("FriendFragment");
-                    FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
+                    Fragment currentFragment = mActivity.getFragmentManager().findFragmentByTag("FriendFragment");
+                    FragmentTransaction fragmentTransaction = mActivity.getFragmentManager().beginTransaction();
                     fragmentTransaction.detach(currentFragment);
                     fragmentTransaction.attach(currentFragment);
                     fragmentTransaction.commit();
