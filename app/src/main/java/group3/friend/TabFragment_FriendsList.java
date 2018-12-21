@@ -82,16 +82,18 @@ public class TabFragment_FriendsList extends Fragment {
 
         // 初始化LocalBroadcastManager並註冊BroadcastReceiver
         broadcastManager = LocalBroadcastManager.getInstance(activity);
-        registerFriendStateReceiver();
+
 
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) {
                 parent.removeView(view);
             }
+            registerFriendStateReceiver();
             return view;
         }
 
+        registerFriendStateReceiver();
         return view;
     }
 
@@ -102,7 +104,6 @@ public class TabFragment_FriendsList extends Fragment {
         String userName = String.valueOf(TabFragment_FriendsList.this.memberid);
 
         SocketCommon.connectServer(userName, getActivity());
-
     }
 
     private void handleViews(View view) {
